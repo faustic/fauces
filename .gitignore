@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+privplat_*
+build
+xcuserdata
+Debug
+Release
+*\ Data
+x64
+.vs
+
