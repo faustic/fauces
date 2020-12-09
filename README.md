@@ -1,4 +1,4 @@
-# Faustic Inferno's C++
+# Faustic Inferno's C++ implementation
 
 An attempt to create a C++ implementation that can be easily ported to arbitrary
 architectures and platforms.
@@ -127,14 +127,8 @@ minute and try to think of a simpler way to organise your code.
 
 ## Good documentation
 
-These are a few guidelines to create good documentation:
-
-* Code should be as **self-documenting** as possible.
-* Documentation should be **well-organised**. A lot of documentation can be as
-bad as no documentation if it is badly organised.
-* Documentation should be organised in an **aim-oriented** way, making it easy
-to find documentation for a particular purpose (e.g. build programs, support a
-new architecture, support a new platform, improve a standard library...).
+A few guidelines to create good documentation can be found
+[here](doc/dev/general/doc_strategy.md).
 
 ## Compiled code speed
 
