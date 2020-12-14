@@ -7,6 +7,13 @@ registers, and the size and contents of available memory. Other information that
 might be maintained by the environment is not considered part of the machine
 state.
 
+### Application of proposed design principles
+
+* Simplicity: short number of registers; indivisible registers; no flags or
+condition codes.
+* Flexibility: derivatives with a different register size are easy to design;
+register PM allowing for different pointer sizes with no change of design.
+
 ### Memory
 
 The memory consists of two separate equally-sized parts, one for code and one

@@ -4,7 +4,8 @@
 
 The virtual system is made of a very simple CPU and an environment. Its main
 goal is to provide an easy to implement architecture where compiler features
-can be tested before porting them to real architectures.
+can be tested before porting them to real architectures. Its design principles
+should be **simplicity** and **flexibility** rather than performance.
 
 The CPU consists of a few registers and a connection to some memory provided by
 the environment. Both registers and memory can be seen and changed by the

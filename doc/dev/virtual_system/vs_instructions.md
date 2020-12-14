@@ -2,6 +2,14 @@
 
 ## Virtual system CPU instructions
 
+## Application of proposed design principles
+
+* Simplicity: few instructions; no built-in arithmetic instructions, only
+bitwise operations; no built-in signed integer format; fixed-length
+instructions; separate load, store and operation instructions.
+* Flexibility: pointer size adapted to memory size; derivatives with a different
+operand size are easy to design.
+
 ## Instruction codification
 
 Every instruction takes exactly eight bits, forming one byte. Six bits
@@ -298,7 +306,7 @@ Action: loads value of register Rs into register Rd.
 Rd = Rs;
 ```
 
-### lrr
+### lrs
 
 Assembly: `lrs Rs, Sd`
 
