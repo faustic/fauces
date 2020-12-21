@@ -1,6 +1,6 @@
 # Faustic Inferno's C++ implementation
 
-## Virtual system CPU instructions
+## Virtual system version 1: CPU instructions
 
 ## Application of proposed design principles
 
@@ -56,15 +56,15 @@ but a 4-bit immediate value overlapping with the opcode.
 |------------------------------------|
 |   0x05         |      jmpnz        |
 |------------------------------------|
-|      *** Load register ***      |
+|      *** Load register ***         |
 |------------------------------------|
-|   0x10         |      lb           |
+|   0x10         |      lmb          |
 |------------------------------------|
-|   0x11         |      lh           |
+|   0x11         |      lmh          |
 |------------------------------------|
-|   0x12         |      lw           |
+|   0x12         |      lmw          |
 |------------------------------------|
-|   0x13         |      ld           |
+|   0x13         |      lmd          |
 |------------------------------------|
 |   0x14         |      popb         |
 |------------------------------------|
@@ -74,7 +74,7 @@ but a 4-bit immediate value overlapping with the opcode.
 |------------------------------------|
 |   0x17         |      popd         |
 |------------------------------------|
-|   0x18         |      ls           |
+|   0x18         |      lrx          |
 |------------------------------------|
 |   0x19         |      pops         |
 |------------------------------------|
@@ -86,13 +86,13 @@ but a 4-bit immediate value overlapping with the opcode.
 |------------------------------------|
 |     *** Store into memory ***      |
 |------------------------------------|
-|   0x20         |      stb          |
+|   0x20         |      stmb         |
 |------------------------------------|
-|   0x21         |      sth          |
+|   0x21         |      stmh         |
 |------------------------------------|
-|   0x22         |      stw          |
+|   0x22         |      stmw         |
 |------------------------------------|
-|   0x23         |      std          |
+|   0x23         |      stmd         |
 |------------------------------------|
 |   0x24         |      pushb        |
 |------------------------------------|
@@ -102,15 +102,13 @@ but a 4-bit immediate value overlapping with the opcode.
 |------------------------------------|
 |   0x27         |      pushd        |
 |------------------------------------|
-|   0x28         |      sts          |
-|------------------------------------|
 |   0x29         |      pushs        |
 |------------------------------------|
-|   0x2a         |      strr          |
+|   0x2a         |      strr         |
 |------------------------------------|
-|   0x2b         |      strs          |
+|   0x2b         |      strs         |
 |------------------------------------|
-|   0x2c         |      stsr          |
+|   0x2c         |      stsr         |
 |------------------------------------|
 |      *** Change register ***       |
 |------------------------------------|
@@ -139,8 +137,8 @@ We use a C-like syntax to describe the action of CPU instructions. An implicit
 
 The content of a register is always interpreted as an unsigned 64-bit value.
 
-The expression `X & PM` is always interpreted as a pointer to an 8-bit value,
-where X can be any of R0, R1, S0, S1 or PC.
+The expression `A & PM` (where A can be any of R0, R1, S0, S1, X0, X1, PC or the
+sum of two of them) is always interpreted as a pointer to an 8-bit value.
 
 A 64-bit value is always assumed to be converted into an 8-bit value before
 assigning it to a byte in memory, by truncating it to the least significant 8
@@ -231,37 +229,6 @@ if (Rs == 0)
     PC = Rd;
 ```
 
-### lb
-
-Assembly: `lb Rs, Rd`
-
-Code: `0b010000{sd}`
-
-Action: loads 8-bit value from address specified in register Rs into register
-Rd, zero-extended to 64 bits.
-
-```
-Rd = *(Rs & PM);
-```
-
-### ld
-
-Assembly: `ld Rs, Rd`
-
-Code: `0b010011{sd}`
-
-Action: loads 64-bit value from address specified in register Rs into register
-Rd.
-
-```
-Rd = 0;
-for (tmp_count = 0; tmp_count < 8; ++tmp_count)
-{
-    Rd <<= 8;
-    Rd |= *((Rs + tmp_count) & PM);
-}
-```
-
 ### least
 
 Assembly: `least Rs, Rd`
@@ -280,18 +247,67 @@ else
     Rd = 2;
 ```
 
-### lh
+### lmb
 
-Assembly: `lh Rs, Rd`
+Assembly: `lmb Rs, Rd`
+
+Code: `0b010000{sd}`
+
+Action: loads 8-bit value from address specified as the sum of Rs and Xs into
+register Rd, zero-extended to 64 bits.
+
+```
+Rd = *((Rs + Xs) & PM);
+```
+
+### lmd
+
+Assembly: `lmd Rs, Rd`
+
+Code: `0b010011{sd}`
+
+Action: loads 64-bit value from address specified as the sum of Rs and Xs into
+register Rd.
+
+```
+Rd = 0;
+for (tmp_count = 0; tmp_count < 8; ++tmp_count)
+{
+    Rd <<= 8;
+    Rd |= *((Rs + Xs + tmp_count) & PM);
+}
+```
+
+### lmh
+
+Assembly: `lmh Rs, Rd`
 
 Code: `0b010001{sd}`
 
-Action: loads 16-bit value from address specified in register Rs into register
-Rd, zero-extended to 64 bits.
+Action: loads 16-bit value from address specified as the sum of Rs and Xs into
+register Rd, zero-extended to 64 bits.
 
 ```
-Rd = (*(Rs & PM)) << 8;
-Rd |= *((Rs + 1) & PM);
+Rd = (*((Rs + Xs) & PM)) << 8;
+Rd |= *((Rs + Xs + 1) & PM);
+```
+
+### lmw
+
+Assembly: `lmw Rs, Rd`
+
+Code: `0b010010{sd}`
+
+Action: loads 32-bit value from address specified as the sum of Rs and Xs into
+register Rd, zero-extended to 64 bits.
+
+```
+Rd = 0;
+for (tmp_count = 0; tmp_count < 4; ++tmp_count)
+{
+    Rd <<= 8;
+    Rd |= *((Rs + Xs + tmp_count) & PM);
+}
 ```
 
 ### lrr
@@ -318,26 +334,16 @@ Action: loads value of register Rs into register Sd.
 Sd = Rs;
 ```
 
-### ls
+### lrx
 
-Assembly: `ls Rs, Sd`
+Assembly: `lrx Rs, Xd`
 
 Code: `0b011000{sd}`
 
-Action: loads value from address specified in register Rs into register Sd. The
-loaded value has 16 bits, 32 bits or 64 bits depending on the value in register
-PM.
+Action: loads value of register Rs into register Xd.
 
 ```
-if (PM >> 32)
-    tmp_size = 8;
-else if (PM >> 16)
-    tmp_size = 4;
-else
-    tmp_size = 2;
-Sd = 0;
-for (tmp_count = 0; tmp_count < tmp_size; ++tmp_count)
-    Sd |= *((Rs + tmp_count) & PM) << ((tmp_size - 1 - tmp_count) * 8);
+Xd = Rs
 ```
 
 ### lsr
@@ -350,24 +356,6 @@ Action: loads value of register Ss into register Rd.
 
 ```
 Rd = Ss;
-```
-
-### lw
-
-Assembly: `lw Rs, Rd`
-
-Code: `0b010010{sd}`
-
-Action: loads 32-bit value from address specified in register Rs into register
-Rd, zero-extended to 64 bits.
-
-```
-Rd = 0;
-for (tmp_count = 0; tmp_count < 4; ++tmp_count)
-{
-    Rd <<= 8;
-    Rd |= *((Rs + tmp_count) & PM);
-}
 ```
 
 ### not
@@ -670,51 +658,66 @@ Assembly: `sori imme, Rd`
 
 Code: `0b111{imme}{d}`
 
-Action: shifts the value in register Rd 4 bits to the left and sets its four
-rightmost bits to the bits in `imme`.
+Action: shifts the value in register Rd four positions to the left and sets its
+four rightmost bits to the bits in `imme`.
 
 ```
 Rd = (Rd << 4) | imme;
 ```
 
-### stb
+### stmb
 
-Assembly: `stb Rs, Rd`
+Assembly: `stmb Rs, Rd`
 
 Code: `0b100000{sd}`
 
 Action: stores 8-bit value from rightmost bits in register Rs into address
-specified in register Rd.
+specified as the sum of Rd and Xd.
 
 ```
-*(Rd & PM) = Rs;
+*((Rd + Xd) & PM) = Rs;
 ```
 
-### std
+### stmd
 
-Assembly: `std Rs, Rd`
+Assembly: `stmd Rs, Rd`
 
 Code: `0b100011{sd}`
 
-Action: stores 64-bit in register Rs into address specified in register Rd.
+Action: stores 64-bit in register Rs into address specified as the sum of Rd and
+Xd.
 
 ```
 for (tmp_count = 0; tmp_count < 8; ++tmp_count)
-    *((Rd + tmp_count) & PM) = Rs >> (56 - tmp_count * 8);
+    *((Rd + Xd + tmp_count) & PM) = Rs >> (56 - tmp_count * 8);
 ```
 
-### sth
+### stmh
 
-Assembly: `sth Rs, Rd`
+Assembly: `stmh Rs, Rd`
 
 Code: `0b100001{sd}`
 
 Action: stores 16-bit value from rightmost bits in register Rs into address
-specified in register Rd.
+specified as the sum of Rd and Xd.
 
 ```
-(*(Rd & PM)) = Rs >> 8;
-*((Rd + 1) & PM) = Rs;
+*((Rd + Xd) & PM) = Rs >> 8;
+*((Rd + Xd + 1) & PM) = Rs;
+```
+
+### stmw
+
+Assembly: `stmw Rs, Rd`
+
+Code: `0b100010{sd}`
+
+Action: stores 32-bit value from rightmost bits in register Rs into address
+specified as the sum of Rd and Xd.
+
+```
+for (tmp_count = 0; tmp_count < 4; ++tmp_count)
+    *((Rd + Xd + tmp_count) & PM) = Rs >> (24 - tmp_count * 8);
 ```
 
 ### strr
@@ -723,11 +726,11 @@ Assembly: `strr Rs, Rd`
 
 Code: `0b101010{sd}`
 
-Action: stores 8-bit value from address specified in Rs into address specified
-in Rd.
+Action: stores 8-bit value from address specified as the sum of Rs and Xs into
+address specified as the sum of Rd and Xd.
 
 ```
-*(Rd & PM) = *(Rs & PM);
+*((Rd + Xd) & PM) = *((Rs + Xs) & PM);
 ```
 
 ### strs
@@ -736,32 +739,11 @@ Assembly: `strs Rs, Sd`
 
 Code: `0b101011{sd}`
 
-Action: stores 8-bit value from address specified in Rs into address specified
-in Sd.
+Action: stores 8-bit value from address specified as the sum of Rs and Xs into
+address specified as the sum of Sd and Xd.
 
 ```
-*(Sd & PM) = *(Rs & PM);
-```
-
-### sts
-
-Assembly: `sts Ss, Rd`
-
-Code: `0b101000{sd}`
-
-Action: stores address from register Ss into address specified in Sd.  The
-stored value has 16 bits, 32 bits or 64 bits depending on the value in register
-PM.
-
-```
-if (PM >> 32)
-    tmp_size = 8;
-else if (PM >> 16)
-    tmp_size = 4;
-else
-    tmp_size = 2;
-for (tmp_count = 0; tmp_count < tmp_size; ++tmp_count)
-    *((Rd + tmp_count) & PM) =  Ss >> ((tmp_size - 1 - tmp_count) * 8);
+*((Sd + Xd) & PM) = *((Rs + Xs) & PM);
 ```
 
 ### stsr
@@ -770,25 +752,11 @@ Assembly: `strr Ss, Rd`
 
 Code: `0b101100{sd}`
 
-Action: stores 8-bit value from address specified in Ss into address specified
-in Rd.
+Action: stores 8-bit value from address specified as the sum of Ss and Xs into
+address specified as the sum of Rd and Xd.
 
 ```
-*(Rd & PM) = *(Ss & PM);
-```
-
-### stw
-
-Assembly: `stw Rs, Rd`
-
-Code: `0b100010{sd}`
-
-Action: stores 32-bit value from rightmost bits in register Rs into address
-specified in register Rd.
-
-```
-for (tmp_count = 0; tmp_count < 4; ++tmp_count)
-    *((Rd + tmp_count) & PM) = Rs >> (24 - tmp_count * 8);
+*((Rd + Xd) & PM) = *((Ss + Xd) & PM);
 ```
 
 ### sys

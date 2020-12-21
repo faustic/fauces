@@ -18,3 +18,4 @@ handling, they should be provided by the environment.
 
 * [CPU state](vs_state.md)
 * [CPU instruction set](vs_instructions.md)
+* [Instruction parsing and processing](vs_parsing.md)

@@ -1,6 +1,6 @@
 # Faustic Inferno's C++ implementation
 
-## Machine state
+## Virtual system version 1: machine state
 
 The state of the machine is determined by the running state, the contents of CPU
 registers, and the size and contents of available memory. Other information that
@@ -9,8 +9,8 @@ state.
 
 ### Application of proposed design principles
 
-* Simplicity: short number of registers; indivisible registers; no flags or
-condition codes.
+* Simplicity: short number of registers; one size for every register; no flags
+or condition codes.
 * Flexibility: derivatives with a different register size are easy to design;
 register PM allowing for different pointer sizes with no change of design.
 
@@ -31,9 +31,9 @@ big-endian conventions (most significant byte at the lowest address).
 
 ### CPU registers
 
-The CPU has six 64-bit registers: one program counter, one pointer mask, two
-general purpose registers (R0 and R1) and two stack control registers (S0 and
-S1).
+The CPU has eight 64-bit registers: one program counter, one pointer mask, two
+general purpose registers (R0 and R1), two stack control registers (S0 and S1)
+and two index register (X0 and X1).
 
 ```
     |----------------|        |----------------|
@@ -46,6 +46,10 @@ S1).
 
     |----------------|        |----------------|
     |       S0       |        |       S1       |
+    |----------------|        |----------------|
+
+    |----------------|        |----------------|
+    |       X0       |        |       X1       |
     |----------------|        |----------------|
 
 ```
@@ -63,6 +67,9 @@ always have the form `0xffff'ffff'ffff'ffff >> (64 - nbits)`.
 
 `S1`: stack base register.
 
+`X0`: primary index register.
+
+`X1`: secondary index register.
 
 ### Running state
 
