@@ -265,7 +265,7 @@ public:
 
     void sori(Imme imme, R d) override
     {
-        disas << "shr 0x" << imme << ", r" << d;
+        disas << "sori 0x" << imme << ", r" << d;
     }
 
     void stmb(R s, R d) override
