@@ -30,6 +30,7 @@ SOFTWARE.
 #include "disassembler.hpp"
 #include "using_cstdint.hpp"
 #include "using_iostream.hpp"
+#include "using_string.hpp"
 
 using namespace vs;
 
@@ -40,7 +41,7 @@ int main()
         mem[i] = static_cast<uint_least8_t>(i);
     try
     {
-        cout << static_cast<std::string>(Disassembler {mem, 0, 80}) ;
+        cout << static_cast<string>(Disassembler {mem, 0, 256}) ;
     }
     catch(Unimplemented_instruction_error e)
     {

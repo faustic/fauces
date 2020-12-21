@@ -1,5 +1,5 @@
-// runner.hpp
-// Base class for virtual system runners
+// processor.hpp
+// Base class for virtual system processors
 // Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 10 December 2020
@@ -28,8 +28,8 @@ SOFTWARE.
 */
 
 
-#ifndef fauvisy_runner_hpp
-#define fauvisy_runner_hpp
+#ifndef fauvisy_processor_hpp
+#define fauvisy_processor_hpp
 
 #include <cstdint>
 #include <cstddef>
@@ -54,6 +54,19 @@ class S
 {
 public:
     explicit S(unsigned n) : n {n & 1}
+    {}
+    operator unsigned()
+    {
+        return n;
+    }
+private:
+    unsigned n;
+};
+
+class X
+{
+public:
+    explicit X(unsigned n) : n {n & 1}
     {}
     operator unsigned()
     {
@@ -88,10 +101,10 @@ struct Unimplemented_instruction_error
     {}
 };
 
-class Runner
+class Processor
 {
 public:
-    virtual ~Runner() = default;
+    virtual ~Processor() = default;
     
     virtual void unimplemented() = 0;
     
@@ -120,22 +133,27 @@ public:
         unimplemented();
     }
     
-    virtual void lb(R s, R d)
-    {
-        unimplemented();
-    }
-    
-    virtual void ld(R s, R d)
-    {
-        unimplemented();
-    }
-    
     virtual void least(R s, R d)
     {
         unimplemented();
     }
     
-    virtual void lh(R s, R d)
+    virtual void lmb(R s, R d)
+    {
+        unimplemented();
+    }
+    
+    virtual void lmd(R s, R d)
+    {
+        unimplemented();
+    }
+    
+    virtual void lmh(R s, R d)
+    {
+        unimplemented();
+    }
+    
+    virtual void lmw(R s, R d)
     {
         unimplemented();
     }
@@ -150,17 +168,12 @@ public:
         unimplemented();
     }
     
-    virtual void ls(R s, S d)
+    virtual void lrx(R s, X d)
     {
         unimplemented();
     }
     
     virtual void lsr(S s, R d)
-    {
-        unimplemented();
-    }
-    
-    virtual void lw(R s, R d)
     {
         unimplemented();
     }
@@ -295,17 +308,22 @@ public:
         unimplemented();
     }
     
-    virtual void stb(R s, R d)
+    virtual void stmb(R s, R d)
     {
         unimplemented();
     }
     
-    virtual void std(R s, R d)
+    virtual void stmd(R s, R d)
     {
         unimplemented();
     }
     
-    virtual void sth(R s, R d)
+    virtual void stmh(R s, R d)
+    {
+        unimplemented();
+    }
+    
+    virtual void stmw(R s, R d)
     {
         unimplemented();
     }
@@ -320,17 +338,7 @@ public:
         unimplemented();
     }
     
-    virtual void sts(S s, R d)
-    {
-        unimplemented();
-    }
-    
     virtual void stsr(S s, R d)
-    {
-        unimplemented();
-    }
-    
-    virtual void stw(R s, R d)
     {
         unimplemented();
     }
@@ -349,4 +357,4 @@ public:
 
 }
 
-#endif /* fauvisy_runner_hpp */
+#endif /* fauvisy_processor_hpp */

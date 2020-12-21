@@ -30,7 +30,7 @@
 		A95E38B12583FB7B00C53F0F /* using_iostream.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = using_iostream.hpp; sourceTree = "<group>"; };
 		A9B56C842582B326004A5365 /* visy1010 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = visy1010; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9FDFD422582B4B600402C1F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A9FDFD472582B59700402C1F /* runner.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = runner.hpp; sourceTree = "<group>"; };
+		A9FDFD472582B59700402C1F /* processor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = processor.hpp; sourceTree = "<group>"; };
 		A9FDFD492582BC6700402C1F /* parser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = parser.hpp; sourceTree = "<group>"; };
 		A9FDFD4B2582D20900402C1F /* parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		A9FDFD4F2582D82B00402C1F /* using_cstdint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = using_cstdint.hpp; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 				A9FDFD422582B4B600402C1F /* main.cpp */,
 				A9FDFD4B2582D20900402C1F /* parser.cpp */,
 				A9FDFD492582BC6700402C1F /* parser.hpp */,
-				A9FDFD472582B59700402C1F /* runner.hpp */,
+				A9FDFD472582B59700402C1F /* processor.hpp */,
 				A95E38A92583F59400C53F0F /* disassembler.hpp */,
 				A95E38AA2583F63100C53F0F /* memory.hpp */,
 			);
@@ -105,7 +105,7 @@
 		A9B56C7C2582B326004A5365 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = "Faustic Inferno SL";
 				TargetAttributes = {
 					A9B56C832582B326004A5365 = {
@@ -262,6 +262,7 @@
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
@@ -278,6 +279,7 @@
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;

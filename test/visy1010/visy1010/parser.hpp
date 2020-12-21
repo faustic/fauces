@@ -33,12 +33,12 @@ SOFTWARE.
 
 #include <cstdint>
 
-#include "runner.hpp"
+#include "processor.hpp"
 
 namespace vs
 {
 
-void parse_instruction(Runner& runner, std::uint_least8_t instruction);
+void parse_instruction(Processor& processor, std::uint_least8_t instruction);
 
 }
 

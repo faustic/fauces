@@ -34,14 +34,14 @@ SOFTWARE.
 #include <sstream>
 #include <iomanip>
 
-#include "runner.hpp"
+#include "processor.hpp"
 #include "parser.hpp"
 #include "memory.hpp"
 
 namespace vs
 {
 
-class Disassembler : public Runner
+class Disassembler : public Processor
 {
 public:
     Disassembler(Memory & mem, std::size_t start, std::size_t count,
@@ -65,10 +65,12 @@ public:
     
     void unimplemented() override
     {
-        if (instruction >= 64)
-            throw Unimplemented_instruction_error(instruction, position);
-        else
-            disas << "byte 0x" << std::setw(2) << (unsigned)instruction;
+        disas << "byte 0x" << std::setw(2) << (unsigned)instruction;
+    }
+    
+    void andb(R s, R d) override
+    {
+        disas << "and r" << s << ", r" << d;
     }
     
     void call(R d) override
@@ -91,24 +93,159 @@ public:
         disas << "jmpz r" << s << ", r" << d;
     }
 
-    void lb(R s, R d) override
+    void least(R s, R d) override
     {
-        disas << "lb r" << s << ", r" << d;
+        disas << "least r" << s << ", r" << d;
     }
 
-    void ld(R s, R d) override
+    void lmb(R s, R d) override
     {
-        disas << "ld r" << s << ", r" << d;
+        disas << "lmb r" << s << ", r" << d;
     }
 
-    void lh(R s, R d) override
+    void lmd(R s, R d) override
     {
-        disas << "lh r" << s << ", r" << d;
+        disas << "lmd r" << s << ", r" << d;
     }
 
-    void lw(R s, R d) override
+    void lmh(R s, R d) override
     {
-        disas << "lw r" << s << ", r" << d;
+        disas << "lmh r" << s << ", r" << d;
+    }
+
+    void lmw(R s, R d) override
+    {
+        disas << "lmw r" << s << ", r" << d;
+    }
+    
+    void lrr(R s, R d) override
+    {
+        disas << "lrr r" << s << ", r" << d;
+    }
+
+    void lrs(R s, S d) override
+    {
+        disas << "lrs r" << s << ", s" << d;
+    }
+
+    void lrx(R s, X d) override
+    {
+        disas << "lrx r" << s << ", x" << d;
+    }
+
+    void lsr(S s, R d) override
+    {
+        disas << "lsr s" << s << ", r" << d;
+    }
+
+    void notb(R s, R d) override
+    {
+        disas << "notb r" << s << ", r" << d;
+    }
+    
+    void orb(R s, R d) override
+    {
+        disas << "or r" << s << ", r" << d;
+    }
+    
+    void popb() override
+    {
+        disas << "popb";
+    }
+
+    void popb(R d) override
+    {
+        disas << "popb r" << d;
+    }
+
+    void popd() override
+    {
+        disas << "popd";
+    }
+
+    void popd(R d) override
+    {
+        disas << "popd r" << d;
+    }
+
+    void poph() override
+    {
+        disas << "poph";
+    }
+
+    void poph(R d) override
+    {
+        disas << "poph r" << d;
+    }
+
+    void pops() override
+    {
+        disas << "pops";
+    }
+
+    void pops(S d) override
+    {
+        disas << "pops s" << d;
+    }
+
+    void popw() override
+    {
+        disas << "popw";
+    }
+
+    void popw(R d) override
+    {
+        disas << "popw r" << d;
+    }
+
+    void pushb() override
+    {
+        disas << "pushb";
+    }
+
+    void pushb(R d) override
+    {
+        disas << "pushb r" << d;
+    }
+
+    void pushd() override
+    {
+        disas << "pushd";
+    }
+
+    void pushd(R d) override
+    {
+        disas << "pushd r" << d;
+    }
+
+    void pushh() override
+    {
+        disas << "pushh";
+    }
+
+    void pushh(R d) override
+    {
+        disas << "pushh r" << d;
+    }
+
+    void pushs() override
+    {
+        disas << "pushs";
+    }
+
+    void pushs(S d) override
+    {
+        disas << "pushs s" << d;
+    }
+
+    void pushw() override
+    {
+        disas << "pushw";
+    }
+
+    void pushw(R d) override
+    {
+        disas << "pushw r" << d;
     }
 
     void ret() override
@@ -116,9 +253,64 @@ public:
         disas << "ret";
     }
     
+    void shl(R s, R d) override
+    {
+        disas << "shl r" << s << ", r" << d;
+    }
+
+    void shr(R s, R d) override
+    {
+        disas << "shr r" << s << ", r" << d;
+    }
+
+    void sori(Imme imme, R d) override
+    {
+        disas << "shr 0x" << imme << ", r" << d;
+    }
+
+    void stmb(R s, R d) override
+    {
+        disas << "stmb r" << s << ", r" << d;
+    }
+
+    void stmd(R s, R d) override
+    {
+        disas << "stmd r" << s << ", r" << d;
+    }
+
+    void stmh(R s, R d) override
+    {
+        disas << "stmh r" << s << ", r" << d;
+    }
+
+    void stmw(R s, R d) override
+    {
+        disas << "stmw r" << s << ", r" << d;
+    }
+
+    void strr(R s, R d) override
+    {
+        disas << "strr r" << s << ", r" << d;
+    }
+
+    void strs(R s, S d) override
+    {
+        disas << "strs r" << s << ", s" << d;
+    }
+
+    void stsr(S s, R d) override
+    {
+        disas << "stsr s" << s << ", r" << d;
+    }
+
     void sys(R s, R d) override
     {
         disas << "sys r" << s << ", r" << d;
+    }
+    
+    void xorb(R s, R d) override
+    {
+        disas << "xor r" << s << ", r" << d;
     }
     
 private:

@@ -51,11 +51,11 @@ class Simple_memory: public Memory
 public:
     Simple_memory(std::size_t size) : data(size)
     {}
-    uint_least8_t& operator [](std::size_t n) override
+    std::uint_least8_t& operator [](std::size_t n) override
     {
         return data[n];
     }
-    uint_least8_t& at(std::size_t n) override
+    std::uint_least8_t& at(std::size_t n) override
     {
         return data.at(n);
     }

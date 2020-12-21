@@ -34,70 +34,245 @@ SOFTWARE.
 namespace vs
 {
 
-using Opcode_parser = void (*)(Runner&, uint_least8_t);
+using Opcode_parser = void (*)(Processor&, uint_least8_t);
 
-static void unimplemented(Runner& runner, uint_least8_t instruction)
+static void unimplemented(Processor& processor, uint_least8_t instruction)
 {
-    runner.unimplemented();
+    processor.unimplemented();
 }
 
-static void call(Runner& runner, uint_least8_t instruction)
+static void andb(Processor& processor, uint_least8_t instruction)
 {
-    if ((instruction >> 1) & 1)
-        runner.unimplemented();
-    else
-        runner.call( R(instruction));
+    processor.andb(R(instruction >> 1), R(instruction));
 }
 
-static void jmp(Runner& runner, uint_least8_t instruction)
+static void call(Processor& processor, uint_least8_t instruction)
 {
     if ((instruction >> 1) & 1)
-        runner.unimplemented();
+        processor.unimplemented();
     else
-        runner.jmp( R(instruction));
+        processor.call( R(instruction));
 }
 
-static void jmpnz(Runner& runner, uint_least8_t instruction)
+static void jmp(Processor& processor, uint_least8_t instruction)
 {
-    runner.jmpnz(R(instruction >> 1), R(instruction));
+    if ((instruction >> 1) & 1)
+        processor.unimplemented();
+    else
+        processor.jmp( R(instruction));
 }
 
-static void jmpz(Runner& runner, uint_least8_t instruction)
+static void jmpnz(Processor& processor, uint_least8_t instruction)
 {
-    runner.jmpz(R(instruction >> 1), R(instruction));
+    processor.jmpnz(R(instruction >> 1), R(instruction));
 }
 
-static void lb(Runner& runner, uint_least8_t instruction)
+static void jmpz(Processor& processor, uint_least8_t instruction)
 {
-    runner.lb(R(instruction >> 1), R(instruction));
+    processor.jmpz(R(instruction >> 1), R(instruction));
 }
 
-static void ld(Runner& runner, uint_least8_t instruction)
+static void least(Processor& processor, uint_least8_t instruction)
 {
-    runner.ld(R(instruction >> 1), R(instruction));
+    processor.least(R(instruction >> 1), R(instruction));
 }
 
-static void lh(Runner& runner, uint_least8_t instruction)
+static void lmb(Processor& processor, uint_least8_t instruction)
 {
-    runner.lh(R(instruction >> 1), R(instruction));
+    processor.lmb(R(instruction >> 1), R(instruction));
 }
 
-static void lw(Runner& runner, uint_least8_t instruction)
+static void lmd(Processor& processor, uint_least8_t instruction)
 {
-    runner.lw(R(instruction >> 1), R(instruction));
+    processor.lmd(R(instruction >> 1), R(instruction));
 }
 
-static void ret(Runner& runner, uint_least8_t instruction)
+static void lmh(Processor& processor, uint_least8_t instruction)
+{
+    processor.lmh(R(instruction >> 1), R(instruction));
+}
+
+static void lmw(Processor& processor, uint_least8_t instruction)
+{
+    processor.lmw(R(instruction >> 1), R(instruction));
+}
+
+static void lrr(Processor& processor, uint_least8_t instruction)
+{
+    processor.lrr(R(instruction >> 1), R(instruction));
+}
+
+static void lrs(Processor& processor, uint_least8_t instruction)
+{
+    processor.lrs(R(instruction >> 1), S(instruction));
+}
+
+static void lrx(Processor& processor, uint_least8_t instruction)
+{
+    processor.lrx(R(instruction >> 1), X(instruction));
+}
+
+static void lsr(Processor& processor, uint_least8_t instruction)
+{
+    processor.lsr(S(instruction >> 1), R(instruction));
+}
+
+static void notb(Processor& processor, uint_least8_t instruction)
+{
+    processor.notb(R(instruction >> 1), R(instruction));
+}
+
+static void orb(Processor& processor, uint_least8_t instruction)
+{
+    processor.orb(R(instruction >> 1), R(instruction));
+}
+
+static void popb(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 2)
+        processor.popb(R(instruction));
+    else
+        processor.popb();
+}
+
+static void popd(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 2)
+        processor.popd(R(instruction));
+    else
+        processor.popd();
+}
+
+static void poph(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 2)
+        processor.poph(R(instruction));
+    else
+        processor.poph();
+}
+
+static void pops(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 2)
+        processor.pops(S(instruction));
+    else
+        processor.pops();
+}
+
+static void popw(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 2)
+        processor.popw(R(instruction));
+    else
+        processor.popw();
+}
+
+static void pushb(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 1)
+        processor.pushb(R(instruction >> 1));
+    else
+        processor.pushb();
+}
+
+static void pushd(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 1)
+        processor.pushd(R(instruction >> 1));
+    else
+        processor.pushd();
+}
+
+static void pushh(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 1)
+        processor.pushh(R(instruction >> 1));
+    else
+        processor.pushh();
+}
+
+static void pushs(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 1)
+        processor.pushs(S(instruction >> 1));
+    else
+        processor.pushs();
+}
+
+static void pushw(Processor& processor, uint_least8_t instruction)
+{
+    if (instruction & 1)
+        processor.pushw(R(instruction >> 1));
+    else
+        processor.pushw();
+}
+
+static void ret(Processor& processor, uint_least8_t instruction)
 {
     if (instruction & 3)
-        runner.unimplemented();
+        processor.unimplemented();
     else
-        runner.ret();
+        processor.ret();
 }
 
-static void sys(Runner& runner, uint_least8_t instruction)
+static void shl(Processor& processor, uint_least8_t instruction)
 {
-    runner.sys(R(instruction >> 1), R(instruction));
+    processor.shl(R(instruction >> 1), R(instruction));
+}
+
+static void shr(Processor& processor, uint_least8_t instruction)
+{
+    processor.shr(R(instruction >> 1), R(instruction));
+}
+
+static void sori(Processor& processor, uint_least8_t instruction)
+{
+    processor.sori(Imme(instruction >> 1), R(instruction));
+}
+
+static void stmb(Processor& processor, uint_least8_t instruction)
+{
+    processor.stmb(R(instruction >> 1), R(instruction));
+}
+
+static void stmd(Processor& processor, uint_least8_t instruction)
+{
+    processor.stmd(R(instruction >> 1), R(instruction));
+}
+
+static void stmh(Processor& processor, uint_least8_t instruction)
+{
+    processor.stmh(R(instruction >> 1), R(instruction));
+}
+
+static void stmw(Processor& processor, uint_least8_t instruction)
+{
+    processor.stmw(R(instruction >> 1), R(instruction));
+}
+
+static void strr(Processor& processor, uint_least8_t instruction)
+{
+    processor.strr(R(instruction >> 1), R(instruction));
+}
+
+static void strs(Processor& processor, uint_least8_t instruction)
+{
+    processor.strs(R(instruction >> 1), S(instruction));
+}
+
+static void stsr(Processor& processor, uint_least8_t instruction)
+{
+    processor.stsr(S(instruction >> 1), R(instruction));
+}
+
+static void sys(Processor& processor, uint_least8_t instruction)
+{
+    processor.sys(R(instruction >> 1), R(instruction));
+}
+
+static void xorb(Processor& processor, uint_least8_t instruction)
+{
+    processor.xorb(R(instruction >> 1), R(instruction));
 }
 
 static Opcode_parser opcodes[64] =
@@ -107,25 +282,25 @@ static Opcode_parser opcodes[64] =
     unimplemented, unimplemented, unimplemented, unimplemented,
     unimplemented, unimplemented, unimplemented, unimplemented,
     
-    lb, lh, lw, ld,
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
+    lmb, lmh, lmw, lmd,
+    popb, poph, popw, popd,
+    lrx, pops, lrr, lrs,
+    lsr, unimplemented, unimplemented, unimplemented,
     
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
+    stmb, stmh, stmw, stmd,
+    pushb, pushh, pushw, pushd,
+    unimplemented, pushs, strr, strs,
+    stsr, unimplemented, unimplemented, unimplemented,
     
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented,
-    unimplemented, unimplemented, unimplemented, unimplemented
+    andb, orb, xorb, notb,
+    least, shl, shr, unimplemented,
+    sori, sori, sori, sori,
+    sori, sori, sori, sori
 };
 
-void parse_instruction(Runner& runner, uint_least8_t instruction)
+void parse_instruction(Processor& processor, uint_least8_t instruction)
 {
-    opcodes[(instruction >> 2)& 0x3f](runner, instruction);
+    opcodes[(instruction >> 2)& 0x3f](processor, instruction);
 }
 
 }
