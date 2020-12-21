@@ -4,7 +4,7 @@
 
 Project phases:
 
-1. Initial planning.
+1. Initial planning. -- *Done: 9 December 2020* --
 2. Experimenting.
 3. Language.
 4. Library.
@@ -20,10 +20,10 @@ Main goal: define project strategy.
 
 Milestones:
 
-* Roadmap.
-* Development strategy.
-* Documentation strategy.
-* Documentation map.
+* Roadmap. -- *Done: 9 December 2020* --
+* Development strategy. -- *Done: 9 December 2020* --
+* Documentation strategy. -- *Done: 9 December 2020* --
+* Documentation map. -- *Done: 9 December 2020* --
 
 ### Phase 2: Experimenting
 
@@ -31,7 +31,7 @@ Main goal: consolidate project strategy.
 
 Milestones:
 
-* Virtual system processor specification.
+* Virtual system processor specification. -- *Done: 21 December 2020* --
 * Virtual system runner.
 * 64-bit reference system specification.
 * 32-bit reference system specification.
