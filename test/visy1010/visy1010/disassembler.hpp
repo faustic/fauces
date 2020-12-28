@@ -44,14 +44,16 @@ namespace vs
 class Disassembler : public Processor
 {
 public:
-    Disassembler(Memory & mem, std::size_t start, std::size_t count,
-                                                        int address_width = 4) :
-    mem {mem}, address_width {4}
+    Disassembler(Memory & mem, Memory::size_type start, Memory::size_type count,
+                                                        int address_bits = 16) :
+    mem {mem}
     {
+        int hex_width = address_bits / 4 + (address_bits % 4 ? 1 : 0);
         disas << std::hex << std::setfill('0');
-        for (position = start; position < count; ++position)
+        for (Memory::size_type i = 0; i < count; ++i)
         {
-            disas << "0x" << std::setw(address_width) << position << ": ";
+            position = start + i;
+            disas << "0x" << std::setw(hex_width) << position << ": ";
             instruction = mem.at(position);
             parse_instruction(*this, instruction);
             disas << '\n';
@@ -316,9 +318,8 @@ public:
 private:
     std::stringstream disas;
     Memory& mem;
-    std::size_t position;
-    std::uint_least8_t instruction;
-    int address_width;
+    Memory::size_type position;
+    Memory::byte_type instruction;
 };
 
 }
