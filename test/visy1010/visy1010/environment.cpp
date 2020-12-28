@@ -1,5 +1,5 @@
 // environment.cpp
-// ** Placeholder to state the purpose of this file in very few words **
+// Virtual system environment
 // Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 22 December 2020
@@ -30,6 +30,7 @@ SOFTWARE.
 
 #include "environment.hpp"
 #include "disassembler.hpp"
+#include "assembler.hpp"
 
 #include "using_iostream.hpp"
 #include "using_string.hpp"
@@ -37,191 +38,6 @@ SOFTWARE.
 
 namespace vs
 {
-
-template <typename reg_type1, typename reg_type2>
-Memory::byte_type instruction_code(Memory::byte_type opcode, reg_type1 s,
-                                                                    reg_type2 d)
-{
-    static_assert(std::is_base_of<Register, reg_type1>::value);
-    static_assert(std::is_base_of<Register, reg_type2>::value);
-    Memory::byte_type code = static_cast<Memory::byte_type>(opcode << 2);
-    code |= s << 1;
-    code |= d;
-    return code;
-}
-
-class Assembler
-{
-public:
-    Assembler(Memory& cram, Bus64& dram) : cram {cram}, dram {dram}
-    {
-    }
-    
-/********** Instructions **********/
-    void andb(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x30, s, d);
-    }
-    
-    void call(R d)
-    {
-        cram.at(pc++) = instruction_code(0x02, R(0), d);
-    }
-    
-    void jmp(R d)
-    {
-        cram.at(pc++) = instruction_code(0x01, R(0), d);
-    }
-    
-    void jmpnz(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x05, R(s), d);
-    }
-    
-    void jmpz(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x04, R(s), d);
-    }
-    
-    void least(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x34, s, d);
-    }
-    
-    void lmb(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x10, s, d);
-    }
-    
-    void lmd(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x13, s, d);
-    }
-    
-    void lmh(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x11, s, d);
-    }
-    
-    void lmw(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x12, s, d);
-    }
-    
-    void lrr(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x1a, s, d);
-    }
-    
-    void lrs(R s, S d)
-    {
-        cram.at(pc++) = instruction_code(0x1b, s, d);
-    }
-    
-    void lrx(R s, X d)
-    {
-        cram.at(pc++) = instruction_code(0x18, s, d);
-    }
-    
-    void lsr(S s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x1c, s, d);
-    }
-    
-    void notb(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x33, s, d);
-    }
-    
-    void orb(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x31, s, d);
-    }
-    
-    void popb()
-    {
-        cram.at(pc++) = instruction_code(0x14, R(0), R(0));
-    }
-    
-    void popb(R d)
-    {
-        cram.at(pc++) = instruction_code(0x14, R(1), d);
-    }
-    
-    void popd()
-    {
-        cram.at(pc++) = instruction_code(0x17, R(0), R(0));
-    }
-    
-    void popd(R d)
-    {
-        cram.at(pc++) = instruction_code(0x17, R(1), d);
-    }
-    
-    void poph()
-    {
-        cram.at(pc++) = instruction_code(0x15, R(0), R(0));
-    }
-    
-    void poph(R d)
-    {
-        cram.at(pc++) = instruction_code(0x15, R(1), d);
-    }
-    
-    void pops()
-    {
-        cram.at(pc++) = instruction_code(0x19, R(0), R(0));
-    }
-    
-    void pops(R d)
-    {
-        cram.at(pc++) = instruction_code(0x19, R(1), d);
-    }
-    
-    void popw()
-    {
-        cram.at(pc++) = instruction_code(0x16, R(0), R(0));
-    }
-    
-    void popw(R d)
-    {
-        cram.at(pc++) = instruction_code(0x16, R(1), d);
-    }
-    
-    void pushb()
-    {
-        cram.at(pc ++) = instruction_code(0x24, R(0), R(0));
-    }
-    
-    void pushb(R s)
-    {
-        cram.at(pc ++) = instruction_code(0x24, s, R(1));
-    }
-    
-    void sori(Imme imme, R d)
-    {
-        Memory::byte_type code = 0xe0;
-        code |= imme << 1;
-        code |= d;
-        cram.at(pc++) = code;
-    }
-    
-    void sys(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x00, s, d);
-    }
-    
-    void xorb(R s, R d)
-    {
-        cram.at(pc++) = instruction_code(0x32, s, d);
-    }
-
-private:
-    Memory::size_type pc {0};
-    Address data {0};
-    Memory& cram;
-    Bus64& dram;
-}; // class Assembler
 
 Environment::Environment(unsigned bits) : cpu(bits)
 {

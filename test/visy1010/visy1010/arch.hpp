@@ -1,8 +1,8 @@
-// environment.hpp
-// Virtual system environment
+// arch.hpp
+// Types for virtual system CPU programmer's model
 // Intended compatibility: c++17
 //
-// Created by Alejandro Castro Garcia on 22 December 2020
+// Created by Alejandro Castro Garcia on 28 December 2020
 /*
 Licensed under the MIT License.
  
@@ -28,55 +28,68 @@ SOFTWARE.
 */
 
 
-#ifndef fauvisy_environment_hpp
-#define fauvisy_environment_hpp
-
-#include "cpu.hpp"
+#ifndef fauvisy_arch_hpp
+#define fauvisy_arch_hpp
 
 namespace vs
 {
-
-struct Unsupported_format
+class Register
 {
 };
 
-struct Unsupported_trap
-{
-    std::uint_least64_t code;
-    std::uint_least64_t param;
-    
-    Unsupported_trap(std::uint_least64_t code, std::uint_least64_t param) :
-    code {code}, param {param}
-    {}
-};
-
-class Environment
+class R : public Register
 {
 public:
-    Environment(unsigned bits);
-    void start();
-    std::uint_least16_t result()
+    explicit R(unsigned n) : n {n & 1}
+    {}
+    operator unsigned() const noexcept
     {
-        return leave_code;
+        return n;
     }
-    
 private:
-    Cpu cpu;
-    bool on = false;
-    std::uint_least16_t leave_code = 0xffff;
-    
-    static int constexpr handler_max = 0xf;
-    
-    using Trap_handler = void (Environment::*)(std::uint_least64_t code,
-                                                    std::uint_least64_t param);
-    static Trap_handler handlers[handler_max + 1];
-
-    void system_trap(R s, R d);
-    void unsupported(std::uint_least64_t code, std::uint_least64_t param);
-    
-    void leave(std::uint_least64_t code, std::uint_least64_t param);
+    unsigned n;
 };
+
+class S : public Register
+{
+public:
+    explicit S(unsigned n) : n {n & 1}
+    {}
+    operator unsigned()
+    {
+        return n;
+    }
+private:
+    unsigned n;
+};
+
+class X : public Register
+{
+public:
+    explicit X(unsigned n) : n {n & 1}
+    {}
+    operator unsigned()
+    {
+        return n;
+    }
+private:
+    unsigned n;
+};
+
+class Imme
+{
+public:
+    explicit Imme(unsigned n) : n {n & 0xf}
+    {}
+    operator unsigned()
+    {
+        return n;
+    }
+private:
+    unsigned n;
+};
+
 
 } // namespace vs
 
-#endif /* fauvisy_environment_hpp */
+#endif /* fauvisy_arch_hpp */

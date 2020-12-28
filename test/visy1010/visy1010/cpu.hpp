@@ -1,5 +1,5 @@
 // cpu.hpp
-// ** Placeholder to state the purpose of this file in very few words **
+// Virtual system CPU representation and interpreter
 // Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 22 December 2020

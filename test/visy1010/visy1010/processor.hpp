@@ -34,65 +34,10 @@ SOFTWARE.
 #include <cstdint>
 #include <cstddef>
 
+#include "arch.hpp"
+
 namespace vs
 {
-
-class Register
-{
-};
-
-class R : public Register
-{
-public:
-    explicit R(unsigned n) : n {n & 1}
-    {}
-    operator unsigned() const noexcept
-    {
-        return n;
-    }
-private:
-    unsigned n;
-};
-
-class S : public Register
-{
-public:
-    explicit S(unsigned n) : n {n & 1}
-    {}
-    operator unsigned()
-    {
-        return n;
-    }
-private:
-    unsigned n;
-};
-
-class X : public Register
-{
-public:
-    explicit X(unsigned n) : n {n & 1}
-    {}
-    operator unsigned()
-    {
-        return n;
-    }
-private:
-    unsigned n;
-};
-
-class Imme
-{
-public:
-    explicit Imme(unsigned n) : n {n & 0xf}
-    {}
-    operator unsigned()
-    {
-        return n;
-    }
-private:
-    unsigned n;
-};
-
 
 struct Unimplemented_instruction_error
 {
