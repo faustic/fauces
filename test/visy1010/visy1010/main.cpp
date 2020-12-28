@@ -28,6 +28,8 @@ SOFTWARE.
 */
 
 #include "disassembler.hpp"
+#include "environment.hpp"
+
 #include "using_cstdint.hpp"
 #include "using_iostream.hpp"
 #include "using_string.hpp"
@@ -36,7 +38,7 @@ using namespace vs;
 
 int main()
 {
-    Simple_memory mem(256);
+/*    Simple_memory mem(256);
     for (size_t i = 0; i < 256; ++i)
         mem[i] = static_cast<uint_least8_t>(i);
     try
@@ -49,6 +51,11 @@ int main()
                 (unsigned)e.instruction << " at 0x" << setw(4) <<
                 e.position << '\n';
         cout << "Opcode: 0x" << setw(2) << (e.instruction >> 2) << dec << '\n';
-    }
+    }*/
+    Environment env(12);
+    env.start();
+    cout << "Result: 0x" << hex << setfill('0') << setw(4) << env.result();
+    cout << '\n';
+    
 }
 

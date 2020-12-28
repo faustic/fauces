@@ -37,7 +37,11 @@ SOFTWARE.
 namespace vs
 {
 
-class R
+class Register
+{
+};
+
+class R : public Register
 {
 public:
     explicit R(unsigned n) : n {n & 1}
@@ -50,7 +54,7 @@ private:
     unsigned n;
 };
 
-class S
+class S : public Register
 {
 public:
     explicit S(unsigned n) : n {n & 1}
@@ -63,7 +67,7 @@ private:
     unsigned n;
 };
 
-class X
+class X : public Register
 {
 public:
     explicit X(unsigned n) : n {n & 1}
@@ -98,6 +102,15 @@ struct Unimplemented_instruction_error
     Unimplemented_instruction_error(std::uint_least8_t instruction,
                                                         std::size_t position) :
     instruction {instruction}, position {position}
+    {}
+};
+
+struct System_trap
+{
+    R s;
+    R d;
+    
+    System_trap(R s, R d) : s {s}, d {d}
     {}
 };
 
