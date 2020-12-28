@@ -76,36 +76,35 @@ Milestones:
 
 Main goal: complete ISO C++ compliance.
 
-For now, we set a milestone for each language and library clause in the C++17
-standard. This will probably be revised shortly if we decide to comply with the
-imminent C++20 standard instead.
+We set a milestone for each language and library clause in the C++20 standard.
+This may be revised at a later time if a new revision of the standard is
+published before phase 5 is near completion.
 
 Milestones:
 
 * Lexical conventions.
-* Basic concepts.
-* Standard conversions.
+* Basics.
 * Expressions.
 * Statements.
 * Declarations.
-* Declarators.
+* Modules.
 * Classes.
-* Derived classes.
-* Member access control.
-* Special member functions.
 * Overloading.
 * Templates.
 * Exception handling.
 * Preprocessing directives.
 * Language support library.
+* Concepts library
 * Diagnostics library.
 * General utilities library.
 * Strings library.
-* Localization library.
 * Containers library.
 * Iterators library.
+* Ranges library.
 * Algorithms library.
 * Numerics library.
+* Time library.
+* Localization library.
 * Input/output library.
 * Regular expressions library.
 * Atomic operations library.
