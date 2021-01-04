@@ -278,7 +278,7 @@ static void xorb(Processor& processor, uint_least8_t instruction)
 static Opcode_parser opcodes[64] =
 {
     sys, jmp, call, ret,
-    jmpnz, jmpz, unimplemented, unimplemented,
+    jmpz, jmpnz, unimplemented, unimplemented,
     unimplemented, unimplemented, unimplemented, unimplemented,
     unimplemented, unimplemented, unimplemented, unimplemented,
     
