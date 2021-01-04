@@ -178,12 +178,12 @@ public:
     {
         std::uint_least64_t value =
                         static_cast<std::uint_least64_t>(data.at(addr)) << 56;
-        value |= static_cast<std::uint_least64_t>(data.at(addr)) << 48;
-        value |= static_cast<std::uint_least64_t>(data.at(addr)) << 40;
-        value |= static_cast<std::uint_least64_t>(data.at(addr)) << 32;
-        value |= static_cast<std::uint_least64_t>(data.at(addr)) << 24;
-        value |= static_cast<std::uint_least64_t>(data.at(addr)) << 16;
-        value |= static_cast<std::uint_least64_t>(data.at(addr)) << 8;
+        value |= static_cast<std::uint_least64_t>(data.at(addr + 1)) << 48;
+        value |= static_cast<std::uint_least64_t>(data.at(addr + 2)) << 40;
+        value |= static_cast<std::uint_least64_t>(data.at(addr + 3)) << 32;
+        value |= static_cast<std::uint_least64_t>(data.at(addr + 4)) << 24;
+        value |= static_cast<std::uint_least64_t>(data.at(addr + 5)) << 16;
+        value |= static_cast<std::uint_least64_t>(data.at(addr + 6)) << 8;
         value |= data.at(addr + 7);
         return value;
     }
