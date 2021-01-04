@@ -125,33 +125,106 @@ private:
         throw Unimplemented_instruction_error(cram[addr], addr);
     }
     
-    void andb(R s, R d) override
+    void andb(R src, R dst) override
     {
-        r[d] &= r[s];
+        r[dst] &= r[src];
     }
     
-    void sori(Imme imme, R d) override
+    void call(R dst) override
     {
-        r[d] <<= 4;
-        r[d] |= imme;
-    }
-    
-    void sys(R s, R d) override
-    {
-        throw System_trap(s, d);
-    }
-    
-    void xorb(R s, R d) override
-    {
-        r[d] ^= r[s];
-    }
-    
-    void execute()
-    {
-        while (running)
+        if (pm >> 32)
         {
-            
+            s[0] -= 8;
+            dram.write64(Address {s[0] & pm},
+                                    static_cast<std::uint_least64_t>(pc & pm));
         }
+        else if (pm >> 16)
+        {
+            s[0] -= 4;
+            dram.write32(Address {s[0] & pm},
+                                    static_cast<std::uint_least32_t>(pc & pm));
+        }
+        else
+        {
+            s[0] -= 2;
+            dram.write16(Address {s[0] & pm},
+                                    static_cast<std::uint_least16_t>(pc & pm));
+        }
+        pc = r[dst];
+    }
+    
+    void jmp(R dst) override
+    {
+        pc = r[dst];
+    }
+    
+    void jmpnz(R src, R dst) override
+    {
+        if (r[src])
+            pc = r[dst];
+    }
+    
+    void jmpz(R src, R dst) override
+    {
+        if (!r[src])
+            pc = r[dst];
+    }
+    
+    void least(R src, R dst) override
+    {
+        if (r[src] == r[dst])
+            r[dst] = 0;
+        else if (r[src] < r[dst])
+            r[dst] = 1;
+        else
+            r[dst] = 2;
+    }
+    
+    void lmb(R src, R dst) override
+    {
+        r[dst] = dram.read8(Address((r[src] + x[src]) & pm));
+    }
+    
+    void lmd(R src, R dst) override
+    {
+        r[dst] = dram.read64(Address((r[src] + x[src]) & pm));
+    }
+    
+    void lmh(R src, R dst) override
+    {
+        r[dst] = dram.read16(Address((r[src] + x[src]) & pm));
+    }
+    
+    void lmw(R src, R dst) override
+    {
+        r[dst] = dram.read32(Address((r[src] + x[src]) & pm));
+    }
+    
+    void lrr(R src, R dst) override
+    {
+        r[dst] = r[src];
+    }
+    
+    void lrs(R src, S dst) override
+    {
+        s[dst] = r[src];
+    }
+    
+    void sori(Imme imme, R dst) override
+    {
+        r[dst] <<= 4;
+        r[dst] &= 0xffff'ffff'ffff'ffff;
+        r[dst] |= imme;
+    }
+    
+    void sys(R src, R dst) override
+    {
+        throw System_trap(src, dst);
+    }
+    
+    void xorb(R src, R dst) override
+    {
+        r[dst] ^= r[src];
     }
     
     Simple_memory cram;
