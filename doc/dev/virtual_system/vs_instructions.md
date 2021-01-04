@@ -572,9 +572,10 @@ if (u)
     tmp_sp = S0;
     for (tmp_count = 0; tmp_count < tmp_size; ++tmp_count)
     {
-       --S0;
+       --tmp_sp;
         *(tmp_sp & PM) = Ss >> (tmp_count * 8);
     }
+    S0 = tmp_sp;
 }
 else
     S0 -= tmp_size;
