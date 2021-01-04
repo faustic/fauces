@@ -31,6 +31,12 @@ SOFTWARE.
 #ifndef fauvisy_assembler_hpp
 #define fauvisy_assembler_hpp
 
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <iostream>
+#include <cstdlib>
+
 #include "memory.hpp"
 #include "arch.hpp"
 
@@ -48,11 +54,37 @@ Memory::byte_type instruction_code(Memory::byte_type opcode, reg_type1 s,
     return code;
 }
 
+struct Error_undefined_label
+{
+    std::string label;
+};
+
+struct Error_duplicate_label
+{
+    std::string label;
+};
+
 class Assembler
 {
 public:
     Assembler(Memory& cram, Bus64& dram) : cram {cram}, dram {dram}
     {
+    }
+    
+    ~Assembler()
+    {
+        if (!ended)
+        {
+            try
+            {
+                end();
+            }
+            catch(Error_undefined_label e)
+            {
+                std::cerr << "\nUndefined label \"" << e.label << "\"\n\n";
+                std::abort();
+            }
+        }
     }
     
 /********** Instructions **********/
@@ -188,12 +220,67 @@ public:
     
     void pushb()
     {
-        cram.at(pc ++) = instruction_code(0x24, R(0), R(0));
+        cram.at(pc++) = instruction_code(0x24, R(0), R(0));
     }
     
     void pushb(R s)
     {
-        cram.at(pc ++) = instruction_code(0x24, s, R(1));
+        cram.at(pc++) = instruction_code(0x24, s, R(1));
+    }
+    
+    void pushd()
+    {
+        cram.at(pc++) = instruction_code(0x27, R(0), R(0));
+    }
+    
+    void pushd(R s)
+    {
+        cram.at(pc++) = instruction_code(0x27, s, R(1));
+    }
+    
+    void pushh()
+    {
+        cram.at(pc++) = instruction_code(0x25, R(0), R(0));
+    }
+    
+    void pushh(R s)
+    {
+        cram.at(pc++) = instruction_code(0x25, s, R(1));
+    }
+    
+    void pushs()
+    {
+        cram.at(pc++) = instruction_code(0x29, R(0), R(0));
+    }
+    
+    void pushs(S s)
+    {
+        cram.at(pc++) = instruction_code(0x29, s, R(1));
+    }
+    
+    void pushw()
+    {
+        cram.at(pc++) = instruction_code(0x26, R(0), R(0));
+    }
+    
+    void pushw(R s)
+    {
+        cram.at(pc++) = instruction_code(0x26, s, R(1));
+    }
+    
+    void ret()
+    {
+        cram.at(pc++) = 0x0c;
+    }
+    
+    void shl(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x35, s, d);
+    }
+    
+    void shr(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x36, s, d);
     }
     
     void sori(Imme imme, R d)
@@ -202,6 +289,41 @@ public:
         code |= imme << 1;
         code |= d;
         cram.at(pc++) = code;
+    }
+    
+    void stmb(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x20, s, d);
+    }
+    
+    void stmd(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x23, s, d);
+    }
+    
+    void stmh(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x21, s, d);
+    }
+    
+    void stmw(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x22, s, d);
+    }
+    
+    void strr(R s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x2a, s, d);
+    }
+    
+    void strs(R s, S d)
+    {
+        cram.at(pc++) = instruction_code(0x2b, s, d);
+    }
+    
+    void stsr(S s, R d)
+    {
+        cram.at(pc++) = instruction_code(0x2c, s, d);
     }
     
     void sys(R s, R d)
@@ -213,12 +335,36 @@ public:
     {
         cram.at(pc++) = instruction_code(0x32, s, d);
     }
+    
+    /********** Directives **********/
+
+    void end();
+    
+    /********** Symbols **********/
+    
+    void label(const std::string& label16);
+    
+    /********** Pseudo-instructions **********/
+    
+    void call(const std::string& label16, R d);
+    void jmp(const std::string& label16, R d);
+    void jmpnz(R s, const std::string& label16, R d);
+    void jmpz(R s, const std::string& label16, R d);
+    void lih(std::uint_least16_t value, R d);
+    void lihz(std::uint_least16_t value, R d);
 
 private:
     Memory::size_type pc {0};
     Address data {0};
     Memory& cram;
     Bus64& dram;
+    std::unordered_map<std::string, Memory::size_type> labels;
+    std::unordered_map<std::string, std::vector<Memory::size_type>>
+                                                                future_labels;
+    bool ended {false};
+    
+    void use_label(std::string label, R d);
+    void use_label(unsigned addr, R d);
 }; // class Assembler
 
 }  // namespace vs
