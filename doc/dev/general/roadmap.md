@@ -32,7 +32,7 @@ Main goal: consolidate project strategy.
 Milestones:
 
 * Virtual system processor specification. -- *Done: 21 December 2020* --
-* Virtual system runner.
+* Virtual system runner. -- *Done: 11 January 2020* --
 * 64-bit reference system specification.
 * 32-bit reference system specification.
 * 16-bit reference system specification.
