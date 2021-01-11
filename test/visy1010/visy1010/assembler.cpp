@@ -86,21 +86,95 @@ void Assembler::label(const string& label16)
     pc = label_pc;
 }
 
+void Assembler::lid(uint_least64_t value, R d)
+{
+    if ((value & 0xffff'ffff'0000'0000) == 0xffff'ffff'0000'0000)
+    {
+        xorb(d, d);
+        notb(d, d);
+        if ((value & 0xf000'0000) != 0xf000'0000)
+            sorix(8, value, d);
+        else if ((value & 0xff00'0000) != 0xff00'0000)
+            sorix(7, value, d);
+        else if ((value & 0xfff0'0000) != 0xfff0'0000)
+            sorix(6, value, d);
+        else if ((value & 0xffff'0000) != 0xffff'0000)
+            sorix(5, value, d);
+        else if ((value & 0xffff'f000) != 0xffff'f000)
+            sorix(4, value, d);
+        else if ((value & 0xffff'ff00) != 0xffff'ff00)
+            sorix(3, value, d);
+        else if ((value & 0xffff'fff0) != 0xffff'fff0)
+            sorix(2, value, d);
+        else
+            sorix(1, value, d);
+    }
+    else if (value & 0xff00'0000'0000'0000)
+        sorix(16, value, d);
+    else if (value & 0xffff'ffff'0000'0000)
+    {
+        xorb(d, d);
+        if (value & 0xfff0'0000'0000'0000)
+            sorix(14, value, d);
+        else if (value & 0xffff'0000'0000'0000)
+            sorix(13, value, d);
+        else if (value & 0xffff'f000'0000'0000)
+            sorix(12, value, d);
+        else if (value & 0xffff'ff00'0000'0000)
+            sorix(11, value, d);
+        else if (value & 0xffff'fff0'0000'0000)
+            sorix(10, value, d);
+        else
+            sorix(9, value, d);
+    }
+    else
+        liwz(static_cast<uint_least32_t>(value), d);
+}
+
+void Assembler::liw(uint_least32_t value, R d)
+{
+    if (value & 0xff00'0000)
+        sorix(8, value, d);
+    else if (value & 0xffff'0000)
+    {
+        xorb(d, d);
+        if (value & 0xfff0'0000)
+            sorix(6, value, d);
+        else
+            sorix(5, value, d);
+    }
+    else
+        lihz(static_cast<uint_least16_t>(value), d);
+}
+
+void Assembler::liwz(uint_least32_t value, R d)
+{
+    if (value & 0xffff'0000)
+    {
+        xorb(d, d);
+        if (value & 0xf000'0000)
+            sorix(8, value, d);
+        else if (value & 0xff00'0000)
+            sorix(7, value, d);
+        else if (value & 0xfff0'0000)
+            sorix(6, value, d);
+        else
+            sorix(5, value, d);
+    }
+    else
+        lihz(static_cast<uint_least16_t>(value), d);
+}
+
 void Assembler::lih(uint_least16_t value, R d)
 {
     if (value & 0xff00)
-    {
-        sori(Imme(value >> 12), d);
-        sori(Imme(value >> 8), d);
-        sori(Imme(value >> 4), d);
-        sori(Imme(value), d);
-    }
+        sorix(4, value, d);
     else
     {
         xorb(d, d);
         if (value & 0xfff0)
-            sori(Imme(value >> 4), d);
-        if (value & 0xffff)
+            sorix(2, value, d);
+        else if (value & 0xffff)
             sori(Imme(value), d);
     }
 }
@@ -109,14 +183,26 @@ void Assembler::lihz(uint_least16_t value, R d)
 {
     xorb(d, d);
     if (value & 0xf000)
-        sori(Imme(value >> 12), d);
-    if (value & 0xff00)
-        sori(Imme(value >> 8), d);
-    if (value & 0xfff0)
-        sori(Imme(value >> 4), d);
-    if (value & 0xffff)
+        sorix(4, value, d);
+    else if (value & 0xff00)
+        sorix(3, value, d);
+    else if (value & 0xfff0)
+        sorix(2, value, d);
+    else if (value & 0xffff)
         sori(Imme(value), d);
 }
+
+void Assembler::sorix(unsigned nibbles, std::uint_least64_t value, R d)
+{
+    if (nibbles > 16)
+        throw Error_bad_nibble_number {nibbles};
+    while (nibbles--)
+    {
+        unsigned bits = nibbles * 4;
+        sori(Imme(static_cast<unsigned>(value >> bits)), d);
+    }
+}
+
 
 void Assembler::use_label(unsigned addr, R d)
 {

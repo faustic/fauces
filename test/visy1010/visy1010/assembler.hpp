@@ -64,6 +64,11 @@ struct Error_duplicate_label
     std::string label;
 };
 
+struct Error_bad_nibble_number
+{
+    unsigned value;
+};
+
 class Assembler
 {
 public:
@@ -203,7 +208,7 @@ public:
         cram.at(pc++) = instruction_code(0x19, R(0), R(0));
     }
     
-    void pops(R d)
+    void pops(S d)
     {
         cram.at(pc++) = instruction_code(0x19, R(1), d);
     }
@@ -350,8 +355,12 @@ public:
     void jmp(const std::string& label16, R d);
     void jmpnz(R s, const std::string& label16, R d);
     void jmpz(R s, const std::string& label16, R d);
+    void lid(std::uint_least64_t value, R d);
     void lih(std::uint_least16_t value, R d);
     void lihz(std::uint_least16_t value, R d);
+    void liw(std::uint_least32_t value, R d);
+    void liwz(std::uint_least32_t value, R d);
+    void sorix(unsigned nibbles, std::uint_least64_t value, R d);
 
 private:
     Memory::size_type pc {0};
