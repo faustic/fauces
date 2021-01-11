@@ -142,7 +142,7 @@ public:
 
     void notb(R s, R d) override
     {
-        disas << "notb r" << s << ", r" << d;
+        disas << "not r" << s << ", r" << d;
     }
     
     void orb(R s, R d) override
