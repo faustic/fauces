@@ -210,11 +210,251 @@ private:
         s[dst] = r[src];
     }
     
+    void lrx(R src, X dst) override
+    {
+        x[dst] = r[src];
+    }
+    
+    void lsr(S src, R dst) override
+    {
+        r[dst] = s[src];
+    }
+    
+    void notb(R src, R dst) override
+    {
+        r[dst] = ~r[src];
+    }
+    
+    void orb(R(src), R(dst)) override
+    {
+        r[dst] |= r[src];
+    }
+    
+    void popb() override
+    {
+        ++s[0];
+    }
+    
+    void popb(R dst) override
+    {
+        r[dst] = dram.read8(Address(s[0] & pm));
+        ++s[0];
+    }
+    
+    void popd() override
+    {
+        s[0] += 8;
+    }
+    
+    void popd(R dst) override
+    {
+        r[dst] = dram.read64(Address(s[0] & pm));
+        s[0] += 8;
+    }
+    
+    void poph() override
+    {
+        s[0] += 2;
+    }
+    
+    void poph(R dst) override
+    {
+        r[dst] = dram.read16(Address(s[0] & pm));
+        s[0] += 2;
+    }
+    
+    void pops() override
+    {
+        if (pm >> 32)
+            s[0] += 8;
+        else if (pm >> 16)
+            s[0] += 4;
+        else
+            s[0] += 2;
+    }
+    
+    void pops(S dst) override
+    {
+        if (pm >> 32)
+        {
+            s[dst] = dram.read64(Address(s[0] & pm));
+            if (dst != S(0))
+                s[0] += 8;
+        }
+        else if (pm >> 16)
+        {
+            s[dst] = dram.read32(Address(s[0] & pm));
+            if (dst != S(0))
+                s[0] += 4;
+        }
+        else
+        {
+            s[dst] = dram.read16(Address(s[0] & pm));
+            if (dst != S(0))
+                s[0] += 2;
+        }
+    }
+    
+    void popw() override
+    {
+        s[0] += 4;
+    }
+    
+    void popw(R dst) override
+    {
+        r[dst] = dram.read32(Address(s[0] & pm));
+        s[0] += 4;
+    }
+    
+    void pushb() override
+    {
+        --s[0];
+    }
+    
+    void pushb(R src) override
+    {
+        --s[0];
+        dram.write8(Address(s[0] & pm), r[src] & 0xff);
+    }
+    
+    void pushd() override
+    {
+        s[0] -= 8;
+    }
+    
+    void pushd(R src) override
+    {
+        s[0] -= 8;
+        dram.write64(Address(s[0] & pm), r[src]);
+    }
+    
+    void pushh() override
+    {
+        s[0] -= 2;
+    }
+    
+    void pushh(R src) override
+    {
+        s[0] -= 2;
+        dram.write16(Address(s[0] & pm), r[src] & 0xffff);
+    }
+    
+    void pushs() override
+    {
+        if (pm >> 32)
+            s[0] -= 8;
+        else if (pm >> 16)
+            s[0] -= 4;
+        else
+            s[0] -= 2;
+    }
+    
+    void pushs(S src) override
+    {
+        std::uint_least64_t tmp_sp = s[0];
+        if (pm >> 32)
+        {
+            tmp_sp -= 8;
+            dram.write64(Address(tmp_sp & pm), s[src]);
+        }
+        else if (pm >> 16)
+        {
+            tmp_sp -= 4;
+            dram.write32(Address(tmp_sp & pm), s[src] & 0xffff'ffff);
+        }
+        else
+        {
+            tmp_sp -= 2;
+            dram.write16(Address(tmp_sp & pm), s[src] & 0xffff);
+        }
+        s[0] = tmp_sp;
+    }
+    
+    void pushw() override
+    {
+        s[0] -= 4;
+    }
+    
+    void pushw(R src) override
+    {
+        s[0] -= 4;
+        dram.write32(Address(s[0] & pm), r[src] & 0xffff'ffff);
+    }
+    
+    void ret() override
+    {
+        if (pm >> 32)
+        {
+            pc = dram.read64(Address(s[0] & pm));
+            s[0] += 8;
+        }
+        else if (pm >> 16)
+        {
+            pc = dram.read32(Address(s[0] & pm));
+            s[0] += 4;
+        }
+        else
+        {
+            pc = dram.read16(Address(s[0] & pm));
+            s[0] += 2;
+        }
+    }
+    
+    void shl(R src, R dst) override
+    {
+        r[dst] <<= r[src] & 63;
+        r[dst] &= 0xffff'ffff'ffff'ffff;
+    }
+    
+    void shr(R src, R dst) override
+    {
+        r[dst] >>= r[src] & 63;
+        r[dst] &= 0xffff'ffff'ffff'ffff;
+    }
+    
     void sori(Imme imme, R dst) override
     {
         r[dst] <<= 4;
         r[dst] &= 0xffff'ffff'ffff'ffff;
         r[dst] |= imme;
+    }
+    
+    void stmb(R src, R dst) override
+    {
+        dram.write8(Address(r[dst] + x[dst] & pm), r[src] & 0xff);
+    }
+    
+    void stmd(R src, R dst) override
+    {
+        dram.write64(Address(r[dst] + x[dst] & pm), r[src]);
+    }
+    
+    void stmh(R src, R dst) override
+    {
+        dram.write16(Address(r[dst] + x[dst] & pm), r[src] & 0xffff);
+    }
+    
+    void stmw(R src, R dst) override
+    {
+        dram.write32(Address(r[dst] + x[dst] & pm), r[src] & 0xffff'ffff);
+    }
+    
+    void strr(R src, R dst) override
+    {
+        dram.write8(Address(r[dst] + x[dst] & pm),
+                                    dram.read8(Address(r[src] + x[src] & pm)));
+    }
+    
+    void strs(R src, S dst) override
+    {
+        dram.write8(Address(s[dst] + x[dst] & pm),
+                                    dram.read8(Address(r[src] + x[src] & pm)));
+    }
+    
+    void stsr(S src, R dst) override
+    {
+        dram.write8(Address(r[dst] + x[dst] & pm),
+                                    dram.read8(Address(s[src] + x[src] & pm)));
     }
     
     void sys(R src, R dst) override
