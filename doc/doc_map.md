@@ -10,6 +10,11 @@
 * [Development strategy](dev/general/dev_strategy.md)
 * [Documentation strategy](dev/general/doc_strategy.md)
 
+#### Targets
+
+* [Reference targets](dev/reference_targets/README.md)
+
 #### Virtual system
 
 * [Virtual system](dev/virtual_system/README.md)
+
