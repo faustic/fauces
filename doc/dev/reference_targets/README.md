@@ -2,7 +2,7 @@
 
 ## Reference targets
 
-In the context of this project, a target is a set of choices for adapting our C++ implementation to a particular CPU and environment. We designate four targets as reference targets: one just virtual and the other three based on real CPUs:
+In the context of this project, a target is a set of choices for adapting our C++ implementation to a particular architecture and platform. We designate four targets as reference targets: one just virtual and the other three based on real CPUs:
 
 * Virtual target
 * 64-bit reference target

@@ -33,9 +33,10 @@ Milestones:
 
 * Virtual system processor specification. -- *Done: 21 December 2020* --
 * Virtual system runner. -- *Done: 11 January 2020* --
-* 64-bit reference system specification.
-* 32-bit reference system specification.
-* 16-bit reference system specification.
+* Virtual target specification.
+* 64-bit reference target specification.
+* 32-bit reference target specification.
+* 16-bit reference target specification.
 
 ### Phase 3: Language
 
@@ -44,11 +45,11 @@ C++ language.
 
 Milestones:
 
-* Virtual system essential operations.
+* Virtual target essential operations.
 * Portable operations.
-* 64-bit reference system essential operations.
-* 32-bit reference system essential operations.
-* 16-bit reference system essential operations.
+* 64-bit reference target essential operations.
+* 32-bit reference target essential operations.
+* 16-bit reference target essential operations.
 
 ### Phase 4: Library
 
@@ -56,10 +57,10 @@ Main goal: implement the most common parts of the C++ standard library.
 
 Milestones:
 
-* Virtual system linker.
-* 64-bit reference system linker.
-* 32-bit reference system linker.
-* 16-bit reference system linker.
+* Virtual target linker.
+* 64-bit target system linker.
+* 32-bit target system linker.
+* 16-bit target system linker.
 * `cstddef`
 * `limits`
 * `climits`
