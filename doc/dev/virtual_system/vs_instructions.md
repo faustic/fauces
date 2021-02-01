@@ -2,7 +2,7 @@
 
 ## Virtual system version 1: CPU instructions
 
-## Application of proposed design principles
+### Application of proposed design principles
 
 * Simplicity: few instructions; no built-in arithmetic instructions, only
 bitwise operations; no built-in signed integer format; fixed-length
@@ -10,7 +10,7 @@ instructions; separate load, store and operation instructions.
 * Flexibility: pointer size adapted to memory size; derivatives with a different
 operand size are easy to design.
 
-## Instruction codification
+### Instruction codification
 
 Every instruction takes exactly eight bits, forming one byte. Six bits
 represent the opcode, one bit represents the source register and one bit
@@ -36,7 +36,7 @@ but a 4-bit immediate value overlapping with the opcode.
 ```
 
 
-## Instruction list
+### Instruction list
 
 ```
 |------------------------------------|
@@ -130,7 +130,7 @@ but a 4-bit immediate value overlapping with the opcode.
 |------------------------------------|
 ```
 
-## Instruction description
+### Instruction description
 
 We use a C-like syntax to describe the action of CPU instructions. An implicit
 `++PC` is executed before the action of every instruction.
@@ -149,7 +149,7 @@ using it in any operation, by using the eight original bits as the least
 significant bits of the 64-bit value and setting the most significant bits as
 zero.
 
-### and
+#### and
 
 Assembly: `and Rs, Rd`
 
@@ -162,7 +162,7 @@ in Rd.
 Rd &= Rs;
 ```
 
-### call
+#### call
 
 Assembly: `call Rd`
 
@@ -189,7 +189,7 @@ for (tmp_count = 0; tmp_count < tmp_size; ++tmp_count)
 PC = Rd;
 ```
 
-### jmp
+#### jmp
 
 Assembly: `jmp Rd`
 
@@ -201,7 +201,7 @@ Action: transfers control to the address specified in register Rd.
 PC = Rd
 ```
 
-### jmpnz
+#### jmpnz
 
 Assembly: `jmpnz Rs, Rd`
 
@@ -215,7 +215,7 @@ if (Rs != 0)
     PC = Rd;
 ```
 
-### jmpz
+#### jmpz
 
 Assembly: `jmpz Rs, Rd`
 
@@ -229,7 +229,7 @@ if (Rs == 0)
     PC = Rd;
 ```
 
-### least
+#### least
 
 Assembly: `least Rs, Rd`
 
@@ -247,7 +247,7 @@ else
     Rd = 2;
 ```
 
-### lmb
+#### lmb
 
 Assembly: `lmb Rs, Rd`
 
@@ -260,7 +260,7 @@ register Rd, zero-extended to 64 bits.
 Rd = *((Rs + Xs) & PM);
 ```
 
-### lmd
+#### lmd
 
 Assembly: `lmd Rs, Rd`
 
@@ -278,7 +278,7 @@ for (tmp_count = 0; tmp_count < 8; ++tmp_count)
 }
 ```
 
-### lmh
+#### lmh
 
 Assembly: `lmh Rs, Rd`
 
@@ -292,7 +292,7 @@ Rd = (*((Rs + Xs) & PM)) << 8;
 Rd |= *((Rs + Xs + 1) & PM);
 ```
 
-### lmw
+#### lmw
 
 Assembly: `lmw Rs, Rd`
 
@@ -310,7 +310,7 @@ for (tmp_count = 0; tmp_count < 4; ++tmp_count)
 }
 ```
 
-### lrr
+#### lrr
 
 Assembly: `lrr Rs, Rd`
 
@@ -322,7 +322,7 @@ Action: loads value of register Rs into register Rd.
 Rd = Rs;
 ```
 
-### lrs
+#### lrs
 
 Assembly: `lrs Rs, Sd`
 
@@ -334,7 +334,7 @@ Action: loads value of register Rs into register Sd.
 Sd = Rs;
 ```
 
-### lrx
+#### lrx
 
 Assembly: `lrx Rs, Xd`
 
@@ -346,7 +346,7 @@ Action: loads value of register Rs into register Xd.
 Xd = Rs
 ```
 
-### lsr
+#### lsr
 
 Assembly: `lsr Ss, Rd`
 
@@ -358,7 +358,7 @@ Action: loads value of register Ss into register Rd.
 Rd = Ss;
 ```
 
-### not
+#### not
 
 Assembly: `not Rs, Rd`
 
@@ -370,7 +370,7 @@ Action: saves into Rd the one's complement of Rs.
 Rd = ~Rs;
 ```
 
-### or
+#### or
 
 Assembly: `or Rs, Rd`
 
@@ -383,7 +383,7 @@ in Rd.
 Rd |= Rs;
 ```
 
-### popb
+#### popb
 
 Assembly: `popb [Rd]`
 
@@ -397,7 +397,7 @@ if (u)
 ++S0;
 ```
 
-### popd
+#### popd
 
 Assembly: `popd [Rd]`
 
@@ -420,7 +420,7 @@ else
     S0 += 8;
 ```
 
-### poph
+#### poph
 
 Assembly: `poph [Rd]`
 
@@ -440,7 +440,7 @@ else
     S0 += 2;
 ```
 
-### pops
+#### pops
 
 Assembly: `pops [Sd]`
 
@@ -473,7 +473,7 @@ else
     S0 += tmp_size;
 ```
 
-### popw
+#### popw
 
 Assembly: `popw [Rd]`
 
@@ -496,7 +496,7 @@ else
     S0 += 4;
 ```
 
-### pushb
+#### pushb
 
 Assembly: `pushb [Rs]`
 
@@ -510,7 +510,7 @@ if (u)
     *(S0 & PM) = Rs;
 ```
 
-### pushd
+#### pushd
 
 Assembly: `pushd [Rs]`
 
@@ -531,7 +531,7 @@ else
     S0 -= 8;
 ```
 
-### pushh
+#### pushh
 
 Assembly: `pushh [Rs]`
 
@@ -551,7 +551,7 @@ else
     S0 -= 2;
 ```
 
-### pushs
+#### pushs
 
 Assembly: `pushs [Ss]`
 
@@ -581,7 +581,7 @@ else
     S0 -= tmp_size;
 ```
 
-### pushw
+#### pushw
 
 Assembly: `pushw [Rs]`
 
@@ -602,7 +602,7 @@ else
     S0 -= 4;
 ```
 
-### ret
+#### ret
 
 Assembly: `ret`
 
@@ -627,7 +627,7 @@ for (tmp_count = 0; tmp_count < tmp_size; ++tmp_count)
 }
 ```
 
-### shl
+#### shl
 
 Assembly: `shl Rs, Rd`
 
@@ -640,7 +640,7 @@ by the value in Rs modulo 63.
 Rd <<= (Rs & 63);
 ```
 
-### shr
+#### shr
 
 Assembly: `shr Rs, Rd`
 
@@ -653,7 +653,7 @@ specified by the value in Rs modulo 63.
 Rd >>= (Rs & 63);
 ```
 
-### sori
+#### sori
 
 Assembly: `sori imme, Rd`
 
@@ -666,7 +666,7 @@ four rightmost bits to the bits in `imme`.
 Rd = (Rd << 4) | imme;
 ```
 
-### stmb
+#### stmb
 
 Assembly: `stmb Rs, Rd`
 
@@ -679,7 +679,7 @@ specified as the sum of Rd and Xd.
 *((Rd + Xd) & PM) = Rs;
 ```
 
-### stmd
+#### stmd
 
 Assembly: `stmd Rs, Rd`
 
@@ -693,7 +693,7 @@ for (tmp_count = 0; tmp_count < 8; ++tmp_count)
     *((Rd + Xd + tmp_count) & PM) = Rs >> (56 - tmp_count * 8);
 ```
 
-### stmh
+#### stmh
 
 Assembly: `stmh Rs, Rd`
 
@@ -707,7 +707,7 @@ specified as the sum of Rd and Xd.
 *((Rd + Xd + 1) & PM) = Rs;
 ```
 
-### stmw
+#### stmw
 
 Assembly: `stmw Rs, Rd`
 
@@ -721,7 +721,7 @@ for (tmp_count = 0; tmp_count < 4; ++tmp_count)
     *((Rd + Xd + tmp_count) & PM) = Rs >> (24 - tmp_count * 8);
 ```
 
-### strr
+#### strr
 
 Assembly: `strr Rs, Rd`
 
@@ -734,7 +734,7 @@ address specified as the sum of Rd and Xd.
 *((Rd + Xd) & PM) = *((Rs + Xs) & PM);
 ```
 
-### strs
+#### strs
 
 Assembly: `strs Rs, Sd`
 
@@ -747,7 +747,7 @@ address specified as the sum of Sd and Xd.
 *((Sd + Xd) & PM) = *((Rs + Xs) & PM);
 ```
 
-### stsr
+#### stsr
 
 Assembly: `strr Ss, Rd`
 
@@ -760,7 +760,7 @@ address specified as the sum of Rd and Xd.
 *((Rd + Xd) & PM) = *((Ss + Xd) & PM);
 ```
 
-### sys
+#### sys
 
 Assembly: `sys Rs, Rd`
 
@@ -769,7 +769,7 @@ Code: `0b000000{sd}`
 Action: stops instruction fetching until the environment sends the signal to
 continue.
 
-### xor
+#### xor
 
 Assembly: `xor Rs, Rd`
 

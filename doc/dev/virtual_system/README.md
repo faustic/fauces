@@ -1,6 +1,6 @@
 # Faustic Inferno's C++ implementation
 
-## Virtual system
+## Virtual system version 1
 
 The virtual system is made of a very simple CPU and an environment. Its main
 goal is to provide an easy to implement architecture where compiler features
@@ -19,3 +19,4 @@ handling, they should be provided by the environment.
 * [CPU state](vs_state.md)
 * [CPU instruction set](vs_instructions.md)
 * [Instruction parsing and processing](vs_parsing.md)
+* [Operating system](vs_os.md)
