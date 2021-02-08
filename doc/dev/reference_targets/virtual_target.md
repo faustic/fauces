@@ -32,7 +32,7 @@ The required virtual hardware consists of the following:
 * Code memory of at least 4096 bytes and no more than 65536 bytes.
 * Data memory of at least 4096 bytes and no more than 65536 bytes.
 
-The required real hardware has as its only requirement the ability to run an implementation of the required virtual hardwarre.
+The required real hardware has as its only requirement the ability to run an implementation of the required virtual hardware.
 
 ### Supported system software
 
@@ -44,5 +44,29 @@ The required host operating system has as its only requirement the ability to ru
 
 ### Memory usage conventions for code and data
 
+#### Size and byte order
+
+* Integer and pointer sizes are given by the convention C8-SIPE16-L32-LL64.
+* Floating point number sizes are as specified by the default [language library](../language_library/README.md).
+* All numbers are stored in memory following the big-endian convention.
+
+#### Alignment
+
+* By default, all types have alignment 1.
+
+#### Memory areas
+
+* The code memory is fully dedicated to the executable code of the program.
+* The data memory is divided into three parts:
+    * Static area: allocated at lower addresses starting at zero up to the size automatically calculated at link time.
+    * Stack area: allocated at higher addresses up to the maximum available data memory and taking a total size configurable at link time.
+    * Heap area: the space remaining between the end of the static area and the beginning of the stack area.
+
 ### Calling conventions
+
+* The callee must preserve the following registers: `S0`, `S1`.
+* The caller will pass parameters on the stack, pushing the last parameter first. The first parameter (i.e. the last one pushed) will also be in register `R0`, that the callee does not need to preserve.
+* If the return type is greater than 64 bits or a non-trivial class, then the caller will allocate space for it and will push its address onto the stack right after the first parameter (i.e. after the last parameter pushed onto the stack). The caller will also put this address in register R0 instead of the first parameter. In this case, the callee must preserve register R0.
+* If the return type is a basic type with size less than 64 bits, or a trivial class with size less than 64 bits, then the callee will return its value in register `R0`.
+* The callee does not need to preserve the following registers: `R1`, `X0`, `X1`.
 
