@@ -52,11 +52,10 @@ The following will be assumed about choices that are not explicitly established:
 * A `long` value has 32 bits (L32).
 * A `long long` value has 64 bits (LL64).
 * Integer types other than `bool` lack padding bits and trap representations.
+* Signed integer types use two's complement representation.
+* The `char` type is unsigned, with the same range as the `unsigned char` type.
 * A `void *` value has 16 bits (P16).
 * A `void (*)()` value has the same number of bits as a `void*` value, 16 bits if neither is specified (E16).
 * The format used for floating point types will be the common one that will be defined for CPUs without floating point capabilities.
 * Right-shifting negative integers will propagate the sign bit.
-
-
-
 
