@@ -27,3 +27,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+
+unsigned leaf(unsigned a, unsigned b)
+{
+    return a + b;
+}
+
+int main()
+{
+    unsigned x = leaf(42, 69);
+    return x;
+}

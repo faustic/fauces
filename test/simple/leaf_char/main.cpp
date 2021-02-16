@@ -27,4 +27,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+unsigned leaf(const char *a)
+{
+    return a[0];
+}
+
+int main(int argc, char** argv)
+{
+    char x = 0;
+    if (argc > 0)
+        x = leaf(argv[0]);
+    return x;
+}
 
