@@ -54,7 +54,7 @@ class Environment
 {
 public:
     Environment(unsigned bits);
-    void start();
+    void start(int argc, char** argv);
     std::uint_least16_t result()
     {
         return leave_code;

@@ -33,10 +33,11 @@ SOFTWARE.
 #include "using_cstdint.hpp"
 #include "using_iostream.hpp"
 #include "using_string.hpp"
+#include "using_cstdlib.hpp"
 
 using namespace vs;
 
-int main()
+int main(int argc, char** argv)
 {
 /*    Simple_memory mem(256);
     for (size_t i = 0; i < 256; ++i)
@@ -52,10 +53,16 @@ int main()
                 e.position << '\n';
         cout << "Opcode: 0x" << setw(2) << (e.instruction >> 2) << dec << '\n';
     }*/
+    if (argc < 2)
+    {
+        cout << "Usage: visy1010 <executable> [<argument1> ... <argumentN>]\n";
+        return EXIT_FAILURE;
+    }
     Environment env(12);
-    env.start();
+    env.start(argc - 1, &argv[1]);
     cout << "Result: 0x" << hex << setfill('0') << setw(4) << env.result();
     cout << '\n';
     
+    return 0;
 }
 

@@ -52,8 +52,11 @@ Environment::Environment(unsigned bits) : cpu(bits)
     cout << static_cast<string>(disas);
 }
 
-void Environment::start()
+void Environment::start(int argc, char** argv)
 {
+    cout << "argc: " << argc << '\n';
+    if (argc > 0)
+        cout << "argv[0]: " << argv[0] << "\n";
     on = true;
     cpu.reset();
     while (on)
