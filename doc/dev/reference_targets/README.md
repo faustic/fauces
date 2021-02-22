@@ -1,4 +1,4 @@
-# Faustic Inferno's C++ implementation
+# Fauces
 
 ## Reference targets
 

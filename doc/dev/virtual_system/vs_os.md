@@ -1,4 +1,4 @@
-# Faustic Inferno's C++ implementation
+# Fauces
 
 ## Virtual system version 1: Operating system
 

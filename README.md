@@ -1,4 +1,4 @@
-# Faustic Inferno's C++ implementation
+# Fauces
 
 An attempt to create a C++ implementation that can be easily ported to arbitrary
 architectures and platforms.
