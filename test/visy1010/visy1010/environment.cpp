@@ -31,6 +31,7 @@ SOFTWARE.
 #include "environment.hpp"
 #include "disassembler.hpp"
 #include "assembler.hpp"
+#include "exec.hpp"
 
 #include "using_iostream.hpp"
 #include "using_string.hpp"
@@ -42,14 +43,16 @@ namespace vs
 Environment::Environment(unsigned bits) : cpu(bits)
 {
     Assembler as {cpu.code_ram(), cpu.data_ram()};
-    as.lihz(20, R(0));
+    as.lihz(0, R(0));
     as.lihz(0, R(1));
     as.sys(R(1), R(0));
     as.end();
-    cpu.data_ram().write64(Address(0x20), 0x0123456789abcdef);
-    cpu.data_ram().write64(Address(0x100), 0xf599211011924ee1);
     Disassembler disas{cpu.code_ram(), 0, 20};
     cout << static_cast<string>(disas);
+}
+
+void Environment::load_exec(int argc, char **argv)
+{
 }
 
 void Environment::start(int argc, char** argv)

@@ -35,6 +35,7 @@ SOFTWARE.
 #include "using_string.hpp"
 #include "using_cstdlib.hpp"
 
+
 using namespace vs;
 
 int main(int argc, char** argv)
@@ -63,6 +64,6 @@ int main(int argc, char** argv)
     cout << "Result: 0x" << hex << setfill('0') << setw(4) << env.result();
     cout << '\n';
     
-    return 0;
+    return env.result();
 }
 

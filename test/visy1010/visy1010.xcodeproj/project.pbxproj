@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A9270F2A25928E3F00BC854D /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9270F2825928E3F00BC854D /* environment.cpp */; };
+		A94C177825E3C28400E5B5FF /* exec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94C177625E3C28300E5B5FF /* exec.cpp */; };
 		A9F398E8259A5E8F00C215C7 /* assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F398E6259A5E8F00C215C7 /* assembler.cpp */; };
 		A9FDFD432582B4B600402C1F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9FDFD422582B4B600402C1F /* main.cpp */; };
 		A9FDFD4C2582D20900402C1F /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9FDFD4B2582D20900402C1F /* parser.cpp */; };
@@ -28,6 +29,8 @@
 /* Begin PBXFileReference section */
 		A9270F2825928E3F00BC854D /* environment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = environment.cpp; sourceTree = "<group>"; };
 		A9270F2925928E3F00BC854D /* environment.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = environment.hpp; sourceTree = "<group>"; };
+		A94C177625E3C28300E5B5FF /* exec.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = exec.cpp; sourceTree = "<group>"; };
+		A94C177725E3C28300E5B5FF /* exec.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = exec.hpp; sourceTree = "<group>"; };
 		A94EF2FD25916ECF00758403 /* cpu.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cpu.hpp; sourceTree = "<group>"; };
 		A95E38A92583F59400C53F0F /* disassembler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = disassembler.hpp; sourceTree = "<group>"; };
 		A95E38AA2583F63100C53F0F /* memory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
@@ -93,6 +96,8 @@
 				A9FDFD4B2582D20900402C1F /* parser.cpp */,
 				A9FDFD492582BC6700402C1F /* parser.hpp */,
 				A9FDFD472582B59700402C1F /* processor.hpp */,
+				A94C177625E3C28300E5B5FF /* exec.cpp */,
+				A94C177725E3C28300E5B5FF /* exec.hpp */,
 			);
 			path = visy1010;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 				A9F398E8259A5E8F00C215C7 /* assembler.cpp in Sources */,
 				A9FDFD4C2582D20900402C1F /* parser.cpp in Sources */,
 				A9270F2A25928E3F00BC854D /* environment.cpp in Sources */,
+				A94C177825E3C28400E5B5FF /* exec.cpp in Sources */,
 				A9FDFD432582B4B600402C1F /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

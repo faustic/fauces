@@ -67,6 +67,8 @@ private:
     
     static int constexpr handler_max = 0xf;
     
+    void load_exec(int argc, char** argv);
+    
     using Trap_handler = void (Environment::*)(std::uint_least64_t code,
                                                     std::uint_least64_t param);
     static Trap_handler handlers[handler_max + 1];
