@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## DOCUMENTATION STRATEGY
 
 ### 1. Introduction

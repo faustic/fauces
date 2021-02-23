@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## Language library
 
 Some of the operations appearing in a source file may be translated by the compiler as function calls made by the built program at runtime. In this project, we will call a library containing such functions a *language library*. In other places it is often called a *runtime library*, but this term can cause confusion because it is also sometimes used to refer to the C++ standard library.

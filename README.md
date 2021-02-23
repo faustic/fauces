@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 An attempt to create a C++ implementation that can be easily ported to arbitrary
 architectures and platforms.
 

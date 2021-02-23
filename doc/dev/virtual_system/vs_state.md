@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## Virtual system version 1: machine state
 
 The state of the machine is determined by the running state, the contents of CPU

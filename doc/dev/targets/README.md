@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## Targets
 
 In the context of this project, a target is a set of choices for adapting our C++ implementation to a particular architecture and platform.

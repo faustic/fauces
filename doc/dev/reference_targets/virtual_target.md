@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## Virtual target
 
 We are defining a target for a virtual system of our own:

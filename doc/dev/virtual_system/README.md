@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## Virtual system version 1
 
 The virtual system is made of a very simple CPU and an environment. Its main

@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## Virtual system version 1: machine code parsing and processing
 
 Machine code parsing is a process that consists of separating a piece of machine
