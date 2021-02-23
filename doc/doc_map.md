@@ -1,5 +1,9 @@
 # Fauces
 
+*Copyright © Faustic Inferno SL*
+
+*Licensed under the MIT License*
+
 ## DOCUMENTATION MAP
 
 ### Development
@@ -9,6 +13,10 @@
 * [Roadmap](dev/general/roadmap.md)
 * [Development strategy](dev/general/dev_strategy.md)
 * [Documentation strategy](dev/general/doc_strategy.md)
+
+#### Phases of translation
+
+* [Phases of translation](dev/translation/README.md)
 
 #### Targets
 
