@@ -53,13 +53,17 @@ Environment::Environment(unsigned bits) : cpu(bits)
 
 void Environment::load_exec(int argc, char **argv)
 {
+    if (argc > 0)
+    {
+        cout << "argv[0]: " << argv[0] << "\n";
+        Program prog {argv[0]};
+    }
 }
 
 void Environment::start(int argc, char** argv)
 {
     cout << "argc: " << argc << '\n';
-    if (argc > 0)
-        cout << "argv[0]: " << argv[0] << "\n";
+    load_exec(argc, argv);
     on = true;
     cpu.reset();
     while (on)

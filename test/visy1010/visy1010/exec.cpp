@@ -66,4 +66,9 @@ struct Code_section
     unsigned short code_size;
 };
 
+Program::Program(char* filename)
+{
+    
+}
+
 }

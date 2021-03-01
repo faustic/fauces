@@ -31,9 +31,22 @@ SOFTWARE.
 #ifndef fauvisy_exec_hpp
 #define fauvisy_exec_hpp
 
+#include <vector>
+#include <cstdint>
+
 namespace vs
 {
 
-}
+class Program
+{
+    std::vector<unsigned char> code;
+    std::vector<unsigned char> data;
+    uint_least16_t start;
+
+public:
+    Program(char* filename);
+};
+
+} // namespace vs
 
 #endif /* fauvisy_exec_hpp */
