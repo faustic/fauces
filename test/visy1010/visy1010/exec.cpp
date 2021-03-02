@@ -30,6 +30,11 @@ SOFTWARE.
 
 #include "exec.hpp"
 
+#include "using_cstdint.hpp"
+#include "using_iostream.hpp"
+#include "using_algorithm.hpp"
+#include "using_containers.hpp"
+
 namespace vs
 {
 static const unsigned char exe_uuid[16] =
@@ -43,32 +48,84 @@ enum class Exe_addr
     undefined = 0xffff
 };
 
-struct Exe
+enum Exe_cpu
+{
+    visy_v1
+};
+
+enum Exe_section_type
+{
+    code_section = 0x434f,
+    data_section = 0x4441,
+    eof_section = 0x454f
+};
+
+struct Exe_header
 {
     unsigned char uuid[16];
-    unsigned short cpu;
-    unsigned short start_section;
-    unsigned short start_addr;
+    unsigned cpu;
+    unsigned start_section;
+    unsigned start_addr;
 };
 
 struct Section_header
 {
-    unsigned short id;
-    unsigned short type;
-    unsigned short size;
-    unsigned short pref_start;
-    unsigned short relocs;
+    unsigned id;
+    unsigned type;
+    unsigned size;
+    unsigned pref_start;
+    unsigned relocs;
 };
 
 struct Code_section
 {
     Section_header header;
-    unsigned short code_size;
+    unsigned code_size;
 };
+
+unsigned read_be2(istream& is)
+{
+    unsigned char tmp;
+    is >> tmp;
+    unsigned value = static_cast<unsigned>(tmp) << 8;
+    is >> tmp;
+    value |= tmp;
+    return value;
+}
+
+Section_header load_section_header(istream& is)
+{
+    Section_header header;
+    header.id = read_be2(is);
+    header.type = read_be2(is);
+    header.size = read_be2(is);
+    header.pref_start = read_be2(is);
+    header.relocs = read_be2(is);
+    return header;
+}
 
 Program::Program(char* filename)
 {
-    
+    cout << "filename: " << filename << "\n";
+    ifstream ifs;
+    ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
+    ifs.open(filename, ios::binary);
+    load_exe_header(ifs);
+    load_section_header(ifs);
+}
+
+unsigned Program::load_exe_header(std:: istream& is)
+{
+    Exe_header header;
+    is.read(reinterpret_cast<char*>(header.uuid), 16);
+    if (!equal(header.uuid, header.uuid + 16, exe_uuid))
+        throw Program_loading_error();
+    header.cpu = read_be2(is);
+    if (header.cpu != visy_v1)
+        throw Program_loading_error();
+    header.start_section = read_be2(is);
+    start = header.start_addr = read_be2(is);
+    return header.start_section;
 }
 
 }

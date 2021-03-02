@@ -38,6 +38,7 @@
 		A95E38B12583FB7B00C53F0F /* using_iostream.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = using_iostream.hpp; sourceTree = "<group>"; };
 		A99528D025DBF0D00002B3B6 /* using_cstdlib.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = using_cstdlib.hpp; sourceTree = "<group>"; };
 		A9B56C842582B326004A5365 /* visy1010 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = visy1010; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9BCA61525ED895A004B3006 /* using_algorithm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = using_algorithm.hpp; sourceTree = "<group>"; };
 		A9F398E6259A5E8F00C215C7 /* assembler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = assembler.cpp; sourceTree = "<group>"; };
 		A9F398E7259A5E8F00C215C7 /* assembler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = assembler.hpp; sourceTree = "<group>"; };
 		A9F398EA259A5F7B00C215C7 /* arch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = arch.hpp; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				A9FDFD422582B4B600402C1F /* main.cpp */,
+				A9BCA61525ED895A004B3006 /* using_algorithm.hpp */,
 				A9FDFD4F2582D82B00402C1F /* using_cstdint.hpp */,
 				A99528D025DBF0D00002B3B6 /* using_cstdlib.hpp */,
 				A95E38B12583FB7B00C53F0F /* using_iostream.hpp */,

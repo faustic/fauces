@@ -1,8 +1,8 @@
-// exec.hpp
-// Loading of executable file
+// using_algorithm.hpp
+// Common using statements for algorithm. Normally not included from headers
 // Intended compatibility: c++17
 //
-// Created by Alejandro Castro García on 22 February 2021
+// Created by Alejandro Castro García on 1 March 2021
 /*
 Licensed under the MIT License.
  
@@ -28,31 +28,14 @@ SOFTWARE.
 */
 
 
-#ifndef fauvisy_exec_hpp
-#define fauvisy_exec_hpp
+#ifndef using_algorithm_h
+#define using_algorithm_h
 
-#include <vector>
-#include <iostream>
+#include <algorithm>
 
-namespace vs
-{
+using std::copy;
+using std::equal;
+using std::fill;
+using std::find;
 
-class Program_loading_error
-{
-};
-
-class Program
-{
-    std::vector<unsigned char> code;
-    std::vector<unsigned char> data;
-    unsigned start;
-    
-    unsigned load_exe_header(std:: istream& is);
-
-public:
-    Program(char* filename);
-};
-
-} // namespace vs
-
-#endif /* fauvisy_exec_hpp */
+#endif /* using_algorithm_h */
