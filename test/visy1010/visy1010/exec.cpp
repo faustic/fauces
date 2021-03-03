@@ -53,19 +53,19 @@ enum Exe_cpu
     visy_v1
 };
 
-enum Exe_section_type
-{
-    code_section = 0x434f,
-    data_section = 0x4441,
-    eof_section = 0x454f
-};
-
 struct Exe_header
 {
     unsigned char uuid[16];
     unsigned cpu;
     unsigned start_section;
     unsigned start_addr;
+};
+
+enum Exe_section_type
+{
+    code_section = 0x434f,
+    data_section = 0x4441,
+    eof_section = 0x454f
 };
 
 struct Section_header
@@ -111,7 +111,12 @@ Program::Program(char* filename)
     ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
     ifs.open(filename, ios::binary);
     load_exe_header(ifs);
-    load_section_header(ifs);
+    for (Section_header h = load_section_header(ifs); h.type != eof_section;
+         h = load_section_header(ifs))
+    {
+        if (h.size)
+            ifs.seekg(h.size, ios::cur);
+    }
 }
 
 unsigned Program::load_exe_header(std:: istream& is)
