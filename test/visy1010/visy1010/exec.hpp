@@ -33,12 +33,25 @@ SOFTWARE.
 
 #include <vector>
 #include <iostream>
+#include <string>
 
 namespace vs
 {
 
-class Program_loading_error
+struct Program_loading_error
 {
+    std::string msg;
+    Program_loading_error(const std::string& msg): msg {msg}
+    {}
+};
+
+struct Section_header
+{
+    unsigned id;
+    unsigned type;
+    unsigned size;
+    unsigned pref_start;
+    unsigned relocs;
 };
 
 class Program
@@ -47,7 +60,10 @@ class Program
     std::vector<unsigned char> data;
     unsigned start;
     
-    unsigned load_exe_header(std:: istream& is);
+    unsigned load_exe_header(std::istream& is);
+    void process_section(std::istream& is, Section_header& h);
+    void load_section(std::istream &is, std::vector<unsigned char>& mem,
+                                                                unsigned size);
 
 public:
     Program(char* filename);

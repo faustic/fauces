@@ -68,15 +68,6 @@ enum Exe_section_type
     eof_section = 0x454f
 };
 
-struct Section_header
-{
-    unsigned id;
-    unsigned type;
-    unsigned size;
-    unsigned pref_start;
-    unsigned relocs;
-};
-
 struct Code_section
 {
     Section_header header;
@@ -110,27 +101,68 @@ Program::Program(char* filename)
     ifstream ifs;
     ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
     ifs.open(filename, ios::binary);
-    load_exe_header(ifs);
+    unsigned start_section = load_exe_header(ifs);
+    unsigned expected_id = 0;
+    bool has_code_section = false;
     for (Section_header h = load_section_header(ifs); h.type != eof_section;
-         h = load_section_header(ifs))
+         h = load_section_header(ifs), ++expected_id)
     {
-        if (h.size)
-            ifs.seekg(h.size, ios::cur);
+        if (h.id != expected_id)
+            throw Program_loading_error("Unexpected section identifier");
+        if (h.relocs != 0 && h.pref_start != 0)
+            throw Program_loading_error("Relocations not supported");
+        if (h.type == code_section)
+        {
+            has_code_section = true;
+            if (h.id != start_section)
+                throw Program_loading_error("Must start at code section");
+        }
+        process_section(ifs, h);
     }
+    if (!has_code_section)
+        throw Program_loading_error("No code section");
 }
 
-unsigned Program::load_exe_header(std:: istream& is)
+unsigned Program::load_exe_header(istream& is)
 {
     Exe_header header;
     is.read(reinterpret_cast<char*>(header.uuid), 16);
     if (!equal(header.uuid, header.uuid + 16, exe_uuid))
-        throw Program_loading_error();
+        throw Program_loading_error("Unknown format identifier");
     header.cpu = read_be2(is);
     if (header.cpu != visy_v1)
-        throw Program_loading_error();
+        throw Program_loading_error("Unsupported CPU");
     header.start_section = read_be2(is);
     start = header.start_addr = read_be2(is);
     return header.start_section;
 }
 
+void Program::process_section(istream &is, Section_header& h)
+{
+    switch (h.type)
+    {
+        case code_section:
+            load_section(is, code, h.size);
+            break;
+        case data_section:
+            load_section(is, data, h.size);
+            break;
+        default:
+            if (h.size)
+                is.seekg(h.size, ios::cur);
+    }
 }
+
+void Program::load_section(istream &is, vector<unsigned char>& mem,
+                                                                unsigned size)
+{
+    if (size)
+    {
+        if (mem.size())
+            throw Program_loading_error("Section of same type already loaded");
+        mem.resize(size);
+        is.read(reinterpret_cast<char*>(mem.data()), size);
+    }
+}
+
+} // namespace vs
