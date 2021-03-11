@@ -56,9 +56,9 @@ struct Section_header
 
 class Program
 {
-    std::vector<unsigned char> code;
-    std::vector<unsigned char> data;
-    unsigned start;
+    std::vector<unsigned char> priv_code;
+    std::vector<unsigned char> priv_data;
+    unsigned priv_start;
     
     unsigned load_exe_header(std::istream& is);
     void process_section(std::istream& is, Section_header& h);
@@ -67,6 +67,21 @@ class Program
 
 public:
     Program(char* filename);
+    
+    const std::vector<unsigned char>& code()
+    {
+        return priv_code;
+    }
+    
+    const std::vector<unsigned char>& data()
+    {
+        return priv_data;
+    }
+    
+    unsigned start()
+    {
+        return priv_start;
+    }
 };
 
 } // namespace vs

@@ -133,7 +133,7 @@ unsigned Program::load_exe_header(istream& is)
     if (header.cpu != visy_v1)
         throw Program_loading_error("Unsupported CPU");
     header.start_section = read_be2(is);
-    start = header.start_addr = read_be2(is);
+    priv_start = header.start_addr = read_be2(is);
     return header.start_section;
 }
 
@@ -142,10 +142,10 @@ void Program::process_section(istream &is, Section_header& h)
     switch (h.type)
     {
         case code_section:
-            load_section(is, code, h.size);
+            load_section(is, priv_code, h.size);
             break;
         case data_section:
-            load_section(is, data, h.size);
+            load_section(is, priv_data, h.size);
             break;
         default:
             if (h.size)
