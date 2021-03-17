@@ -36,6 +36,10 @@ SOFTWARE.
 namespace vs
 {
 
+struct No_program
+{
+};
+
 struct Unsupported_format
 {
 };

@@ -78,6 +78,11 @@ public:
         return cram;
     }
     
+    Memory& sdata_ram()
+    {
+        return dram;
+    }
+    
     Bus64& data_ram()
     {
         return dram;

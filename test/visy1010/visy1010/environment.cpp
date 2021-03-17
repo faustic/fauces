@@ -42,13 +42,13 @@ namespace vs
 
 Environment::Environment(unsigned bits) : cpu(bits)
 {
+    /*
     Assembler as {cpu.code_ram(), cpu.data_ram()};
     as.lihz(0, R(0));
     as.lihz(0, R(1));
     as.sys(R(1), R(0));
     as.end();
-    Disassembler disas{cpu.code_ram(), 0, 20};
-    cout << static_cast<string>(disas);
+     */
 }
 
 void Environment::load_exec(int argc, char **argv)
@@ -57,7 +57,13 @@ void Environment::load_exec(int argc, char **argv)
     {
         cout << "argv[0]: " << argv[0] << "\n";
         Program prog {argv[0]};
+        cpu.code_ram().load(prog.code(), 0);
+        cpu.sdata_ram().load(prog.data(), 0);
+        Disassembler disas{cpu.code_ram(), 0, 20};
+        cout << static_cast<string>(disas);
     }
+    else
+        throw No_program();
 }
 
 void Environment::start(int argc, char** argv)

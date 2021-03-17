@@ -34,6 +34,8 @@ SOFTWARE.
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <algorithm>
+#include <iostream>
 
 namespace  vs
 {
@@ -48,6 +50,8 @@ public:
     virtual ~GenericMemory() = default;
     virtual byte_type& operator [](size_type n) = 0;
     virtual byte_type& at(size_type n) = 0;
+    virtual void load(const std::vector<byte_type>& ext_data, size_type start)
+                                                                            = 0;
 };
 
 using Memory =
@@ -72,6 +76,16 @@ public:
     void resize(size_type new_size)
     {
         data.resize(new_size);
+    }
+    
+    void load(const std::vector<byte_type>& ext_data, size_type start) override
+    {
+        if (start > data.size())
+            throw std::out_of_range("Start address out of limits");
+        if (ext_data.size() > data.size() - start)
+            throw std::out_of_range("Source too big");
+        std::copy(ext_data.begin(), ext_data.end(), data.begin() +
+            static_cast<std::vector<uint_least8_t>::difference_type> (start));
     }
     
 protected:
