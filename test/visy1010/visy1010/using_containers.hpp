@@ -32,3 +32,6 @@ using std::unordered_map;
 
 #include <vector>
 using std::vector;
+
+#include <array>
+using std::array;
