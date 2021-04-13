@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9C5814626261DCA0086E2DA /* pieces.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9C5814426261DCA0086E2DA /* pieces.cpp */; };
 		A9E4131C25D325DE001DDA9B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E4131B25D325DE001DDA9B /* main.cpp */; };
 		A9E4132125D3298B001DDA9B /* phase1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E4131F25D3298B001DDA9B /* phase1.cpp */; };
 		A9E4132525D329C8001DDA9B /* phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E4132325D329C8001DDA9B /* phase2.cpp */; };
@@ -33,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		A9C1449F25D32567000822F8 /* cpp_visyv1_i16 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cpp_visyv1_i16; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9C5814426261DCA0086E2DA /* pieces.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pieces.cpp; sourceTree = "<group>"; };
+		A9C5814526261DCA0086E2DA /* pieces.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pieces.hpp; sourceTree = "<group>"; };
 		A9E4131B25D325DE001DDA9B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A9E4131F25D3298B001DDA9B /* phase1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = phase1.cpp; sourceTree = "<group>"; };
 		A9E4132025D3298B001DDA9B /* phase1.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = phase1.hpp; sourceTree = "<group>"; };
@@ -103,6 +106,8 @@
 				A9E4133225D32B4F001DDA9B /* phase8.hpp */,
 				A9E4132E25D32B4F001DDA9B /* phase9.cpp */,
 				A9E4132725D32B4E001DDA9B /* phase9.hpp */,
+				A9C5814426261DCA0086E2DA /* pieces.cpp */,
+				A9C5814526261DCA0086E2DA /* pieces.hpp */,
 			);
 			path = cpp_visyv1_i16;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 				A9E4133A25D32B4F001DDA9B /* phase7.cpp in Sources */,
 				A9E4133B25D32B4F001DDA9B /* phase5.cpp in Sources */,
 				A9E4133925D32B4F001DDA9B /* phase4.cpp in Sources */,
+				A9C5814626261DCA0086E2DA /* pieces.cpp in Sources */,
 				A9E4133825D32B4F001DDA9B /* phase9.cpp in Sources */,
 				A9E4131C25D325DE001DDA9B /* main.cpp in Sources */,
 				A9E4133625D32B4F001DDA9B /* phase3.cpp in Sources */,
