@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pieces.hpp"
+#include "fo16.hpp"
 
 #include "../../visy1010/visy1010/using_iostream.hpp"
 #include "../../visy1010/visy1010/using_string.hpp"

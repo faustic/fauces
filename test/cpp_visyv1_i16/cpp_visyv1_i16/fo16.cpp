@@ -1,8 +1,8 @@
-// pieces.hpp
-// Classes representing the pieces used to build a program
+// fo16.cpp
+// Fo16 format support
 // Intended compatibility: c++17
 //
-// Created by Alejandro Castro García on 13 April 2021
+// Created by Alejandro Castro García on 14 April 2021
 /*
 Licensed under the MIT License.
  
@@ -28,44 +28,5 @@ SOFTWARE.
 */
 
 
-#ifndef pieces_hpp
-#define pieces_hpp
+#include "fo16.hpp"
 
-#include <vector>
-#include <unordered_map>
-#include <string>
-#include <cstdint>
-
-namespace fauces
-{
-
-using Location =  std::uint_least16_t;
-using Size =  std::uint_least16_t;
-
-struct Symbol
-{
-    Location pos;
-    Size size;
-};
-
-struct Translated_unit_error {};
-
-struct Translated_unit
-{
-    std::vector<unsigned char> code;
-    std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> code_symbols;
-    std::unordered_map<std::string, Symbol> data_symbols;
-};
-
-class Translated_unit_loader
-{
-public:
-    virtual Translated_unit load() = 0;
-};
-
-using Instantiation_unit = Translated_unit;
-
-} // namespace fauces
-
-#endif /* pieces_hpp */
