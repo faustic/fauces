@@ -1,8 +1,8 @@
-// pieces.hpp
-// Classes representing the pieces used to build a program
+// files.cpp
+// File transformation.
 // Intended compatibility: c++17
 //
-// Created by Alejandro Castro García on 13 April 2021
+// Created by Alejandro Castro García on 15 April 2021
 /*
 Licensed under the MIT License.
  
@@ -28,56 +28,15 @@ SOFTWARE.
 */
 
 
-#ifndef pieces_hpp
-#define pieces_hpp
+#include "files.hpp"
 
-#include <vector>
-#include <unordered_map>
-#include <string>
-#include <cstdint>
-#include <memory>
+#include "fo16.hpp"
 
 namespace fauces
 {
 
-using Location =  std::uint_least16_t;
-using Size =  std::uint_least16_t;
-
-struct Symbol
+void add_to_supply(Supply& supply, const Program_input& input)
 {
-    Location pos;
-    Size size;
-};
-
-struct Translated_unit_error {};
-
-struct Translated_unit
-{
-    std::vector<unsigned char> code;
-    std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> code_symbols;
-    std::unordered_map<std::string, Symbol> data_symbols;
-};
-
-class Translated_unit_loader
-{
-public:
-    virtual Translated_unit load() = 0;
-};
-
-using Instantiation_unit = Translated_unit;
-
-class Supply
-{
-public:
-    void add_unit(std::unique_ptr<Instantiation_unit>& unit)
-    {
-        units.push_back(move(unit));
-    }
-private:
-    std::vector<std::unique_ptr<Instantiation_unit>> units;
-};
+}
 
 } // namespace fauces
-
-#endif /* pieces_hpp */

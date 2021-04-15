@@ -27,107 +27,102 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "fo16.hpp"
+#include "files.hpp"
 
 #include "../../visy1010/visy1010/using_iostream.hpp"
 #include "../../visy1010/visy1010/using_string.hpp"
 #include "../../visy1010/visy1010/using_containers.hpp"
 
-struct Arg_handle
+namespace fauces
 {
-    int pos;
-    int argc;
-    char** argv;
-    unordered_map<string, string> options;
-};
-
-struct Program_input
-{
-    unordered_map<string, string> options;
-    string value;
-};
-
-struct Program_output
-{
-    string value;
-};
-
-
-struct Program_arg
-{
-    std::vector<Program_input> inputs;
-    Program_output output;
-};
-
-unordered_map<char, string> expanded = {{'o', "output"}};
-unordered_map<string, bool> expected_empty = {{"output", false}};
-
-bool parse_options(Arg_handle& harg)
-{
-    string item {harg.argv[harg.pos]};
-    try
+    struct Arg_handle
     {
-        if (item.at(0) == '-')
+        int pos;
+        int argc;
+        char** argv;
+        unordered_map<string, string> options;
+    };
+
+    struct Program_arg
+    {
+        vector<Program_input> inputs;
+        Program_output output;
+    };
+
+    unordered_map<char, string> expanded = {{'o', "output"}};
+    unordered_map<string, bool> expected_empty = {{"output", false}};
+
+    bool parse_options(Arg_handle& harg)
+    {
+        string item {harg.argv[harg.pos]};
+        try
         {
-            char c = item.at(1);
-            string key;
-            if (c == '-')
-                key = item.substr(2);
-            else
+            if (item.at(0) == '-')
             {
-                key = expanded.at(c);
-                if (item.size() > 2)
+                char c = item.at(1);
+                string key;
+                if (c == '-')
+                    key = item.substr(2);
+                else
                 {
-                    if (expected_empty.at(key))
-                        return false;
-                    else
+                    key = expanded.at(c);
+                    if (item.size() > 2)
                     {
-                        harg.options[key] = item.substr(2);
-                        ++harg.pos;
-                        return true;
+                        if (expected_empty.at(key))
+                            return false;
+                        else
+                        {
+                            harg.options[key] = item.substr(2);
+                            ++harg.pos;
+                            return true;
+                        }
                     }
                 }
-            }
-            harg.options[key] = "";
-            if (!expected_empty.at(key))
-            {
-                if (harg.pos == harg.argc)
-                    return false;
-                harg.options[key] = harg.argv[harg.pos + 1];
-                harg.pos += 2;
-                return true;
+                harg.options[key] = "";
+                if (!expected_empty.at(key))
+                {
+                    if (harg.pos == harg.argc)
+                        return false;
+                    harg.options[key] = harg.argv[harg.pos + 1];
+                    harg.pos += 2;
+                    return true;
+                }
             }
         }
-    }
-    catch (std::out_of_range)
-    {
-    }
-    return false;
-}
-
-Program_arg parse_args(int argc, char** argv)
-{
-    Arg_handle harg{0, argc, argv, {}};
-    std::vector<Program_input> inputs;
-    for (harg.pos = 1; harg.pos < argc; ++harg.pos)
-    {
-        if (!parse_options(harg))
+        catch (out_of_range)
         {
-            string item {harg.argv[harg.pos]};
-            Program_input input {harg.options, harg.argv[harg.pos]};
-            inputs.push_back(input);
         }
+        return false;
     }
-    Program_output output {harg.options.at("output")};
-    Program_arg arg {inputs, output};
-    return arg;
+
+    Program_arg parse_args(int argc, char** argv)
+    {
+        Arg_handle harg{0, argc, argv, {}};
+        vector<Program_input> inputs;
+        for (harg.pos = 1; harg.pos < argc; ++harg.pos)
+        {
+            if (!parse_options(harg))
+            {
+                string item {harg.argv[harg.pos]};
+                Program_input input {harg.options, harg.argv[harg.pos]};
+                inputs.push_back(input);
+            }
+        }
+        Program_output output {harg.options.at("output")};
+        Program_arg arg {inputs, output};
+        return arg;
+    }
 }
 
 int main(int argc, char** argv)
 {
-    Program_arg arg = parse_args(argc, argv);
+    fauces::Program_arg arg = fauces::parse_args(argc, argv);
+    fauces::Supply supply;
     for (auto i = arg.inputs.begin(); i != arg.inputs.end(); ++i)
+    {
         cout << "Input: " << i->value << "\n";
+        fauces::add_to_supply(supply, *i);
+    }
     cout << "Output: " << arg.output.value << "\n";
     return 0;
 }

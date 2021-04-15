@@ -33,6 +33,8 @@ SOFTWARE.
 
 #include "pieces.hpp"
 
+#include <array>
+
 namespace fauces
 {
 
@@ -40,6 +42,15 @@ class Fo16_unit_loader : Translated_unit_loader
 {
 public:
     Fo16_unit_loader(const std::string& path) : path {path} {}
+    bool uuid_recognized(const std::array<unsigned char, 16>& try_uuid)
+    {
+        static const std::array<unsigned char, 16> uuid =
+        {
+            0xec, 0x4b, 0x79, 0xc8, 0x57, 0xee, 0x4b, 0xad,
+            0x96, 0xcf, 0x93, 0x85, 0x48, 0xa2, 0xe0, 0x4b
+        };
+        return try_uuid == uuid;
+    }
 private:
     const std::string path;
     Translated_unit load()

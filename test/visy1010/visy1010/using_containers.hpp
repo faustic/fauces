@@ -35,3 +35,6 @@ using std::vector;
 
 #include <array>
 using std::array;
+
+#include <stdexcept>
+using std::out_of_range;

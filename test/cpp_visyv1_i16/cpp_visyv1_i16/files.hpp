@@ -1,8 +1,8 @@
-// pieces.hpp
-// Classes representing the pieces used to build a program
+// files.hpp
+// File transformation.
 // Intended compatibility: c++17
 //
-// Created by Alejandro Castro García on 13 April 2021
+// Created by Alejandro Castro García on 15 April 2021
 /*
 Licensed under the MIT License.
  
@@ -28,56 +28,29 @@ SOFTWARE.
 */
 
 
-#ifndef pieces_hpp
-#define pieces_hpp
+#ifndef files_hpp
+#define files_hpp
 
-#include <vector>
-#include <unordered_map>
 #include <string>
-#include <cstdint>
-#include <memory>
+#include <unordered_map>
+
+#include "pieces.hpp"
 
 namespace fauces
 {
 
-using Location =  std::uint_least16_t;
-using Size =  std::uint_least16_t;
-
-struct Symbol
+struct Program_input
 {
-    Location pos;
-    Size size;
+    std::unordered_map<std::string, std::string> options;
+    std::string value;
 };
 
-struct Translated_unit_error {};
-
-struct Translated_unit
+struct Program_output
 {
-    std::vector<unsigned char> code;
-    std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> code_symbols;
-    std::unordered_map<std::string, Symbol> data_symbols;
+    std::string value;
 };
 
-class Translated_unit_loader
-{
-public:
-    virtual Translated_unit load() = 0;
-};
-
-using Instantiation_unit = Translated_unit;
-
-class Supply
-{
-public:
-    void add_unit(std::unique_ptr<Instantiation_unit>& unit)
-    {
-        units.push_back(move(unit));
-    }
-private:
-    std::vector<std::unique_ptr<Instantiation_unit>> units;
-};
+void add_to_supply(Supply& supply, const Program_input& input);
 
 } // namespace fauces
-
-#endif /* pieces_hpp */
+#endif /* files_hpp */
