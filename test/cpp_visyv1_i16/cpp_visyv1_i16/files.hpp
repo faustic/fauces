@@ -50,6 +50,10 @@ struct Program_output
     std::string value;
 };
 
+struct File_error_cantopen {};
+struct File_error_read {};
+struct File_error_unknown {};
+
 void add_to_supply(Supply& supply, const Program_input& input);
 
 } // namespace fauces

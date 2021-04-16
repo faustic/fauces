@@ -70,12 +70,12 @@ using Instantiation_unit = Translated_unit;
 class Supply
 {
 public:
-    void add_unit(std::unique_ptr<Instantiation_unit>& unit)
+    void add_unit(std::unique_ptr<Translated_unit>& unit)
     {
         units.push_back(move(unit));
     }
 private:
-    std::vector<std::unique_ptr<Instantiation_unit>> units;
+    std::vector<std::unique_ptr<Translated_unit>> units;
 };
 
 } // namespace fauces

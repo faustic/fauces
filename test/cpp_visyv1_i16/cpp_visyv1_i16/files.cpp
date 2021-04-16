@@ -32,11 +32,58 @@ SOFTWARE.
 
 #include "fo16.hpp"
 
+#include "../../visy1010/visy1010/using_iostream.hpp"
+#include "../../visy1010/visy1010/using_containers.hpp"
+#include "../../visy1010/visy1010/using_string.hpp"
+
+
 namespace fauces
 {
 
+enum class File_type {fo16, cpp};
+
+static File_type identify_source_file(string filename)
+{
+    return File_type::cpp;
+}
+
+static File_type identify_file_type(string filename)
+{
+    ifstream ifs;
+    ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
+    try
+    {
+        ifs.open(filename, ios::binary);
+    }
+    catch (...)
+    {
+        throw File_error_cantopen();
+    }
+    try
+    {
+        array<unsigned char, 16> signature;
+        ifs.read(reinterpret_cast<char*>(signature.data()),signature.size());
+        if (Fo16_unit_loader::is_signature(signature))
+            return File_type::fo16;
+    }
+    catch (...)
+    {
+        if (!ifs.eof())
+            throw File_error_read();
+    }
+    return identify_source_file(filename);
+}
+
 void add_to_supply(Supply& supply, const Program_input& input)
 {
+    File_type type = identify_file_type(input.value);
+    switch (type)
+    {
+        case File_type::fo16:
+            return;
+        default:
+            throw File_error_unknown();
+    }
 }
 
 } // namespace fauces
