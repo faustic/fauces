@@ -62,7 +62,8 @@ struct Translated_unit
 class Translated_unit_loader
 {
 public:
-    virtual Translated_unit load() = 0;
+    virtual std::unique_ptr<Translated_unit> load() = 0;
+    virtual ~Translated_unit_loader() = default;
 };
 
 using Instantiation_unit = Translated_unit;
@@ -70,7 +71,7 @@ using Instantiation_unit = Translated_unit;
 class Supply
 {
 public:
-    void add_unit(std::unique_ptr<Translated_unit>& unit)
+    void add_unit(std::unique_ptr<Translated_unit> unit)
     {
         units.push_back(move(unit));
     }

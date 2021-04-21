@@ -34,11 +34,11 @@ SOFTWARE.
 #include "pieces.hpp"
 
 #include <array>
+#include <memory>
 
 namespace fauces
 {
-
-class Fo16_unit_loader : Translated_unit_loader
+class Fo16_unit_loader : public Translated_unit_loader
 {
 public:
     Fo16_unit_loader(const std::string& path) : path {path} {}
@@ -51,12 +51,13 @@ public:
         };
         return try_signature == signature;
     }
+    static std::unique_ptr<Translated_unit_loader> make(const std::string& path)
+    {
+        return std::make_unique<Fo16_unit_loader>(path);
+    }
 private:
     const std::string path;
-    Translated_unit load()
-    {
-        throw Translated_unit_error();
-    }
+    std::unique_ptr<Translated_unit> load();
 };
 
 }

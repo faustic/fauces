@@ -29,4 +29,33 @@ SOFTWARE.
 
 
 #include "fo16.hpp"
+#include "files.hpp"
 
+#include "../../visy1010/visy1010/using_iostream.hpp"
+#include "../../visy1010/visy1010/using_containers.hpp"
+#include "../../visy1010/visy1010/using_string.hpp"
+#include "../../visy1010/visy1010/using_memory.hpp"
+
+namespace fauces
+{
+std::unique_ptr<Translated_unit> Fo16_unit_loader::load()
+{
+    ifstream ifs;
+    ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
+    try
+    {
+        ifs.open(path, ios::binary);
+    }
+    catch (...)
+    {
+        throw File_error_cantopen();
+    }
+    array<unsigned char, 16> signature;
+    read(ifs, signature.data(), signature.size());
+    if (!Fo16_unit_loader::is_signature(signature))
+        throw File_error_unknown();
+    auto unit = make_unique<Translated_unit>();    
+    return unit;
+}
+
+}

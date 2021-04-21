@@ -35,6 +35,7 @@ SOFTWARE.
 #include "../../visy1010/visy1010/using_iostream.hpp"
 #include "../../visy1010/visy1010/using_containers.hpp"
 #include "../../visy1010/visy1010/using_string.hpp"
+#include "../../visy1010/visy1010/using_memory.hpp"
 
 
 namespace fauces
@@ -62,7 +63,7 @@ static File_type identify_file_type(string filename)
     try
     {
         array<unsigned char, 16> signature;
-        ifs.read(reinterpret_cast<char*>(signature.data()),signature.size());
+        read(ifs, signature.data(), signature.size());
         if (Fo16_unit_loader::is_signature(signature))
             return File_type::fo16;
     }
@@ -77,13 +78,23 @@ static File_type identify_file_type(string filename)
 void add_to_supply(Supply& supply, const Program_input& input)
 {
     File_type type = identify_file_type(input.value);
+    unique_ptr<Translated_unit_loader> loader;
     switch (type)
     {
         case File_type::fo16:
-            return;
-        default:
+        {
+            loader = Fo16_unit_loader::make(input.value);
+            break;
+        }
+        case File_type::cpp:
             throw File_error_unknown();
     }
+    supply.add_unit(loader->load());
+}
+
+istream& read(istream& is, unsigned char* bytes, streamsize n)
+{
+    return is.read(reinterpret_cast<char*>(bytes), n);
 }
 
 } // namespace fauces

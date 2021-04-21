@@ -33,6 +33,7 @@ SOFTWARE.
 
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 #include "pieces.hpp"
 
@@ -53,6 +54,8 @@ struct Program_output
 struct File_error_cantopen {};
 struct File_error_read {};
 struct File_error_unknown {};
+
+std::istream& read(std::istream& is, unsigned char* bytes, std::streamsize n);
 
 void add_to_supply(Supply& supply, const Program_input& input);
 
