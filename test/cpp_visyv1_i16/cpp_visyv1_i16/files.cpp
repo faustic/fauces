@@ -63,7 +63,7 @@ static File_type identify_file_type(string filename)
     try
     {
         array<unsigned char, 16> signature;
-        read(ifs, signature.data(),signature.size());
+        read(ifs, signature.data(), signature.size());
         if (Fo16_unit_loader::is_signature(signature))
             return File_type::fo16;
     }
@@ -87,8 +87,7 @@ void add_to_supply(Supply& supply, const Program_input& input)
         default:
             throw File_error_unknown();
     }
-    auto unit = loader->load();
-    supply.add_unit(unit);
+    supply.add_unit(loader->load());
 }
 
 } // namespace fauces

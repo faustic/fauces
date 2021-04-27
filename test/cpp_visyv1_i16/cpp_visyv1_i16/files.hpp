@@ -33,6 +33,7 @@ SOFTWARE.
 
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 #include "pieces.hpp"
 

@@ -140,4 +140,3 @@ void Fo16_unit_loader::init(ifstream& ifs)
 }
 
 } // namespace fauces
-
