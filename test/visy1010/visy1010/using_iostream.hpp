@@ -45,3 +45,9 @@ using std::ifstream;
 using std::ofstream;
 using std::fstream;
 using std::ios;
+using std::streamsize;
+
+inline void read(istream& is, unsigned char* data, streamsize size)
+{
+    is.read(reinterpret_cast<char*>(data),size);
+}

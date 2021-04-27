@@ -29,4 +29,115 @@ SOFTWARE.
 
 
 #include "fo16.hpp"
+#include "files.hpp"
+
+#include "../../visy1010/visy1010/using_iostream.hpp"
+#include "../../visy1010/visy1010/using_containers.hpp"
+#include "../../visy1010/visy1010/using_string.hpp"
+#include "../../visy1010/visy1010/using_memory.hpp"
+
+namespace fauces
+{
+
+enum class Cpu_type
+{
+    visy = 0
+};
+
+enum Sec_id
+{
+    sec_max_id = 65534
+};
+
+enum class Sec_type
+{
+    code = 0x434f,
+    data = 0x4441,
+    symbols = 0x5359,
+    eof = 0x454f
+};
+
+static unsigned short load_short(istream& is)
+{
+    unsigned char bytes[2];
+    read(is, bytes, 2);
+    return (bytes[0] << 8) | bytes[1];
+}
+
+static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
+{
+    if (id > sec_max_id || id != load_short(is))
+        throw Fo16_error_bad();
+    Sec_type type = static_cast<Sec_type>(load_short(is));
+    unsigned short size = load_short(is);
+    load_short(is);
+    load_short(is);
+    vector<unsigned char> content(size);
+    read(is, content.data(), size);
+    switch (type)
+    {
+        case Sec_type::code:
+            if (unit->code.size())
+                throw Fo16_error_bad();
+            unit->code = content;
+            break;
+        case Sec_type::data:
+            if (unit->data.size())
+                throw Fo16_error_bad();
+            unit->data = content;
+            break;
+        case Sec_type::eof:
+            return false;
+    }
+    return true;
+}
+
+unique_ptr<Translated_unit> Fo16_unit_loader::load()
+{
+    ifstream ifs;
+    init(ifs);
+    
+    cout << "load\n";
+    
+    unique_ptr<Translated_unit> unit = make_unique<Translated_unit>();
+    
+    for (unsigned short i = 0; load_section(ifs, unit.get(), i); ++i)
+    {
+        
+    }
+    
+    return unit;
+}
+
+void Fo16_unit_loader::init(ifstream& ifs)
+{
+    ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
+    try
+    {
+        ifs.open(path, ios::binary);
+    }
+    catch (...)
+    {
+        throw File_error_cantopen();
+    }
+    try
+    {
+        array<unsigned char, 16> signature;
+        read(ifs, signature.data(),signature.size());
+        if (!Fo16_unit_loader::is_signature(signature))
+            throw File_error_unknown();
+        Cpu_type cpu = static_cast<Cpu_type>(load_short(ifs));
+        unsigned short start_section = load_short(ifs);
+        unsigned short start_offset = load_short(ifs);
+        if (cpu != Cpu_type::visy || start_section != 0xffff ||
+                                                        start_offset != 0xffff)
+            throw Fo16_error_bad();
+    }
+    catch (...)
+    {
+        throw File_error_read();
+    }
+}
+
+} // namespace fauces
 

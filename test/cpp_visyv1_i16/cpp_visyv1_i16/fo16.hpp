@@ -34,11 +34,14 @@ SOFTWARE.
 #include "pieces.hpp"
 
 #include <array>
+#include <iostream>
 
 namespace fauces
 {
 
-class Fo16_unit_loader : Translated_unit_loader
+struct Fo16_error_bad {};
+
+class Fo16_unit_loader : public Translated_unit_loader
 {
 public:
     Fo16_unit_loader(const std::string& path) : path {path} {}
@@ -53,10 +56,9 @@ public:
     }
 private:
     const std::string path;
-    Translated_unit load()
-    {
-        throw Translated_unit_error();
-    }
+    
+    std::unique_ptr<Translated_unit> load() override;
+    void init(std::ifstream &ifs);
 };
 
 }
