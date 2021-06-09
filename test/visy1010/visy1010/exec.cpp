@@ -158,10 +158,22 @@ void Program::load_section(istream &is, vector<unsigned char>& mem,
 {
     if (size)
     {
-        if (mem.size())
-            throw Program_loading_error("Section of same type already loaded");
-        mem.resize(size);
-        is.read(reinterpret_cast<char*>(mem.data()), size);
+         if (mem.size())
+             throw Program_loading_error("Section of same type already loaded");
+         using mtype = vector<unsigned char>::size_type;
+         mtype msize = size * static_cast<mtype>(2);
+         if (msize < size)
+             throw Program_loading_error("Integer overflow");
+         mem.resize(msize);
+         constexpr streamsize mmax = std::numeric_limits<streamsize>::max();
+         char* dst = reinterpret_cast<char*>(mem.data());
+         while (msize > mmax)
+         {
+             is.read(dst, mmax);
+             msize -= mmax;
+             dst += mmax;
+         }
+         is.read(dst, static_cast<streamsize>(msize));
     }
 }
 

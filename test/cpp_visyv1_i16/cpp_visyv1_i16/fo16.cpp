@@ -72,8 +72,12 @@ static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
     unsigned short size = load_short(is);
     load_short(is);
     load_short(is);
-    vector<unsigned char> content(size);
-    read(is, content.data(), size);
+    using mtype = vector<unsigned char>::size_type;
+    mtype msize = size * static_cast<mtype>(2);
+    if (msize < size)
+        throw Fo16_error_overflow();
+    vector<unsigned char> content(msize);
+    read(is, content.data(), msize);
     switch (type)
     {
         case Sec_type::code:

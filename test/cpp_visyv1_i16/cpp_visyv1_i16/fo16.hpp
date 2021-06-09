@@ -40,6 +40,7 @@ namespace fauces
 {
 
 struct Fo16_error_bad {};
+struct Fo16_error_overflow {};
 
 class Fo16_unit_loader : public Translated_unit_loader
 {
