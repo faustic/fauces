@@ -65,6 +65,7 @@ enum Exe_section_type
 {
     code_section = 0x434f,
     data_section = 0x4441,
+    symbol_section = 0x5359,
     eof_section = 0x454f
 };
 
@@ -91,7 +92,6 @@ Section_header load_section_header(istream& is)
     header.type = read_be2(is);
     header.size = read_be2(is);
     header.pref_start = read_be2(is);
-    header.relocs = read_be2(is);
     return header;
 }
 
@@ -109,14 +109,14 @@ Program::Program(char* filename)
     {
         if (h.id != expected_id)
             throw Program_loading_error("Unexpected section identifier");
-        if (h.relocs != 0 && h.pref_start != 0)
-            throw Program_loading_error("Relocations not supported");
         if (h.type == code_section)
         {
             has_code_section = true;
             if (h.id != start_section)
                 throw Program_loading_error("Must start at code section");
         }
+        else if (h.type == symbol_section)
+            throw Program_loading_error("Symbols not supported");
         process_section(ifs, h);
     }
     if (!has_code_section)

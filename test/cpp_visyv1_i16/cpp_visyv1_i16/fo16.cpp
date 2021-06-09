@@ -71,7 +71,6 @@ static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
     Sec_type type = static_cast<Sec_type>(load_short(is));
     unsigned short size = load_short(is);
     load_short(is);
-    load_short(is);
     using mtype = vector<unsigned char>::size_type;
     mtype msize = size * static_cast<mtype>(2);
     if (msize < size)

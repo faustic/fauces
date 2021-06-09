@@ -51,7 +51,6 @@ struct Section_header
     unsigned type;
     unsigned size;
     unsigned pref_start;
-    unsigned relocs;
 };
 
 class Program
