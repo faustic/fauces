@@ -57,11 +57,66 @@ enum class Sec_type
     eof = 0x454f
 };
 
+enum class Whence
+{
+    start,
+    cur
+};
+
+class Content_access
+{
+public:
+    Content_access(const std::vector<unsigned char>& content): content {content}
+    {}
+    unsigned short seek(unsigned short pos, Whence whence)
+    {
+        if (whence == Whence::cur)
+        {
+            pos = pointer + pos;
+            if (pos < pointer)
+                throw std::out_of_range("Address not in content");
+        }
+        if (pos > content.size())
+            throw std::out_of_range("Address not in content");
+        pointer = pos;
+        return pointer;
+    }
+    unsigned short load_short()
+    {
+        unsigned short n = (content.at(pointer) << 8) | content.at(pointer + 1);
+        pointer += 2;
+        return n;
+    }
+private:
+    unsigned short pointer {0};
+    const std::vector<unsigned char>& content;
+};
+
 static unsigned short load_short(istream& is)
 {
     unsigned char bytes[2];
     read(is, bytes, 2);
     return (bytes[0] << 8) | bytes[1];
+}
+
+struct Symbol_record
+{
+    unsigned short name;
+    unsigned short section_id;
+    unsigned short location;
+    unsigned short object_size;
+};
+
+static void
+load_symbols(Translated_unit* unit, const vector<unsigned char>& content)
+{
+    Content_access sym(content);
+    unsigned short num_symbols = sym.load_short();
+    unsigned short size = sym.load_short();
+    sym.seek(size, Whence::cur);
+    for (unsigned short i = 0; i < num_symbols; ++i)
+    {
+    }
 }
 
 static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
@@ -88,6 +143,9 @@ static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
             if (unit->data.size())
                 throw Fo16_error_bad();
             unit->data = content;
+            break;
+        case Sec_type::symbols:
+            load_symbols(unit, content);
             break;
         case Sec_type::eof:
             return false;

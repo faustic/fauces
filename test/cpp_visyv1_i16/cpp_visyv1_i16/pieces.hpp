@@ -43,10 +43,24 @@ namespace fauces
 using Location =  std::uint_least16_t;
 using Size =  std::uint_least16_t;
 
+enum class Ref_type
+{
+    two_bytes,
+    four_halfbytes
+};
+
+struct Reference
+{
+    Ref_type type;
+    Location pos;
+};
+
 struct Symbol
 {
     Location pos;
     Size size;
+    std::vector<Reference> code_references;
+    std::vector<Reference> data_references;
 };
 
 struct Translated_unit_error {};
