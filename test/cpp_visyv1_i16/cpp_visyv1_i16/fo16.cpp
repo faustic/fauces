@@ -105,6 +105,13 @@ struct Symbol_record
     unsigned short section_id;
     unsigned short location;
     unsigned short object_size;
+    Symbol_record(Content_access& a)
+    {
+        name = a.load_short();
+        section_id = a.load_short();
+        location = a.load_short();
+        object_size = a.load_short();
+    }
 };
 
 static void
@@ -116,6 +123,7 @@ load_symbols(Translated_unit* unit, const vector<unsigned char>& content)
     sym.seek(size, Whence::cur);
     for (unsigned short i = 0; i < num_symbols; ++i)
     {
+        Symbol_record rec {sym};
     }
 }
 
