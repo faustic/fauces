@@ -35,6 +35,7 @@ SOFTWARE.
 #include "../../visy1010/visy1010/using_containers.hpp"
 #include "../../visy1010/visy1010/using_string.hpp"
 #include "../../visy1010/visy1010/using_memory.hpp"
+#include "../../visy1010/visy1010/using_algorithm.hpp"
 
 namespace fauces
 {
@@ -127,7 +128,8 @@ load_symbols(Translated_unit* unit, const vector<unsigned char>& content)
     }
 }
 
-static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
+bool Fo16_unit_loader::load_section
+                        (istream& is, Translated_unit* unit, unsigned short id)
 {
     if (id > sec_max_id || id != load_short(is))
         throw Fo16_error_bad();
@@ -145,12 +147,14 @@ static bool load_section(istream& is, Translated_unit* unit, unsigned short id)
         case Sec_type::code:
             if (unit->code.size())
                 throw Fo16_error_bad();
-            unit->code = content;
+            code_id = id;
+            swap(unit->code, content);
             break;
         case Sec_type::data:
             if (unit->data.size())
                 throw Fo16_error_bad();
-            unit->data = content;
+            data_id = id;
+            swap(unit->data, content);
             break;
         case Sec_type::symbols:
             load_symbols(unit, content);

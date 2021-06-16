@@ -57,9 +57,13 @@ public:
     }
 private:
     const std::string path;
-    
+    unsigned short code_id {0xffff};
+    unsigned short data_id {0xffff};
+
     std::unique_ptr<Translated_unit> load() override;
     void init(std::ifstream &ifs);
+    bool load_section
+                (std::istream& is, Translated_unit* unit, unsigned short id);
 };
 
 }

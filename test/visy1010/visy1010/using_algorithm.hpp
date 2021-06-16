@@ -37,5 +37,6 @@ using std::copy;
 using std::equal;
 using std::fill;
 using std::find;
+using std::swap;
 
 #endif /* using_algorithm_h */
