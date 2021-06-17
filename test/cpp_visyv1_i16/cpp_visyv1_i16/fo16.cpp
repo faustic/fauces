@@ -58,41 +58,6 @@ enum class Sec_type
     eof = 0x454f
 };
 
-enum class Whence
-{
-    start,
-    cur
-};
-
-class Content_access
-{
-public:
-    Content_access(const std::vector<unsigned char>& content): content {content}
-    {}
-    unsigned short seek(unsigned short pos, Whence whence)
-    {
-        if (whence == Whence::cur)
-        {
-            pos = pointer + pos;
-            if (pos < pointer)
-                throw std::out_of_range("Address not in content");
-        }
-        if (pos > content.size())
-            throw std::out_of_range("Address not in content");
-        pointer = pos;
-        return pointer;
-    }
-    unsigned short load_short()
-    {
-        unsigned short n = (content.at(pointer) << 8) | content.at(pointer + 1);
-        pointer += 2;
-        return n;
-    }
-private:
-    unsigned short pointer {0};
-    const std::vector<unsigned char>& content;
-};
-
 static unsigned short load_short(istream& is)
 {
     unsigned char bytes[2];
@@ -100,32 +65,15 @@ static unsigned short load_short(istream& is)
     return (bytes[0] << 8) | bytes[1];
 }
 
-struct Symbol_record
-{
-    unsigned short name;
-    unsigned short section_id;
-    unsigned short location;
-    unsigned short object_size;
-    Symbol_record(Content_access& a)
-    {
-        name = a.load_short();
-        section_id = a.load_short();
-        location = a.load_short();
-        object_size = a.load_short();
-    }
-};
-
-static void
-load_symbols(Translated_unit* unit, const vector<unsigned char>& content)
+void Fo16_unit_loader::load_symbols
+                (Translated_unit* unit, const vector<unsigned char>& content)
 {
     Content_access sym(content);
     unsigned short num_symbols = sym.load_short();
     unsigned short size = sym.load_short();
     sym.seek(size, Whence::cur);
     for (unsigned short i = 0; i < num_symbols; ++i)
-    {
-        Symbol_record rec {sym};
-    }
+        symrec.emplace_back(sym);
 }
 
 bool Fo16_unit_loader::load_section
@@ -161,6 +109,8 @@ bool Fo16_unit_loader::load_section
             break;
         case Sec_type::eof:
             return false;
+        default:
+            throw Fo16_error_bad();
     }
     return true;
 }
@@ -175,6 +125,8 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
     unique_ptr<Translated_unit> unit = make_unique<Translated_unit>();
     
     for (unsigned short i = 0; load_section(ifs, unit.get(), i); ++i)
+        ;
+    for (auto i = symrec.begin(); i != symrec.end(); ++i)
     {
         
     }
