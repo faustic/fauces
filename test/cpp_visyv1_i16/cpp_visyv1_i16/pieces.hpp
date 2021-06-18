@@ -61,6 +61,10 @@ struct Symbol
     Size size;
     std::vector<Reference> code_references;
     std::vector<Reference> data_references;
+    bool is_external()
+    {
+        return pos == 0xffff && size == 0xffff;
+    }
 };
 
 struct Translated_unit_error {};

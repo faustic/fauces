@@ -72,6 +72,16 @@ public:
         pointer += 2;
         return n;
     }
+    std::string load_string()
+    {
+        std::string str;
+        unsigned char c;
+        while ((c = content.at(pointer++)))
+        {
+            str += c;
+        }
+        return str;
+    }
 private:
     unsigned short pointer {0};
     const std::vector<unsigned char>& content;
@@ -79,13 +89,17 @@ private:
 
 struct Symbol_record
 {
-    unsigned short name;
+    static constexpr unsigned short strings = 4;
+    std::string name;
     unsigned short section_id;
     unsigned short location;
     unsigned short object_size;
     Symbol_record(Content_access& a)
     {
-        name = a.load_short();
+        unsigned short name_pos = a.load_short();
+        Content_access s {a};
+        s.seek(strings + name_pos, Whence::start);
+        name = s.load_string();
         section_id = a.load_short();
         location = a.load_short();
         object_size = a.load_short();
