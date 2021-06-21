@@ -96,11 +96,25 @@ struct Reference_record
     unsigned char type;
     unsigned short section_id;
     unsigned short location;
+    
     Reference_record(Content_access& a, unsigned char type) :
     type {type},
     section_id {a.load_short()},
     location {a.load_short()}
     {}
+    
+    operator Ref_type()
+    {
+        switch (type)
+        {
+            case 1:
+                return Ref_type::two_bytes;
+            case 2:
+                return Ref_type::four_halfbytes;
+            default:
+                throw Fo16_error_bad();
+        }
+    }
 };
 
 struct Symbol_record

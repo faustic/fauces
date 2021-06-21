@@ -123,20 +123,28 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
     cout << "load\n";
     
     unique_ptr<Translated_unit> unit = make_unique<Translated_unit>();
-    
     for (unsigned short i = 0; load_section(ifs, unit.get(), i); ++i)
         ;
     for (auto i = symrec.begin(); i != symrec.end(); ++i)
     {
         Symbol symbol {i->location, i->object_size};
+        for (auto j = i->references.begin(); j != i->references.end(); ++j)
+        {
+            Reference ref {Ref_type {j->type}, j->location};
+            if (j->section_id == code_id)
+                symbol.code_references.push_back(ref);
+            else if (j->section_id == data_id)
+                symbol.data_references.push_back(ref);
+            else
+                throw Fo16_error_bad();
+        }
         if (i->section_id == code_id)
             swap(unit->code_symbols[i->name], symbol);
         else if (i->section_id == data_id)
             swap(unit->data_symbols[i->name], symbol);
         else
             throw Fo16_error_bad();
-    }
-    
+    }    
     return unit;
 }
 
