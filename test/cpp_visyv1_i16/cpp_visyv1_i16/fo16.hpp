@@ -93,20 +93,14 @@ private:
 
 struct Reference_record
 {
-    unsigned char number;
     unsigned char type;
     unsigned short section_id;
     unsigned short location;
-    Reference_record(Content_access& a)
-    {
-        number = a.load_byte();
-        type = a.load_byte();
-        if (type)
-        {
-            section_id = a.load_short();
-            location = a.load_short();
-        }
-    }
+    Reference_record(Content_access& a, unsigned char type) :
+    type {type},
+    section_id {a.load_short()},
+    location {a.load_short()}
+    {}
 };
 
 struct Symbol_record
@@ -126,11 +120,18 @@ struct Symbol_record
         section_id = a.load_short();
         location = a.load_short();
         object_size = a.load_short();
-        Reference_record r {a};
-        while (r.number != 0 && r.type != 0)
+        unsigned char number = a.load_byte();
+        unsigned char type = a.load_byte();
+        while (number != 0 && type != 0)
         {
-            references.push_back(r);
-            r = a;
+            Reference_record r {a, type};
+            for (unsigned char i = 0; i < number; ++i)
+            {
+                references.push_back(r);
+                r = {a, type};
+            }
+            number = a.load_byte();
+            type = a.load_byte();
         }
     }
 };
