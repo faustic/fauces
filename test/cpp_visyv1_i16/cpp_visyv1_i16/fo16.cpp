@@ -129,15 +129,12 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
     for (auto i = symrec.begin(); i != symrec.end(); ++i)
     {
         Symbol symbol {i->location, i->object_size};
-        if (!symbol.is_external())
-        {
-            if (i->section_id == code_id)
-                swap(unit->code_symbols[i->name], symbol);
-            else if (i->section_id == data_id)
-                swap(unit->data_symbols[i->name], symbol);
-            else
-                throw Fo16_error_bad();
-        }
+        if (i->section_id == code_id)
+            swap(unit->code_symbols[i->name], symbol);
+        else if (i->section_id == data_id)
+            swap(unit->data_symbols[i->name], symbol);
+        else
+            throw Fo16_error_bad();
     }
     
     return unit;
