@@ -66,6 +66,10 @@ public:
         pointer = pos;
         return pointer;
     }
+    unsigned char load_byte()
+    {
+        return content.at(pointer++);
+    }
     unsigned short load_short()
     {
         unsigned short n = (content.at(pointer) << 8) | content.at(pointer + 1);
@@ -87,6 +91,24 @@ private:
     const std::vector<unsigned char>& content;
 };
 
+struct Reference_record
+{
+    unsigned char number;
+    unsigned char type;
+    unsigned short section_id;
+    unsigned short location;
+    Reference_record(Content_access& a)
+    {
+        number = a.load_byte();
+        type = a.load_byte();
+        if (type)
+        {
+            section_id = a.load_short();
+            location = a.load_short();
+        }
+    }
+};
+
 struct Symbol_record
 {
     static constexpr unsigned short strings = 4;
@@ -94,6 +116,7 @@ struct Symbol_record
     unsigned short section_id;
     unsigned short location;
     unsigned short object_size;
+    std::vector<Reference_record> references;
     Symbol_record(Content_access& a)
     {
         unsigned short name_pos = a.load_short();
@@ -103,6 +126,12 @@ struct Symbol_record
         section_id = a.load_short();
         location = a.load_short();
         object_size = a.load_short();
+        Reference_record r {a};
+        while (r.number != 0 && r.type != 0)
+        {
+            references.push_back(r);
+            r = a;
+        }
     }
 };
 
