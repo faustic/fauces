@@ -29,3 +29,56 @@ SOFTWARE.
 
 
 #include "pieces.hpp"
+
+#include "../../visy1010/visy1010/using_containers.hpp"
+
+void fauces::Linked_program::load_symbol
+                    (const Symbol& symbol, const vector<unsigned char>& origin)
+{
+    auto end = symbol.pos + symbol.size;
+    if (symbol.references_in_code.size() || symbol.references_in_data.size())
+        throw std::runtime_error("References not supported yet");
+    Symbol dst {symbol};
+    vector<unsigned char>* bytes = nullptr;
+    switch (symbol.type)
+    {
+        case Sym_type::code:
+            dst.pos = code.size();
+            bytes = &code;
+            break;
+        case Sym_type::data:
+            dst.pos = data.size();
+            bytes = &data;
+            break;
+        default:
+            throw Sym_type_bad();
+    }
+    for (auto i = symbol.pos; i != end; ++i)
+    {
+        bytes->push_back(origin.at(i));
+    }
+}
+
+
+fauces::Linked_program fauces::Supply::link()
+{
+    Linked_program prog;
+    add_start(prog);
+    return prog;
+}
+
+void fauces::Supply::add_start(Linked_program& prog)
+{
+    for (auto i = units.begin(); i != units.end(); ++i)
+    {
+        auto& symbols = (*i)->symbols;
+        auto j = symbols.find("_start");
+        if (j != symbols.end() && !j->second.is_external())
+        {
+            auto& sym = j->second;
+            auto& bytes = sym.type == Sym_type::code ? (*i)->code : (*i)->data;
+            prog.load_symbol(sym, bytes);
+            break;
+        }
+    }
+}

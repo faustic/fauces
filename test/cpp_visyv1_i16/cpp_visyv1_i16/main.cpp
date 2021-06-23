@@ -123,6 +123,7 @@ int main(int argc, char** argv)
         cout << "Input: " << i->value << "\n";
         fauces::add_to_supply(supply, *i);
     }
+    supply.link();
     cout << "Output: " << arg.output.value << "\n";
     return 0;
 }

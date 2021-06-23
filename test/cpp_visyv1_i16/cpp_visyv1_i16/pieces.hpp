@@ -61,6 +61,8 @@ enum class Sym_type
     data
 };
 
+struct Sym_type_bad {};
+
 struct Symbol
 {
     Location pos;
@@ -83,6 +85,17 @@ struct Translated_unit
     std::unordered_map<std::string, Symbol> symbols;
 };
 
+struct Linked_program
+{
+    std::vector<unsigned char> code;
+    std::vector<unsigned char> data;
+    std::unordered_map<std::string, Symbol> int_symbols;
+    std::unordered_map<std::string, Symbol> ext_symbols;
+    
+    void load_symbol(const Symbol& symbol,
+                                    const std::vector<unsigned char>& origin);
+};
+
 class Translated_unit_loader
 {
 public:
@@ -99,8 +112,11 @@ public:
     {
         units.push_back(move(unit));
     }
+    
+    Linked_program link();
 private:
     std::vector<std::unique_ptr<Translated_unit>> units;
+    void add_start(Linked_program& prog);
 };
 
 } // namespace fauces
