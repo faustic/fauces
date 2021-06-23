@@ -55,12 +55,19 @@ struct Reference
     Location pos;
 };
 
+enum class Sym_type
+{
+    code,
+    data
+};
+
 struct Symbol
 {
     Location pos;
     Size size;
-    std::vector<Reference> code_references;
-    std::vector<Reference> data_references;
+    Sym_type type;
+    std::vector<Reference> references_in_code;
+    std::vector<Reference> references_in_data;
     bool is_external()
     {
         return pos == 0xffff && size == 0xffff;
@@ -73,8 +80,7 @@ struct Translated_unit
 {
     std::vector<unsigned char> code;
     std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> code_symbols;
-    std::unordered_map<std::string, Symbol> data_symbols;
+    std::unordered_map<std::string, Symbol> symbols;
 };
 
 class Translated_unit_loader

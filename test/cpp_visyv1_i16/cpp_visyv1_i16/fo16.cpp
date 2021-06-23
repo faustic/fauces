@@ -127,24 +127,26 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
         ;
     for (auto i = symrec.begin(); i != symrec.end(); ++i)
     {
-        Symbol symbol {i->location, i->object_size};
+        Sym_type stype;
+        if (i->section_id == code_id)
+            stype = Sym_type::code;
+        else if (i->section_id == data_id)
+            stype = Sym_type::data;
+        else
+            throw Fo16_error_bad();
+        Symbol symbol {i->location, i->object_size, stype};
         for (auto j = i->references.begin(); j != i->references.end(); ++j)
         {
             Reference ref {Ref_type {j->type}, j->location};
             if (j->section_id == code_id)
-                symbol.code_references.push_back(ref);
+                symbol.references_in_code.push_back(ref);
             else if (j->section_id == data_id)
-                symbol.data_references.push_back(ref);
+                symbol.references_in_data.push_back(ref);
             else
                 throw Fo16_error_bad();
         }
-        if (i->section_id == code_id)
-            swap(unit->code_symbols[i->name], symbol);
-        else if (i->section_id == data_id)
-            swap(unit->data_symbols[i->name], symbol);
-        else
-            throw Fo16_error_bad();
-    }    
+        swap(unit->symbols[i->name], symbol);
+    }
     return unit;
 }
 
