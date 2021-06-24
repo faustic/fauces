@@ -49,6 +49,18 @@ Environment::Environment(unsigned bits) : cpu(bits)
     as.sys(R(1), R(0));
     as.end();
      */
+/*    Assembler as {cpu.code_ram(), cpu.data_ram()};
+    string main_sym = "main";
+    as.call(main_sym, R(1));
+    as.lihz(0, R(1));
+    as.sys(R(1), R(0));
+    as.label(main_sym);
+    as.xorb(R(0), R(0));
+    as.ret();
+    as.end();
+    Disassembler disas{cpu.code_ram(), 0, 20};
+    cout << static_cast<string>(disas);
+    abort();*/
 }
 
 void Environment::load_exec(int argc, char **argv)

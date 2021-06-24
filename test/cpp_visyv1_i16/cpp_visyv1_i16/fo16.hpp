@@ -150,17 +150,25 @@ struct Symbol_record
     }
 };
 
+enum class Sec_type
+{
+    code = 0x434f,
+    data = 0x4441,
+    symbols = 0x5359,
+    eof = 0x454f
+};
+
 class Fo16_unit_loader : public Translated_unit_loader
 {
 public:
     Fo16_unit_loader(const std::string& path) : path {path} {}
+    static constexpr std::array<unsigned char, 16> signature =
+    {
+        0xec, 0x4b, 0x79, 0xc8, 0x57, 0xee, 0x4b, 0xad,
+        0x96, 0xcf, 0x93, 0x85, 0x48, 0xa2, 0xe0, 0x4b
+    };
     static bool is_signature(const std::array<unsigned char, 16>& try_signature)
     {
-        static const std::array<unsigned char, 16> signature =
-        {
-            0xec, 0x4b, 0x79, 0xc8, 0x57, 0xee, 0x4b, 0xad,
-            0x96, 0xcf, 0x93, 0x85, 0x48, 0xa2, 0xe0, 0x4b
-        };
         return try_signature == signature;
     }
 private:
@@ -175,6 +183,21 @@ private:
                 (std::istream& is, Translated_unit* unit, unsigned short id);
     void load_symbols
             (Translated_unit* unit, const std::vector<unsigned char>& content);
+};
+
+class Fo16_program_saver : public Linked_program_saver
+{
+public:
+    Fo16_program_saver(const std::string& path) : path {path} {};
+private:
+    const std::string path;
+    static constexpr unsigned short pref_code_id = 0;
+    static constexpr unsigned short pref_start = 0;
+    void init(std::ofstream &ofs);
+    void save(Linked_program& prog) override;
+    void save_section (std::ofstream &ofs, unsigned char id, Sec_type type,
+                                            std::vector<unsigned char>& bytes);
+    void save_eof(std::ofstream &ofs, unsigned char id);
 };
 
 }

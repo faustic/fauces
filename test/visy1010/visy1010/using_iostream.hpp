@@ -51,3 +51,8 @@ inline void read(istream& is, unsigned char* data, streamsize size)
 {
     is.read(reinterpret_cast<char*>(data),size);
 }
+
+inline void write(ostream& os, const unsigned char* data, streamsize size)
+{
+    os.write(reinterpret_cast<const char*>(data),size);
+}

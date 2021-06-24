@@ -50,19 +50,18 @@ enum Sec_id
     sec_max_id = 65534
 };
 
-enum class Sec_type
-{
-    code = 0x434f,
-    data = 0x4441,
-    symbols = 0x5359,
-    eof = 0x454f
-};
-
 static unsigned short load_short(istream& is)
 {
     unsigned char bytes[2];
     read(is, bytes, 2);
     return (bytes[0] << 8) | bytes[1];
+}
+
+static void save_short(ostream& os, unsigned short n)
+{
+    unsigned char bytes[2]
+            {static_cast<unsigned char>(n >> 8), static_cast<unsigned char>(n)};
+    write(os, bytes, 2);
 }
 
 void Fo16_unit_loader::load_symbols
@@ -181,3 +180,76 @@ void Fo16_unit_loader::init(ifstream& ifs)
 }
 
 } // namespace fauces
+
+void fauces::Fo16_program_saver::init(std::ofstream &ofs)
+{
+    ofs.exceptions(ios::failbit | ios::badbit);
+    try
+    {
+        ofs.open(path, ios::binary | ios::trunc);
+    }
+    catch (...)
+    {
+        throw File_error_cantopen();
+    }
+    try
+    {
+        const auto& data = Fo16_unit_loader::signature.data();
+        const auto size = Fo16_unit_loader::signature.size();
+        write(ofs, data, size);
+        save_short(ofs, static_cast<unsigned short>(Cpu_type::visy));
+        save_short(ofs, pref_code_id);
+        save_short(ofs, pref_start);
+    }
+    catch (...)
+    {
+        throw File_error_write();
+    }
+}
+
+void fauces::Fo16_program_saver::save(Linked_program &prog)
+{
+    if (prog.ext_symbols.size())
+        throw Ref_unresolved();
+    if (!prog.code.size())
+        throw Prog_nocode();
+    if (prog.code.size() > 65536)
+        throw Prog_toobig();
+    ofstream ofs;
+    init(ofs);
+    static_assert(pref_code_id == 0);
+    unsigned short section_id = pref_code_id;
+    save_section(ofs, section_id, Sec_type::code, prog.code);
+    if (prog.data.size())
+        save_section(ofs, ++section_id, Sec_type::data, prog.data);
+    save_eof(ofs, ++section_id);
+    try
+    {
+        ofs.close();
+    }
+    catch (...)
+    {
+        throw File_error_write();
+    }
+}
+
+void fauces::Fo16_program_saver::save_section(std::ofstream &ofs,
+    unsigned char id, Sec_type type, std::vector<unsigned char>& bytes)
+{
+    save_short(ofs, id);
+    save_short(ofs, static_cast<unsigned short>(type));
+    if (bytes.size() % 2)
+        bytes.push_back(0);
+    save_short(ofs, bytes.size() / 2);
+    save_short(ofs, pref_start);
+    write(ofs, bytes.data(), bytes.size());
+}
+
+void fauces::Fo16_program_saver::save_eof(std::ofstream &ofs, unsigned char id)
+{
+    save_short(ofs, id);
+    save_short(ofs, static_cast<unsigned short>(Sec_type::eof));
+    unsigned short size = 0;
+    save_short(ofs, size);
+    save_short(ofs, pref_start);
+}

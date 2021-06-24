@@ -53,9 +53,11 @@ struct Program_output
 
 struct File_error_cantopen {};
 struct File_error_read {};
+struct File_error_write {};
 struct File_error_unknown {};
 
 void add_to_supply(Supply& supply, const Program_input& input);
+void save_program(Linked_program& prog, const Program_output& output);
 
 } // namespace fauces
 #endif /* files_hpp */

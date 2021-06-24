@@ -62,6 +62,9 @@ enum class Sym_type
 };
 
 struct Sym_type_bad {};
+struct Ref_unresolved {};
+struct Prog_nocode {};
+struct Prog_toobig {};
 
 struct Symbol
 {
@@ -78,13 +81,6 @@ struct Symbol
 
 struct Translated_unit_error {};
 
-struct Translated_unit
-{
-    std::vector<unsigned char> code;
-    std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> symbols;
-};
-
 struct Linked_program
 {
     std::vector<unsigned char> code;
@@ -94,6 +90,20 @@ struct Linked_program
     
     void load_symbol(const Symbol& symbol,
                                     const std::vector<unsigned char>& origin);
+};
+
+class Linked_program_saver
+{
+public:
+    virtual void save(Linked_program& prog) = 0;
+    virtual ~Linked_program_saver() = default;
+};
+
+struct Translated_unit
+{
+    std::vector<unsigned char> code;
+    std::vector<unsigned char> data;
+    std::unordered_map<std::string, Symbol> symbols;
 };
 
 class Translated_unit_loader
@@ -113,7 +123,13 @@ public:
         units.push_back(move(unit));
     }
     
+    void clear()
+    {
+        units.clear();
+    }
+    
     Linked_program link();
+
 private:
     std::vector<std::unique_ptr<Translated_unit>> units;
     void add_start(Linked_program& prog);

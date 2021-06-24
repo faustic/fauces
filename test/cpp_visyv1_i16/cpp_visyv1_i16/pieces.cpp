@@ -64,6 +64,9 @@ fauces::Linked_program fauces::Supply::link()
 {
     Linked_program prog;
     add_start(prog);
+    if (prog.ext_symbols.size())
+        throw Ref_unresolved();
+    clear();
     return prog;
 }
 
