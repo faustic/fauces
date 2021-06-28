@@ -62,7 +62,7 @@ enum class Sym_type
 };
 
 struct Sym_type_bad {};
-struct Ref_unresolved {};
+struct Ref_unresolved {std::string symbol_name;};
 struct Prog_nocode {};
 struct Prog_toobig {};
 
@@ -73,6 +73,7 @@ struct Symbol
     Sym_type type;
     std::vector<Reference> references_in_code;
     std::vector<Reference> references_in_data;
+    std::unordered_map<std::string, bool> references_to_others;
     bool is_external()
     {
         return pos == 0xffff && size == 0xffff;
@@ -132,8 +133,20 @@ public:
 
 private:
     std::vector<std::unique_ptr<Translated_unit>> units;
-    void add_start(Linked_program& prog);
+    
+    void add_start(Linked_program& prog)
+    {
+        add_symbol(prog, "_start");
+    }
+    
+    void add_symbol(Linked_program& prog, std::string symbol_name);
 };
+
+template<typename T>
+bool within(T thing, T begin, T size)
+{
+    return thing >= begin && thing < begin + size;
+}
 
 } // namespace fauces
 

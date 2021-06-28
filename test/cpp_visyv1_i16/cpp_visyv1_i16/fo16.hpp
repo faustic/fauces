@@ -138,12 +138,8 @@ struct Symbol_record
         unsigned char type = a.load_byte();
         while (number != 0 && type != 0)
         {
-            Reference_record r {a, type};
             for (unsigned char i = 0; i < number; ++i)
-            {
-                references.push_back(r);
-                r = {a, type};
-            }
+                references.emplace_back(a, type);
             number = a.load_byte();
             type = a.load_byte();
         }

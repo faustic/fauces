@@ -144,6 +144,13 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
             else
                 throw Fo16_error_bad();
         }
+        for (auto j = symrec.begin(); j != symrec.end(); ++j)
+        {
+            if (j->name == i->name)
+                continue;
+            if (within(j->location, i->location, i->object_size))
+                symbol.references_to_others.emplace(j->name, true);
+        }
         swap(unit->symbols[i->name], symbol);
     }
     return unit;
