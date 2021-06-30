@@ -146,10 +146,17 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
         }
         for (auto j = symrec.begin(); j != symrec.end(); ++j)
         {
-            if (j->name == i->name)
-                continue;
-            if (within(j->location, i->location, i->object_size))
-                symbol.references_to_others.emplace(j->name, true);
+            for (auto k = j->references.begin(); k != j->references.end(); ++k)
+            {
+                if (i->section_id == k->section_id &&
+                    within(k->location, i->location, i->object_size))
+                {
+                    Ref_type rtype = static_cast<Ref_type>(k->type);
+                    Location pos = k->location - i->location;
+                    symbol.references_to_others[j->name].
+                                                    emplace_back(rtype, pos);
+                }
+            }
         }
         swap(unit->symbols[i->name], symbol);
     }

@@ -53,6 +53,8 @@ struct Reference
 {
     Ref_type type;
     Location pos;
+    Reference(Ref_type type, Location pos): type {type}, pos {pos}
+    {}
 };
 
 enum class Sym_type
@@ -61,6 +63,7 @@ enum class Sym_type
     data
 };
 
+struct Ref_type_bad {};
 struct Sym_type_bad {};
 struct Ref_unresolved {std::string symbol_name;};
 struct Prog_nocode {};
@@ -73,11 +76,20 @@ struct Symbol
     Sym_type type;
     std::vector<Reference> references_in_code;
     std::vector<Reference> references_in_data;
-    std::unordered_map<std::string, bool> references_to_others;
+    std::unordered_map<std::string, std::vector<Reference>>
+                                                        references_to_others;
     bool is_external()
     {
-        return pos == 0xffff && size == 0xffff;
+        return pos == 0 && size == 0;
     }
+};
+
+struct Linked_symbol
+{
+    Location pos;
+    Size size;
+    Sym_type type;
+    std::unordered_map<std::string, std::vector<Reference>> refs;
 };
 
 struct Translated_unit_error {};
@@ -86,11 +98,16 @@ struct Linked_program
 {
     std::vector<unsigned char> code;
     std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> int_symbols;
-    std::unordered_map<std::string, Symbol> ext_symbols;
+    std::unordered_map<std::string, Linked_symbol> int_symbols;
+    std::unordered_map<std::string, bool> ext_symbols;
     
-    void load_symbol(const Symbol& symbol,
+    std::vector<unsigned char>* section_bytes(Sym_type type);
+    
+    void load_symbol(const std::string& name, const Symbol& symbol,
                                     const std::vector<unsigned char>& origin);
+    
+    void relocate(const Linked_symbol& caller, const Linked_symbol& called,
+                                                        const Reference& ref);
 };
 
 class Linked_program_saver
@@ -139,7 +156,7 @@ private:
         add_symbol(prog, "_start");
     }
     
-    void add_symbol(Linked_program& prog, std::string symbol_name);
+    void add_symbol(Linked_program& prog, const std::string& symbol_name);
 };
 
 template<typename T>
@@ -147,6 +164,44 @@ bool within(T thing, T begin, T size)
 {
     return thing >= begin && thing < begin + size;
 }
+
+class Relocate
+{
+public:
+    virtual
+    void change_loc
+        (std::vector<unsigned char>& dst, Location pos, Location new_ref) = 0;
+    virtual ~Relocate() = default;
+};
+
+class Relocate_two_bytes: public Relocate
+{
+    void change_loc
+        (std::vector<unsigned char>& dst, Location pos, Location new_ref)
+        override
+    {
+        dst.at(pos) = (new_ref >> 8) & 0xff;
+        dst.at(pos + 1) = new_ref & 0xff;
+    }
+};
+
+class Relocate_four_halfbytes: public Relocate
+{
+    void change_loc
+        (std::vector<unsigned char>& dst, Location pos, Location new_ref)
+        override
+    {
+        constexpr unsigned char mask = 0b0001'1110;
+        auto& b3 = dst.at(pos);
+        auto& b2 = dst.at(pos + 1);
+        auto& b1 = dst.at(pos + 2);
+        auto& b0 = dst.at(pos + 3);
+        b3 = (b3 & ~mask) | ((new_ref << 1) & mask);
+        b2 = (b2 & ~mask) | ((new_ref >> 3) & mask);
+        b1 = (b1 & ~mask) | ((new_ref >> 7) & mask);
+        b0 = (b0 & ~mask) | ((new_ref >> 11) & mask);
+    }
+};
 
 } // namespace fauces
 
