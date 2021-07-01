@@ -70,10 +70,8 @@ load_symbol
             {
                 auto& ref_list = prev_ref->second;
                 for (auto j = ref_list.begin(); j != ref_list.end(); ++j)
-                {
                     relocate(i->second, dst, *j);
-                    prev_refs.erase(name);
-                }
+                prev_refs.erase(name);
             }
         }
         ext_symbols.erase(name);
