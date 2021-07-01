@@ -96,18 +96,53 @@ struct Translated_unit_error {};
 
 struct Linked_program
 {
+    
+    void load_symbol(const std::string& name, const Symbol& symbol,
+                                    const std::vector<unsigned char>& origin);
+    const std::unordered_map<std::string, bool>& pending_symbols()
+    {
+        return ext_symbols;
+    }
+    
+    const std::vector<unsigned char>& code_section()
+    {
+        return code;
+    }
+    
+    const std::vector<unsigned char>& data_section()
+    {
+        return data;
+    }
+    
+    void verify()
+    {
+        if (ext_symbols.size())
+            throw Ref_unresolved();
+        if (!code.size())
+            throw Prog_nocode();
+        if (code.size() % 2)
+            code.push_back(0);
+        if (data.size() % 2)
+            code.push_back(0);
+        if (code.size() > 65536 || data.size() > 65536)
+            throw Prog_toobig();
+    }
+    
+private:
     std::vector<unsigned char> code;
     std::vector<unsigned char> data;
     std::unordered_map<std::string, Linked_symbol> int_symbols;
     std::unordered_map<std::string, bool> ext_symbols;
     
     std::vector<unsigned char>* section_bytes(Sym_type type);
-    
-    void load_symbol(const std::string& name, const Symbol& symbol,
-                                    const std::vector<unsigned char>& origin);
-    
+
     void relocate(const Linked_symbol& caller, const Linked_symbol& called,
                                                         const Reference& ref);
+    Linked_symbol init_linked_symbol
+        (const Symbol& symbol, const std::vector<unsigned char>& origin);
+    void relocate_new_references(const Symbol& sym, Linked_symbol& lsym);
+    void relocate_old_references
+        (const std::string& name, const Linked_symbol& lsym);
 };
 
 class Linked_program_saver

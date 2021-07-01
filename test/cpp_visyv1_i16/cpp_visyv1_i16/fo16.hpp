@@ -119,7 +119,7 @@ struct Reference_record
 
 struct Symbol_record
 {
-    static constexpr unsigned short strings = 4;
+    static constexpr unsigned short string_table = 4;
     std::string name;
     unsigned short section_id;
     unsigned short location;
@@ -129,7 +129,7 @@ struct Symbol_record
     {
         unsigned short name_pos = a.load_short();
         Content_access s {a};
-        s.seek(strings + name_pos, Whence::start);
+        s.seek(string_table + name_pos, Whence::start);
         name = s.load_string();
         section_id = a.load_short();
         location = a.load_short();
@@ -192,7 +192,7 @@ private:
     void init(std::ofstream &ofs);
     void save(Linked_program& prog) override;
     void save_section (std::ofstream &ofs, unsigned char id, Sec_type type,
-                                            std::vector<unsigned char>& bytes);
+                                    const std::vector<unsigned char>& bytes);
     void save_eof(std::ofstream &ofs, unsigned char id);
 };
 

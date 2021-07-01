@@ -39,12 +39,29 @@ fauces::Linked_program::
 load_symbol
 (const string& name, const Symbol& symbol, const vector<unsigned char>& origin)
 {
-    Linked_symbol dst {symbol.pos, symbol.size, symbol.type};
+    Linked_symbol lsym = init_linked_symbol(symbol, origin);
+    relocate_new_references(symbol, lsym);
+    int_symbols.emplace(name, lsym);
+    relocate_old_references(name, lsym);
+}
+
+fauces::Linked_symbol
+fauces::Linked_program::
+init_linked_symbol(const Symbol &symbol, const vector<unsigned char> &origin)
+{
+    Linked_symbol linked_symbol {symbol.pos, symbol.size, symbol.type};
     auto bytes = section_bytes(symbol.type);
-    dst.pos = bytes->size();
+    linked_symbol.pos = bytes->size();
     auto sym_end = symbol.pos + symbol.size;
     for (auto i = symbol.pos; i != sym_end; ++i)
         bytes->push_back(origin.at(i));
+    return linked_symbol;
+}
+
+void
+fauces::Linked_program::
+relocate_new_references(const Symbol& symbol, Linked_symbol& linked_symbol)
+{
     auto& refs = symbol.references_to_others;
     for (auto i = refs.begin(); i != refs.end(); ++i)
     {
@@ -54,15 +71,20 @@ load_symbol
         {
             auto& ref_list = i->second;
             for (auto j = ref_list.begin(); j != ref_list.end(); ++j)
-                relocate(dst, ref_symbol->second, *j);
+                relocate(linked_symbol, ref_symbol->second, *j);
         }
         else
         {
             ext_symbols.emplace(other_name, true);
-            dst.refs[other_name] = i->second;
+            linked_symbol.refs[other_name] = i->second;
         }
     }
-    int_symbols.emplace(name, dst);
+}
+
+void
+fauces::Linked_program::
+relocate_old_references(const string& name, const Linked_symbol& lsym)
+{
     if (ext_symbols.find(name) != ext_symbols.end())
     {
         for (auto i = int_symbols.begin(); i != int_symbols.end(); ++i)
@@ -73,13 +95,14 @@ load_symbol
             {
                 auto& ref_list = prev_ref->second;
                 for (auto j = ref_list.begin(); j != ref_list.end(); ++j)
-                    relocate(i->second, dst, *j);
+                    relocate(i->second, lsym, *j);
                 prev_refs.erase(name);
             }
         }
         ext_symbols.erase(name);
     }
 }
+
 
 void
 fauces::Linked_program::
@@ -125,9 +148,9 @@ fauces::Supply::link()
 {
     Linked_program prog;
     add_start(prog);
-    while (prog.ext_symbols.size())
+    while (prog.pending_symbols().size())
     {
-        auto ext_sym = prog.ext_symbols;
+        auto& ext_sym = prog.pending_symbols();
         for (auto i = ext_sym.begin(); i != ext_sym.end(); ++i)
             add_symbol(prog, i->first);
     }

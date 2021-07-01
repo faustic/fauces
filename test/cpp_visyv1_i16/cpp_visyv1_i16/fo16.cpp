@@ -223,19 +223,14 @@ void fauces::Fo16_program_saver::init(std::ofstream &ofs)
 
 void fauces::Fo16_program_saver::save(Linked_program &prog)
 {
-    if (prog.ext_symbols.size())
-        throw Ref_unresolved();
-    if (!prog.code.size())
-        throw Prog_nocode();
-    if (prog.code.size() > 65536)
-        throw Prog_toobig();
+    prog.verify();
     ofstream ofs;
     init(ofs);
     static_assert(pref_code_id == 0);
     unsigned short section_id = pref_code_id;
-    save_section(ofs, section_id, Sec_type::code, prog.code);
-    if (prog.data.size())
-        save_section(ofs, ++section_id, Sec_type::data, prog.data);
+    save_section(ofs, section_id, Sec_type::code, prog.code_section());
+    if (prog.data_section().size())
+        save_section(ofs, ++section_id, Sec_type::data, prog.data_section());
     save_eof(ofs, ++section_id);
     try
     {
@@ -248,12 +243,10 @@ void fauces::Fo16_program_saver::save(Linked_program &prog)
 }
 
 void fauces::Fo16_program_saver::save_section(std::ofstream &ofs,
-    unsigned char id, Sec_type type, std::vector<unsigned char>& bytes)
+    unsigned char id, Sec_type type, const std::vector<unsigned char>& bytes)
 {
     save_short(ofs, id);
     save_short(ofs, static_cast<unsigned short>(type));
-    if (bytes.size() % 2)
-        bytes.push_back(0);
     save_short(ofs, bytes.size() / 2);
     save_short(ofs, pref_start);
     write(ofs, bytes.data(), bytes.size());
