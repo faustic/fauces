@@ -196,10 +196,10 @@ class Relocate_four_halfbytes: public Relocate
         auto& b2 = dst.at(pos + 1);
         auto& b1 = dst.at(pos + 2);
         auto& b0 = dst.at(pos + 3);
-        b3 = (b3 & ~mask) | ((new_ref << 1) & mask);
-        b2 = (b2 & ~mask) | ((new_ref >> 3) & mask);
-        b1 = (b1 & ~mask) | ((new_ref >> 7) & mask);
-        b0 = (b0 & ~mask) | ((new_ref >> 11) & mask);
+        b0 = (b0 & ~mask) | ((new_ref << 1) & mask);
+        b1 = (b1 & ~mask) | ((new_ref >> 3) & mask);
+        b2 = (b2 & ~mask) | ((new_ref >> 7) & mask);
+        b3 = (b3 & ~mask) | ((new_ref >> 11) & mask);
     }
 };
 
