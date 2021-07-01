@@ -151,7 +151,7 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
                 if (i->section_id == k->section_id &&
                     within(k->location, i->location, i->object_size))
                 {
-                    Ref_type rtype = static_cast<Ref_type>(k->type);
+                    Ref_type rtype {*k};
                     Location pos = k->location - i->location;
                     symbol.references_to_others[j->name].
                                                     emplace_back(rtype, pos);
