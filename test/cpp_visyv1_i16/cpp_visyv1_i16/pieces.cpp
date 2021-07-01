@@ -51,8 +51,11 @@ load_symbol
         auto other_name = i->first;
         auto ref_symbol = int_symbols.find(other_name);
         if (ref_symbol != int_symbols.end())
-#pragma message("Pending: perform relocations from already loaded symbols")
-            throw std::runtime_error("Pending: adapt to previous symbol");
+        {
+            auto& ref_list = i->second;
+            for (auto j = ref_list.begin(); j != ref_list.end(); ++j)
+                relocate(dst, ref_symbol->second, *j);
+        }
         else
         {
             ext_symbols.emplace(other_name, true);
