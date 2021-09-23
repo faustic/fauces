@@ -6,7 +6,7 @@
 /*
 Licensed under the MIT License.
  
-Copyright (c) 2021 Faustic Inferno SL
+Copyright (c) Faustic Inferno SL
  
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ SOFTWARE.
 #include "files.hpp"
 
 #include "fo16.hpp"
+#include "translator.hpp"
 
 #include "../../visy1010/visy1010/using_iostream.hpp"
 #include "../../visy1010/visy1010/using_containers.hpp"
@@ -83,6 +84,9 @@ void add_to_supply(Supply& supply, const Program_input& input)
     {
         case File_type::fo16:
             loader = make_unique<Fo16_unit_loader>(input.value);
+            break;
+        case File_type::cpp:
+            loader = make_unique<Translator>(input.value);
             break;
         default:
             throw File_error_unknown();

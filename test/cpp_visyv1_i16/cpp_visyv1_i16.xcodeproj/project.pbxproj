@@ -20,6 +20,7 @@
 		A9E4133925D32B4F001DDA9B /* phase4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E4132F25D32B4F001DDA9B /* phase4.cpp */; };
 		A9E4133A25D32B4F001DDA9B /* phase7.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E4133325D32B4F001DDA9B /* phase7.cpp */; };
 		A9E4133B25D32B4F001DDA9B /* phase5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E4133425D32B4F001DDA9B /* phase5.cpp */; };
+		CE13D55F26FCD76C00161781 /* translator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE13D55D26FCD76C00161781 /* translator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +62,8 @@
 		A9E4133225D32B4F001DDA9B /* phase8.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = phase8.hpp; sourceTree = "<group>"; };
 		A9E4133325D32B4F001DDA9B /* phase7.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = phase7.cpp; sourceTree = "<group>"; };
 		A9E4133425D32B4F001DDA9B /* phase5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = phase5.cpp; sourceTree = "<group>"; };
+		CE13D55D26FCD76C00161781 /* translator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = translator.cpp; sourceTree = "<group>"; };
+		CE13D55E26FCD76C00161781 /* translator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = translator.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +121,8 @@
 				A9C5814526261DCA0086E2DA /* pieces.hpp */,
 				A9B253EA2626DF4D00973862 /* fo16.cpp */,
 				A9B253EB2626DF4D00973862 /* fo16.hpp */,
+				CE13D55D26FCD76C00161781 /* translator.cpp */,
+				CE13D55E26FCD76C00161781 /* translator.hpp */,
 			);
 			path = cpp_visyv1_i16;
 			sourceTree = "<group>";
@@ -148,7 +153,7 @@
 		A9C1449725D32567000822F8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "Faustic Inferno SL";
 				TargetAttributes = {
 					A9C1449E25D32567000822F8 = {
@@ -190,6 +195,7 @@
 				A9E4133625D32B4F001DDA9B /* phase3.cpp in Sources */,
 				A9E4133725D32B4F001DDA9B /* phase8.cpp in Sources */,
 				A9E4132125D3298B001DDA9B /* phase1.cpp in Sources */,
+				CE13D55F26FCD76C00161781 /* translator.cpp in Sources */,
 				A9E4133525D32B4F001DDA9B /* phase6.cpp in Sources */,
 				A9E4132525D329C8001DDA9B /* phase2.cpp in Sources */,
 			);
@@ -312,6 +318,7 @@
 		A9C144A725D32567000822F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -320,6 +327,7 @@
 		A9C144A825D32567000822F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

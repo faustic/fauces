@@ -6,7 +6,7 @@
 /*
 Licensed under the MIT License.
  
-Copyright (c) 2021 Faustic Inferno SL
+Copyright (c) Faustic Inferno SL
  
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -68,6 +68,7 @@ struct Sym_type_bad {};
 struct Ref_unresolved {std::string symbol_name;};
 struct Prog_nocode {};
 struct Prog_toobig {};
+struct Syntax_error {std::string msg;};
 
 struct Symbol
 {
