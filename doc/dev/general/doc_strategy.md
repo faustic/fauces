@@ -37,7 +37,7 @@ and operate without the need to search documentation.
 * Graphical user interfaces should not be cluttered: there should be a clearly
 visible way to perform every basic task, while access to advanced tasks should
 be organised in such a way that it is easy to figure out but does not overshadow
-other tasks.
+basic tasks.
 
 ### 3. Well-organised documentation
 

@@ -120,9 +120,8 @@ small reusable functions...
 
 A few clues to keep it simple:
 
-* Do not define pragmas or command line options just in case you need them some
-time in the future. Add them only when you really need them, and try to think
-first if there is a simpler way to solve the problem.
+* Do not make the program more customisable than is needed: wait until there is
+enough demand before adding new configuration settings.
 * Whenever you find a simpler or more efficient way to do something, try to
 apply it everywhere in the project where it fits, rather than keeping multiple
 pieces of code that do the same thing in different ways.
