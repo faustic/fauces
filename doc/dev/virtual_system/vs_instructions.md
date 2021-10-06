@@ -462,8 +462,8 @@ else
     tmp_size = 2;
 if (u)
 {    
-    Sd = 0;
     tmp_sp = S0;
+    Sd = 0;
     for (tmp_count = 0; tmp_count < tmp_size; ++tmp_count)
     {
         Sd <<= 8;
