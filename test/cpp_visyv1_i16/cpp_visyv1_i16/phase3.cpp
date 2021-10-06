@@ -100,17 +100,8 @@ static char32_t escape(istream& is, Source_context& context, u32string& line)
     return U'\\';
 }
 
-static vector<Token_type> get_expected_types(char32_t initial_code)
+static void unknown_token(Token& token, const u32string& text)
 {
-    vector<Token_type> expected_types;
-    if (!expected_types.size())
-        expected_types.push_back(Token_type::unknown);
-    return expected_types;
-}
-
-static void unknown_token(Token& token, u32string& text, char32_t code)
-{
-    text += code;
     token.type = Token_type::unknown;
     token.text = plainchar_utf8(text);
 }
@@ -128,39 +119,44 @@ static Token new_line(istream& is, Source_context& context, u32string& line)
     return token;
 }
 
-static void continue_token(Token& token, vector<Token_type>& expected_types,
+static void continue_token(Token& token, Token_type& expected_type,
                            u32string& text, char32_t code)
 {
-    if (!expected_types.size())
-        expected_types = get_expected_types(code);
-    for (auto type: expected_types)
+    text += code;
+    switch (expected_type)
     {
-        switch (type)
-        {
-            case Token_type::unknown:
-                unknown_token(token, text, code);
-                return;
-            default:
-                text += code;
-        }
+        case Token_type::unknown:
+            unknown_token(token, text);
+            return;
+        default:
+            break;
     }
+}
+
+static Token_type expected_type
+                        (istream& is, Source_context& context, u32string& line)
+{
+    // TODO: detect potential white space, identifier or number
+    /* * This function should take a peek at the next character in the line,
+     * * then deduce the probable token type. It does not matter if the guess
+     * * is wrong, it will be corrected later.
+     * * For example L"hello" will be first expected to be an identifier
+     * * because it starts with an L, but as soon a the first double quotation
+     * * mark is found, the expected token type will be changed to string
+     * * literal.
+     */
+    auto& src = context.src;
+    if (context.line_start + src.col >= line.size())
+        return Token_type::white;
+    return Token_type::unknown;
 }
 
 static Token next_token(istream& is, Source_context& context, u32string& line)
 {
-    // TODO: revise everything
-    /*
-     * * This has been done without first making our minds about how to do it.
-     * *
-     * * Column number (src.col) should not be incremented until confirming that
-     * * the read code fits in the expected token type. If it does not fit, then
-     * * the current token should be considered either complete or failed, and a
-     * * new token should be parsed.
-     * *
-     */
     auto& src = context.src;
     Token token {src};
     u32string text;
+    auto type = expected_type(is, context, line);
     vector<Token_type> expected_types;
     while (token.type == Token_type::incomplete)
     {
@@ -176,11 +172,11 @@ static Token next_token(istream& is, Source_context& context, u32string& line)
             {
                 char32_t code = escape(is, context, line);
                 if (code)
-                    continue_token(token, expected_types, text, code);
+                    continue_token(token, type, text, code);
                 break;
             }
             default:
-                continue_token(token, expected_types, text, c);
+                continue_token(token, type, text, c);
         }
     }
     return token;
