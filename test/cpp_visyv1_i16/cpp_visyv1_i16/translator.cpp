@@ -35,7 +35,18 @@ SOFTWARE.
 #include "../../visy1010/visy1010/using_memory.hpp"
 #include "../../visy1010/visy1010/using_algorithm.hpp"
 
+auto fauces::Translator::preprocess(const string& path, size_t level)
+    -> list<Token>
+{
+    if (level > max_include)
+        throw Limit_error {"Included file is too nested"};
+    list<Token> tokens = pretokenize(path);
+    // execute_directives(tokens, level);
+    return tokens;
+}
+
 unique_ptr<fauces::Translated_unit> fauces::Translator::load()
 {
+    list<Token> tokens = preprocess(path);
     throw Syntax_error {"No syntax defined yet: everything is an error"};
 }

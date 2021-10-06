@@ -31,6 +31,7 @@ SOFTWARE.
 #define translator_hpp
 
 #include "pieces.hpp"
+#include <list>
 
 namespace fauces
 {
@@ -38,9 +39,14 @@ class Translator: public Translated_unit_loader
 {
 public:
     Translator(const std::string& path) : path {path} {}
+    static constexpr size_t max_include = 256;
 private:
     const std::string path;
     std::unique_ptr<Translated_unit> load() override;
+    
+    static
+        std::list<Token> preprocess(const std::string& path, size_t level = 0);
+    static std::list<Token> pretokenize(const std::string& path);
 };
 }
 

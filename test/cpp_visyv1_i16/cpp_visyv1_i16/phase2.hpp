@@ -31,6 +31,17 @@ SOFTWARE.
 #ifndef phase2_hpp
 #define phase2_hpp
 
+#include <string>
+#include <iostream>
+#include <stdexcept>
 
+namespace fauces
+{
+using std::istream;
+using std::u32string;
+
+void splice_lines(istream& is, u32string& line);
+
+}
 
 #endif /* phase2_hpp */

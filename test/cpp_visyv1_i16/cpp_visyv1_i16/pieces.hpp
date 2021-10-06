@@ -36,12 +36,15 @@ SOFTWARE.
 #include <string>
 #include <cstdint>
 #include <memory>
+#include <cstddef>
 
 namespace fauces
 {
 
 using Location =  std::uint_least16_t;
 using Size =  std::uint_least16_t;
+using std::string;
+using std::size_t;
 
 enum class Ref_type
 {
@@ -63,12 +66,66 @@ enum class Sym_type
     data
 };
 
+enum class Token_type
+{
+    incomplete,
+    unknown,
+    white,
+    bom,
+    eof,
+    pp_number,
+    identifier,
+    pp_op_or_punc
+};
+
+struct Source_location
+{
+    string path;
+    size_t lineno;
+    size_t col;
+    
+    Source_location(const string& path, size_t lineno = 0, size_t col = 0):
+    path {path},
+    lineno {lineno},
+    col {col}
+    {}
+};
+
+struct Source_context
+{
+    Source_location src;
+    size_t line_start = 0;
+    bool literal = false;
+    
+    Source_context(const string& path) :
+    src {path}
+    {}
+};
+
+struct Token
+{
+    string text;
+    Source_location src;
+    Token_type type;
+    
+    Token(string source, size_t line, size_t col):
+    src {source, line, col},
+    type {Token_type::incomplete}
+    {}
+    
+    Token(Source_location& src):
+    src {src},
+    type {Token_type::incomplete}
+    {}
+};
+
 struct Ref_type_bad {};
 struct Sym_type_bad {};
-struct Ref_unresolved {std::string symbol_name;};
+struct Ref_unresolved {string symbol_name;};
 struct Prog_nocode {};
 struct Prog_toobig {};
-struct Syntax_error {std::string msg;};
+struct Syntax_error {string msg;};
+struct Limit_error {string msg;};
 
 struct Symbol
 {
@@ -77,8 +134,7 @@ struct Symbol
     Sym_type type;
     std::vector<Reference> references_in_code;
     std::vector<Reference> references_in_data;
-    std::unordered_map<std::string, std::vector<Reference>>
-                                                        references_to_others;
+    std::unordered_map<string, std::vector<Reference>> references_to_others;
     bool is_external()
     {
         return pos == 0 && size == 0;
@@ -90,7 +146,7 @@ struct Linked_symbol
     Location pos;
     Size size;
     Sym_type type;
-    std::unordered_map<std::string, std::vector<Reference>> refs;
+    std::unordered_map<string, std::vector<Reference>> refs;
 };
 
 struct Translated_unit_error {};
@@ -98,9 +154,9 @@ struct Translated_unit_error {};
 struct Linked_program
 {
     
-    void load_symbol(const std::string& name, const Symbol& symbol,
+    void load_symbol(const string& name, const Symbol& symbol,
                                     const std::vector<unsigned char>& origin);
-    const std::unordered_map<std::string, bool>& pending_symbols()
+    const std::unordered_map<string, bool>& pending_symbols()
     {
         return ext_symbols;
     }
@@ -132,8 +188,8 @@ struct Linked_program
 private:
     std::vector<unsigned char> code;
     std::vector<unsigned char> data;
-    std::unordered_map<std::string, Linked_symbol> int_symbols;
-    std::unordered_map<std::string, bool> ext_symbols;
+    std::unordered_map<string, Linked_symbol> int_symbols;
+    std::unordered_map<string, bool> ext_symbols;
     
     std::vector<unsigned char>* section_bytes(Sym_type type);
 
@@ -143,7 +199,7 @@ private:
         (const Symbol& symbol, const std::vector<unsigned char>& origin);
     void relocate_new_references(const Symbol& sym, Linked_symbol& lsym);
     void relocate_old_references
-        (const std::string& name, const Linked_symbol& lsym);
+        (const string& name, const Linked_symbol& lsym);
 };
 
 class Linked_program_saver
@@ -157,7 +213,7 @@ struct Translated_unit
 {
     std::vector<unsigned char> code;
     std::vector<unsigned char> data;
-    std::unordered_map<std::string, Symbol> symbols;
+    std::unordered_map<string, Symbol> symbols;
 };
 
 class Translated_unit_loader
@@ -192,7 +248,7 @@ private:
         add_symbol(prog, "_start");
     }
     
-    void add_symbol(Linked_program& prog, const std::string& symbol_name);
+    void add_symbol(Linked_program& prog, const string& symbol_name);
 };
 
 template<typename T>

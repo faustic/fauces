@@ -31,6 +31,42 @@ SOFTWARE.
 #ifndef phase1_hpp
 #define phase1_hpp
 
+#include <string>
+#include <iostream>
+#include <stdexcept>
 
+namespace fauces
+{
+using std::istream;
+using std::string;
+using std::u32string;
+
+enum: char32_t
+{
+    unicode_eot = 4,
+    unicode_beot = (char32_t)(-1) // Extraofficial EOT for binary transmissions
+};
+
+class Invalid_character: std::runtime_error
+{
+public:
+    Invalid_character() : std::runtime_error("Invalid character")
+    {}
+};
+
+class Invalid_universal: std::runtime_error
+{
+public:
+    Invalid_universal() : std::runtime_error("Invalid universal character name")
+    {}
+};
+
+u32string readline(istream& is, bool deletebom = false);
+
+char32_t universal(u32string text);
+
+string plainchar_utf8(u32string text);
+
+}
 
 #endif /* phase1_hpp */

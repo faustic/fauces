@@ -29,3 +29,10 @@ SOFTWARE.
 
 
 #include "phase2.hpp"
+#include "phase1.hpp"
+
+
+void fauces::splice_lines(istream& is, u32string& line)
+{
+    line += readline(is);
+}
