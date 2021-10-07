@@ -32,21 +32,31 @@ SOFTWARE.
 
 #include "pieces.hpp"
 #include <list>
+#include <string>
+#include <memory>
 
 namespace fauces
 {
+using std::list;
+using std::string;
+using std::unique_ptr;
+
 class Translator: public Translated_unit_loader
 {
 public:
-    Translator(const std::string& path) : path {path} {}
+    Translator(const string& path) : path {path} {}
     static constexpr size_t max_include = 256;
 private:
-    const std::string path;
-    std::unique_ptr<Translated_unit> load() override;
+    const string path;
+    unique_ptr<Translated_unit> load() override;
     
-    static
-        std::list<Token> preprocess(const std::string& path, size_t level = 0);
-    static std::list<Token> pretokenize(const std::string& path);
+    static list<Token> preprocess(const string& path, size_t level = 0);
+    static std::list<Token> pretokenize(const string& path);
+    static void execute_directives(list<Token>& tokens, size_t level = 0);
+    static void convert_literals(list<Token>& tokens);
+    static void concatenate_literals(list<Token>& tokens);
+    static void analyze(list<Token>& tokens, Translated_unit& unit);
+    static void instantiate(Translated_unit& unit);
 };
 }
 

@@ -29,3 +29,11 @@ SOFTWARE.
 
 
 #include "phase8.hpp"
+
+#include "translator.hpp"
+
+void fauces::Translator::instantiate(Translated_unit& unit)
+{
+    // Templates not supported yet.
+    // For the time being, this acts like a no-op.
+}

@@ -29,6 +29,8 @@ SOFTWARE.
 
 #include "translator.hpp"
 
+#include "phase4.hpp"
+
 #include "../../visy1010/visy1010/using_iostream.hpp"
 #include "../../visy1010/visy1010/using_containers.hpp"
 #include "../../visy1010/visy1010/using_string.hpp"
@@ -41,12 +43,17 @@ auto fauces::Translator::preprocess(const string& path, size_t level)
     if (level > max_include)
         throw Limit_error {"Included file is too nested"};
     list<Token> tokens = pretokenize(path);
-    // execute_directives(tokens, level);
+    execute_directives(tokens, level);
     return tokens;
 }
 
 unique_ptr<fauces::Translated_unit> fauces::Translator::load()
 {
     list<Token> tokens = preprocess(path);
-    throw Syntax_error {"No syntax defined yet: everything is an error"};
+    convert_literals(tokens);
+    concatenate_literals(tokens);
+    auto unit = make_unique<Translated_unit>();
+    analyze(tokens, *unit);
+    instantiate(*unit);
+    return unit;
 }

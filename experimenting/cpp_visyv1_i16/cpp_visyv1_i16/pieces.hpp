@@ -45,6 +45,9 @@ using Location =  std::uint_least16_t;
 using Size =  std::uint_least16_t;
 using std::string;
 using std::size_t;
+using std::vector;
+using std::unique_ptr;
+using std::make_unique;
 
 enum class Ref_type
 {

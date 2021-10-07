@@ -29,3 +29,11 @@ SOFTWARE.
 
 
 #include "phase5.hpp"
+
+#include "translator.hpp"
+
+void fauces::Translator::convert_literals(list<Token>& tokens)
+{
+    // No character conversion needed.
+    // This acts like a no-op.
+}

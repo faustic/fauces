@@ -107,6 +107,13 @@ auto fauces::readline(istream& is, bool deletebom) -> u32string
     {
         if (is.eof())
         {
+            // TODO: Better error checking.
+            /*
+             * * 1) Make sure that every valid character before the EOF has
+             * *    already been appended to the line.
+             * * 2) Make sure that an incomplete UTF8-sequence just before the
+             * *    EOF will be reported as an error.
+             */
             line += unicode_beot;
             return line;
         }

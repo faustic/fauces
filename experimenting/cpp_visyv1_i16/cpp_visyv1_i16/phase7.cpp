@@ -29,3 +29,10 @@ SOFTWARE.
 
 
 #include "phase7.hpp"
+
+#include "translator.hpp"
+
+void fauces::Translator::analyze(list<Token>& tokens, Translated_unit& unit)
+{
+    throw Syntax_error {"No syntax defined yet: everything is an error"};
+}
