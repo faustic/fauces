@@ -68,23 +68,35 @@ static char32_t fauces::from_utf8(istream& is)
     // No need to check for EOF because exceptions are set
     if (!(u8 & 0x80))
         return static_cast<char32_t>(u8);
-    else if ((u8 & 0xe0) == 0xc0 )
+    else
     {
-        char32_t c = (static_cast<char32_t>(u8) & 0x1f) << 8;
-        return add_continuation(is, c, 0);
-    }
-    else if ((u8 & 0xf0) == 0xe0)
-    {
-        char32_t c = (static_cast<char32_t>(u8) & 0x0f) << 16;
-        add_continuation(is, c, 8);
-        return add_continuation(is, c, 0);
-    }
-    else if ((u8 & 0xf8) == 0xf0)
-    {
-        char32_t c = (static_cast<char32_t>(u8) & 0x07) << 24;
-        add_continuation(is, c, 16);
-        add_continuation(is, c, 8);
-        return add_continuation(is, c, 0);
+        try
+        {
+            if ((u8 & 0xe0) == 0xc0 )
+            {
+                char32_t c = (static_cast<char32_t>(u8) & 0x1f) << 8;
+                return add_continuation(is, c, 0);
+            }
+            else if ((u8 & 0xf0) == 0xe0)
+            {
+                char32_t c = (static_cast<char32_t>(u8) & 0x0f) << 16;
+                add_continuation(is, c, 8);
+                return add_continuation(is, c, 0);
+            }
+            else if ((u8 & 0xf8) == 0xf0)
+            {
+                char32_t c = (static_cast<char32_t>(u8) & 0x07) << 24;
+                add_continuation(is, c, 16);
+                add_continuation(is, c, 8);
+                return add_continuation(is, c, 0);
+            }
+        }
+        catch (std::ios_base::failure)
+        {
+            if (is.eof())
+                throw Invalid_character();
+            throw;
+        }
     }
     throw Invalid_character();
 }
@@ -107,13 +119,6 @@ auto fauces::readline(istream& is, bool deletebom) -> u32string
     {
         if (is.eof())
         {
-            // TODO: Better error checking.
-            /*
-             * * 1) Make sure that every valid character before the EOF has
-             * *    already been appended to the line.
-             * * 2) Make sure that an incomplete UTF8-sequence just before the
-             * *    EOF will be reported as an error.
-             */
             line += unicode_beot;
             return line;
         }
