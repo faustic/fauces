@@ -37,6 +37,7 @@ SOFTWARE.
 #include <cstdint>
 #include <memory>
 #include <cstddef>
+#include <fstream>
 
 namespace fauces
 {
@@ -48,6 +49,9 @@ using std::size_t;
 using std::vector;
 using std::unique_ptr;
 using std::make_unique;
+using std::istream;
+using std::ifstream;
+using std::u32string;
 
 enum class Ref_type
 {
@@ -71,7 +75,7 @@ enum class Sym_type
 
 enum class Token_type
 {
-    incomplete,
+    empty,
     unknown,
     white,
     bom,
@@ -96,13 +100,18 @@ struct Source_location
 
 struct Source_context
 {
+    ifstream is;
+    u32string line;
     Source_location src;
     size_t line_start = 0;
     bool literal = false;
-    
+
     Source_context(const string& path) :
     src {path}
-    {}
+    {
+        is.exceptions(is.failbit | is.badbit | is.eofbit);
+        is.open(path, is.binary);
+    }
 };
 
 struct Token
@@ -113,12 +122,12 @@ struct Token
     
     Token(string source, size_t line, size_t col):
     src {source, line, col},
-    type {Token_type::incomplete}
+    type {Token_type::empty}
     {}
     
     Token(Source_location& src):
     src {src},
-    type {Token_type::incomplete}
+    type {Token_type::empty}
     {}
 };
 
