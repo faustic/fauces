@@ -129,6 +129,11 @@ struct Token
     src {src},
     type {Token_type::empty}
     {}
+    
+    Token(Source_location& src, Token_type type):
+    src {src},
+    type {type}
+    {}
 };
 
 struct Ref_type_bad {};

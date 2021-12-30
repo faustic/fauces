@@ -102,20 +102,19 @@ static char32_t escape(Source_context& context)
     return U'\\';
 }
 
-static void unknown_token(Token& token, const u32string& text)
-{
-    token.type = Token_type::unknown;
-    token.text = plainchar_utf8(text);
-}
-
-static Token new_line(Source_context& context)
+static void next_line(Source_context& context)
 {
     auto& src = context.src;
     context.line = readline(context.is);
     context.line_start = 0;
     src.col = 0;
     ++src.lineno;
-    Token token {src};
+}
+
+static Token new_line(Source_context& context)
+{
+    next_line(context);
+    Token token {context.src};
     token.text = "\n";
     token.type = Token_type::white;
     return token;
@@ -135,29 +134,162 @@ static void next_ch(Source_context& context)
     ++context.src.col;
 }
 
-static Token next_token(Source_context& context)
+static char32_t get_ch(Source_context& context)
+{
+    char32_t c = peek_ch(context);
+    next_ch(context);
+    return c;
+}
+
+static bool is_control(char32_t c)
+{
+    return c < 0x1f || (c >= 0x7f && c <= 0x9f);
+}
+
+static bool is_basic(char32_t c)
+{
+    return (c>= 9 && c <= 0xc) || (c >= 0x20 && c<= 0x23) ||
+            (c >= 0x25 && c <= 0x3f) || (c >= 0x41 && c <= 0x5f) ||
+            (c >= 0x61 && c <= 0x7e);
+}
+
+using Parse_token = Token (*)(Source_context& context);
+
+static Token unknown_token(Source_context& context)
+{
+    Token token {context.src, Token_type::unknown};
+    token.text = plainchar_utf8(u32string {get_ch(context)});
+    return token;
+}
+
+static Token eof(Source_context& context)
+{
+    return Token(context.src, Token_type::eof);
+}
+
+static Token parse_div(Source_context& context)
 {
     auto& src = context.src;
-    Token token {src};
-    char32_t c = peek_ch(context);
-    if (c == 0x0a)
-        return new_line(context);
+    Token token {src, Token_type::pp_op_or_punc};
+    token.text = "/";
     next_ch(context);
-    switch (c)
+    if (peek_ch(context) == U'/')
     {
-        case unicode_beot:
-            token.type = Token_type::eof;
-            break;
-        case '\\':
-            c = escape(context);
-            [[fallthrough]];
-        default:
+        token.text = " ";
+        token.type = Token_type::white;
+        src.col = context.line.size() - context.line_start;
+    }
+    else if (peek_ch(context) == U'*')
+    {
+        next_ch(context);
+        token.text = " ";
+        token.type = Token_type::white;
+        for (;;)
         {
-            u32string text {c};
-            unknown_token(token, text);
+            auto pos = context.line.find(U"*/");
+            if (pos == string::npos)
+                next_line(context);
+            else
+            {
+                context.src.col = context.line_start + pos + 2;
+                break;
+            }
         }
     }
     return token;
+}
+
+static inline bool in_range(char32_t c, char32_t first, char32_t last)
+{
+    return c >= first && c <= last;
+}
+
+static bool is_identifier_char(char32_t c)
+{
+    if (in_range(c, U'A', U'Z') || c == U'_' || in_range(c, U'a', U'z') ||
+        c == 0xa8 || c == 0xaa || c == 0xad || c == 0xaf ||
+        in_range(c, 0xb2, 0xb5) || in_range(c, 0xb7, 0xba) ||
+        in_range(c, 0xbc, 0xbe) || in_range(c, 0xc0, 0xd6) ||
+        in_range(c, 0xd8, 0xf6) || in_range(c, 0xf8, 0xff) ||
+        in_range(c, 0x0100, 0x167f) || in_range(c, 0x1681, 0x180d) ||
+        in_range(c, 0x180f, 0x1fff) || in_range(c, 0x200b, 0x200d) ||
+        in_range(c, 0x202a, 0x202e) || in_range(c, 0x203f, 0x2040) ||
+        c == 0x2054 || in_range(c, 0x2060, 0x206f) ||
+        in_range(c, 0x2070, 0x218f) || in_range(c, 0x2460, 0x24ff) ||
+        in_range(c, 0x2776, 0x2793) || in_range(c, 0x2c00, 0x2dff) ||
+        in_range(c, 0x2e80, 0x2fff) || in_range(c, 0x3004, 0x3007) ||
+        in_range(c, 0x3021, 0x302f) || in_range(c, 0x3031, 0xd7ff) ||
+        in_range(c, 0xf900, 0xfd3d) || in_range(c, 0xfd40, 0xfdcf) ||
+        in_range(c, 0xfdf0, 0xfe44) || in_range(c, 0xfe47, 0xfffd) ||
+        in_range(c, 0x10000, 0x1fffd) || in_range(c, 0x20000, 0x2fffd) ||
+        in_range(c, 0x30000, 0x3fffd) || in_range(c, 0x40000, 0x4fffd) ||
+        in_range(c, 0x50000, 0x5fffd) || in_range(c, 0x60000, 0x6fffd) ||
+        in_range(c, 0x70000, 0x7fffd) || in_range(c, 0x80000, 0x8fffd) ||
+        in_range(c, 0x90000, 0x9fffd) || in_range(c, 0xa0000, 0xafffd) ||
+        in_range(c, 0xb0000, 0xbfffd) || in_range(c, 0xc0000, 0xcfffd) ||
+        in_range(c, 0xd0000, 0xdfffd) || in_range(c, 0xe0000, 0xefffd) ||
+        in_range(c, U'0', U'9'))
+            return true;
+    return false;
+}
+
+static bool is_identifier_start(char32_t c)
+{
+    if (is_identifier_char(c) && !in_range(c, U'0', U'9') &&
+        !in_range(c, 0x300, 0x36f) && !in_range(c, 0x1dc0, 0x1dff) &&
+        !in_range(c, 0x20d0, 0x20ff) && !in_range(c, 0xfe20, 0xfe2f))
+            return true;
+    return false;
+}
+
+static Token parse_identifier(Source_context& context)
+{
+    auto& src = context.src;
+    u32string identifier {get_ch(context)};
+    Token token {src, Token_type::identifier};
+    for (char32_t c = peek_ch(context); is_identifier_char(c);
+         c = peek_ch(context))
+    {
+        identifier += c;
+        next_ch(context);
+    }
+    token.text = plainchar_utf8(identifier);
+    return token;
+}
+
+unordered_map<char32_t, Parse_token> parse
+{
+    {U'/', parse_div}
+};
+
+static Token parse_token(char32_t start, Source_context& context)
+{
+    auto parser = parse.find(start);
+    if (parser != parse.end())
+        return parser->second(context);
+    else if (is_identifier_start(start))
+        return parse_identifier(context);
+    return unknown_token(context);
+}
+
+static Token next_token(Source_context& context)
+{
+    char32_t c = peek_ch(context);
+    if (c == 0x0a)
+        return new_line(context);
+    switch (c)
+    {
+        case unicode_beot:
+            return eof(context);
+        case '\\':
+            next_ch(context);
+            c = escape(context);
+            if (is_control(c) || is_basic(c))
+                throw Invalid_universal();
+            [[fallthrough]];
+        default:
+            return parse_token(c, context);
+    }
 }
 
 } // namespace fauces

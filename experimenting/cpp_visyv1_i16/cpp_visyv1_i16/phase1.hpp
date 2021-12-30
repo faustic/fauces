@@ -57,7 +57,7 @@ public:
 class Invalid_universal: std::runtime_error
 {
 public:
-    Invalid_universal() : std::runtime_error("Invalid universal character name")
+    Invalid_universal(): std::runtime_error("Invalid universal character name")
     {}
 };
 

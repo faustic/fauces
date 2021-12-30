@@ -32,7 +32,16 @@ SOFTWARE.
 
 #include "translator.hpp"
 
+#include <iostream>
+
 void fauces::Translator::analyze(list<Token>& tokens, Translated_unit& unit)
 {
+    size_t n = 0;
+    for (auto& t: tokens)
+    {
+        if (t.type == Token_type::unknown)
+            std::cout << n << ". Unknown: " << t.text << "\n";
+        ++n;
+    }
     throw Syntax_error {"No syntax defined yet: everything is an error"};
 }
