@@ -40,7 +40,7 @@ void fauces::Translator::analyze(list<Token>& tokens, Translated_unit& unit)
     for (auto& t: tokens)
     {
         if (t.type == Token_type::unknown)
-            std::cout << n << ". Unknown: " << t.text << "\n";
+            std::cerr << n << ". Unknown: " << t.text << "\n";
         ++n;
     }
     throw Syntax_error {"No syntax defined yet: everything is an error"};

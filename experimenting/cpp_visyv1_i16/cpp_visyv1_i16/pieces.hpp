@@ -142,6 +142,7 @@ struct Ref_unresolved {string symbol_name;};
 struct Prog_nocode {};
 struct Prog_toobig {};
 struct Syntax_error {string msg;};
+struct Unget_error {};
 struct Limit_error {string msg;};
 
 struct Symbol

@@ -134,6 +134,19 @@ static void next_ch(Source_context& context)
     ++context.src.col;
 }
 
+static void unget_ch(Source_context& context)
+{
+    if (context.src.col == 0)
+        throw Unget_error();
+    --context.src.col;
+}
+
+static void unget_ch(Source_context& context, size_t times)
+{
+    while (times--)
+        unget_ch(context);
+}
+
 static char32_t get_ch(Source_context& context)
 {
     char32_t c = peek_ch(context);
@@ -151,6 +164,11 @@ static bool is_basic(char32_t c)
     return (c>= 9 && c <= 0xc) || (c >= 0x20 && c<= 0x23) ||
             (c >= 0x25 && c <= 0x3f) || (c >= 0x41 && c <= 0x5f) ||
             (c >= 0x61 && c <= 0x7e);
+}
+
+static bool is_digit(char32_t c)
+{
+    return (c >= U'0' & c <= U'9');
 }
 
 using Parse_token = Token (*)(Source_context& context);
@@ -204,33 +222,44 @@ static inline bool in_range(char32_t c, char32_t first, char32_t last)
     return c >= first && c <= last;
 }
 
+static bool is_nondigit(char32_t c)
+{
+    return in_range(c, U'A', U'Z')  || c == U'_' || in_range(c, U'a', U'z');
+}
+
+static bool is_universal(char32_t c)
+{
+    return c == 0xa8 || c == 0xaa || c == 0xad || c == 0xaf ||
+    in_range(c, 0xb2, 0xb5) || in_range(c, 0xb7, 0xba) ||
+    in_range(c, 0xbc, 0xbe) || in_range(c, 0xc0, 0xd6) ||
+    in_range(c, 0xd8, 0xf6) || in_range(c, 0xf8, 0xff) ||
+    in_range(c, 0x0100, 0x167f) || in_range(c, 0x1681, 0x180d) ||
+    in_range(c, 0x180f, 0x1fff) || in_range(c, 0x200b, 0x200d) ||
+    in_range(c, 0x202a, 0x202e) || in_range(c, 0x203f, 0x2040) ||
+    c == 0x2054 || in_range(c, 0x2060, 0x206f) ||
+    in_range(c, 0x2070, 0x218f) || in_range(c, 0x2460, 0x24ff) ||
+    in_range(c, 0x2776, 0x2793) || in_range(c, 0x2c00, 0x2dff) ||
+    in_range(c, 0x2e80, 0x2fff) || in_range(c, 0x3004, 0x3007) ||
+    in_range(c, 0x3021, 0x302f) || in_range(c, 0x3031, 0xd7ff) ||
+    in_range(c, 0xf900, 0xfd3d) || in_range(c, 0xfd40, 0xfdcf) ||
+    in_range(c, 0xfdf0, 0xfe44) || in_range(c, 0xfe47, 0xfffd) ||
+    in_range(c, 0x10000, 0x1fffd) || in_range(c, 0x20000, 0x2fffd) ||
+    in_range(c, 0x30000, 0x3fffd) || in_range(c, 0x40000, 0x4fffd) ||
+    in_range(c, 0x50000, 0x5fffd) || in_range(c, 0x60000, 0x6fffd) ||
+    in_range(c, 0x70000, 0x7fffd) || in_range(c, 0x80000, 0x8fffd) ||
+    in_range(c, 0x90000, 0x9fffd) || in_range(c, 0xa0000, 0xafffd) ||
+    in_range(c, 0xb0000, 0xbfffd) || in_range(c, 0xc0000, 0xcfffd) ||
+    in_range(c, 0xd0000, 0xdfffd) || in_range(c, 0xe0000, 0xefffd);
+}
+
+static bool is_identifier_nondigit(char32_t c)
+{
+    return is_nondigit(c) || is_universal(c);
+}
+
 static bool is_identifier_char(char32_t c)
 {
-    if (in_range(c, U'A', U'Z') || c == U'_' || in_range(c, U'a', U'z') ||
-        c == 0xa8 || c == 0xaa || c == 0xad || c == 0xaf ||
-        in_range(c, 0xb2, 0xb5) || in_range(c, 0xb7, 0xba) ||
-        in_range(c, 0xbc, 0xbe) || in_range(c, 0xc0, 0xd6) ||
-        in_range(c, 0xd8, 0xf6) || in_range(c, 0xf8, 0xff) ||
-        in_range(c, 0x0100, 0x167f) || in_range(c, 0x1681, 0x180d) ||
-        in_range(c, 0x180f, 0x1fff) || in_range(c, 0x200b, 0x200d) ||
-        in_range(c, 0x202a, 0x202e) || in_range(c, 0x203f, 0x2040) ||
-        c == 0x2054 || in_range(c, 0x2060, 0x206f) ||
-        in_range(c, 0x2070, 0x218f) || in_range(c, 0x2460, 0x24ff) ||
-        in_range(c, 0x2776, 0x2793) || in_range(c, 0x2c00, 0x2dff) ||
-        in_range(c, 0x2e80, 0x2fff) || in_range(c, 0x3004, 0x3007) ||
-        in_range(c, 0x3021, 0x302f) || in_range(c, 0x3031, 0xd7ff) ||
-        in_range(c, 0xf900, 0xfd3d) || in_range(c, 0xfd40, 0xfdcf) ||
-        in_range(c, 0xfdf0, 0xfe44) || in_range(c, 0xfe47, 0xfffd) ||
-        in_range(c, 0x10000, 0x1fffd) || in_range(c, 0x20000, 0x2fffd) ||
-        in_range(c, 0x30000, 0x3fffd) || in_range(c, 0x40000, 0x4fffd) ||
-        in_range(c, 0x50000, 0x5fffd) || in_range(c, 0x60000, 0x6fffd) ||
-        in_range(c, 0x70000, 0x7fffd) || in_range(c, 0x80000, 0x8fffd) ||
-        in_range(c, 0x90000, 0x9fffd) || in_range(c, 0xa0000, 0xafffd) ||
-        in_range(c, 0xb0000, 0xbfffd) || in_range(c, 0xc0000, 0xcfffd) ||
-        in_range(c, 0xd0000, 0xdfffd) || in_range(c, 0xe0000, 0xefffd) ||
-        in_range(c, U'0', U'9'))
-            return true;
-    return false;
+    return is_nondigit(c) || is_digit(c) || is_universal(c);
 }
 
 static bool is_identifier_start(char32_t c)
@@ -260,8 +289,8 @@ static Token parse_identifier(Source_context& context)
 static Token parse_white(Source_context& context)
 {
     auto& src = context.src;
-    Token token{src, Token_type::white};;
-    token.text = plainchar_utf8(u32string() + peek_ch(context));
+    Token token{src, Token_type::white};
+    token.text = plainchar_utf8(peek_ch(context));
     next_ch(context);
     return token;
 }
@@ -269,18 +298,82 @@ static Token parse_white(Source_context& context)
 static Token parse_punc(Source_context &context)
 {
     auto& src = context.src;
-    Token token{src, Token_type::pp_op_or_punc};;
-    token.text = plainchar_utf8(u32string() + peek_ch(context));
+    Token token{src, Token_type::pp_op_or_punc};
+    token.text = plainchar_utf8(peek_ch(context));
     next_ch(context);
     return token;
 }
+
+static Token& parse_number(Source_context &context, Token& token)
+{
+    do
+    {
+        char32_t c = get_ch(context);
+        if (is_digit(c) || is_identifier_nondigit(c) || c == U'.')
+            token.text += plainchar_utf8(c);
+        else if (c == U'\'')
+        {
+            char32_t c2 = get_ch(context);
+            if (is_digit(c2) || is_nondigit(c2))
+                token.text += plainchar_utf8(u32string() + c + c2);
+            else
+            {
+                unget_ch(context, 2);
+                break;
+            }
+        }
+        else if (c == U'e' || c == U'E' || c == U'p' || c == U'P')
+        {
+            char32_t c2 = get_ch(context);
+            if (c2 == U'+' || c2 == U'-')
+                token.text += plainchar_utf8(u32string() + c + c2);
+            else
+            {
+                unget_ch(context, 2);
+                break;
+            }
+        }
+        else
+        {
+            unget_ch(context);
+            break;
+        }
+    } while (true);
+    return token;
+}
+
+static Token parse_fullstop(Source_context &context)
+{
+    auto& src = context.src;
+    Token token{src, Token_type::pp_op_or_punc};
+    token.text = ".";
+    char32_t c = get_ch(context);
+    if (is_digit(c))
+        return parse_number(context, token);
+    else
+        return token;
+}
+
+static Token parse_number(Source_context &context)
+{
+    auto& src = context.src;
+    Token token{src, Token_type::pp_number};
+    token.text = plainchar_utf8(peek_ch(context));
+    next_ch(context);
+    return parse_number(context, token);
+}
+
 
 unordered_map<char32_t, Parse_token> parse
 {
     {U'/', parse_div}, {0x20, parse_white}, {0x09, parse_white},
     {0x0b, parse_white}, {0xff, parse_white}, {U'(', parse_punc},
     {U')', parse_punc}, {U'[', parse_punc}, {U']', parse_punc},
-    {U'{', parse_punc}, {U'}', parse_punc}, {U';', parse_punc}
+    {U'{', parse_punc}, {U'}', parse_punc}, {U';', parse_punc},
+    {U'.', parse_fullstop}, {U'0', parse_number}, {U'1', parse_number},
+    {U'2', parse_number}, {U'3', parse_number}, {U'4', parse_number},
+    {U'5', parse_number}, {U'6', parse_number}, {U'7', parse_number},
+    {U'8', parse_number}, {U'9', parse_number}
 };
 
 static Token parse_token(char32_t start, Source_context& context)

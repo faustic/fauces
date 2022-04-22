@@ -174,27 +174,32 @@ auto fauces::plainchar_utf8(u32string text) -> string
 {
     string utf8;
     for (auto c: text)
+        utf8 += plainchar_utf8(c);
+    return utf8;
+}
+
+auto fauces::plainchar_utf8(char32_t c) -> string
+{
+    string utf8;
+    if (c <= 0x7f)
+        utf8.push_back(plainchar(static_cast<unsigned char>(c)));
+    else if (c <= 0x7ff)
     {
-        if (c <= 0x7f)
-            utf8.push_back(plainchar(static_cast<unsigned char>(c)));
-        else if (c <= 0x7ff)
-        {
-            utf8.push_back(plainchar(0xc0 | ((c >> 6) & 0x1f)));
-            utf8.push_back(plainchar(0x80 | (c & 0x3f)));
-        }
-        else if (c <= 0xffff)
-        {
-            utf8.push_back(plainchar(0xe0 | ((c >> 12) & 0x0f)));
-            utf8.push_back(plainchar(0x80 | ((c >> 6) & 0x3f)));
-            utf8.push_back(plainchar(0x80 | (c & 0x3f)));
-        }
-        else
-        {
-            utf8.push_back(plainchar(0xf0 | ((c >> 18) & 0x07)));
-            utf8.push_back(plainchar(0x80 | ((c >> 12) & 0x3f)));
-            utf8.push_back(plainchar(0x80 | ((c >> 6) & 0x3f)));
-            utf8.push_back(plainchar(0x80 | (c & 0x3f)));
-        }
+        utf8.push_back(plainchar(0xc0 | ((c >> 6) & 0x1f)));
+        utf8.push_back(plainchar(0x80 | (c & 0x3f)));
+    }
+    else if (c <= 0xffff)
+    {
+        utf8.push_back(plainchar(0xe0 | ((c >> 12) & 0x0f)));
+        utf8.push_back(plainchar(0x80 | ((c >> 6) & 0x3f)));
+        utf8.push_back(plainchar(0x80 | (c & 0x3f)));
+    }
+    else
+    {
+        utf8.push_back(plainchar(0xf0 | ((c >> 18) & 0x07)));
+        utf8.push_back(plainchar(0x80 | ((c >> 12) & 0x3f)));
+        utf8.push_back(plainchar(0x80 | ((c >> 6) & 0x3f)));
+        utf8.push_back(plainchar(0x80 | (c & 0x3f)));
     }
     return utf8;
 }

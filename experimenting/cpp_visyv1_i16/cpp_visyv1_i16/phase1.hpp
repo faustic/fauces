@@ -66,6 +66,7 @@ u32string readline(istream& is, bool deletebom = false);
 char32_t universal(u32string text);
 
 string plainchar_utf8(u32string text);
+string plainchar_utf8(char32_t c);
 
 }
 
