@@ -34,9 +34,27 @@ SOFTWARE.
 
 #include <iostream>
 
+namespace fauces
+{
+
+static void remove_white_space(list<Token>& tokens)
+{
+    auto t = tokens.begin();
+    while (t != tokens.end())
+    {
+        if ((*t).type == Token_type::white)
+            t = tokens.erase(t);
+        else
+            ++t;
+    }
+}
+
+}
+
 void fauces::Translator::analyze(list<Token>& tokens, Translated_unit& unit)
 {
     size_t n = 0;
+    remove_white_space(tokens);
     for (auto& t: tokens)
     {
         if (t.type == Token_type::unknown)
