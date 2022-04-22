@@ -266,10 +266,21 @@ static Token parse_white(Source_context& context)
     return token;
 }
 
+static Token parse_punc(Source_context &context)
+{
+    auto& src = context.src;
+    Token token{src, Token_type::pp_op_or_punc};;
+    token.text = plainchar_utf8(u32string() + peek_ch(context));
+    next_ch(context);
+    return token;
+}
+
 unordered_map<char32_t, Parse_token> parse
 {
     {U'/', parse_div}, {0x20, parse_white}, {0x09, parse_white},
-    {0x0b, parse_white}, {0xff, parse_white}
+    {0x0b, parse_white}, {0xff, parse_white}, {U'(', parse_punc},
+    {U')', parse_punc}, {U'[', parse_punc}, {U']', parse_punc},
+    {U'{', parse_punc}, {U'}', parse_punc}, {U';', parse_punc}
 };
 
 static Token parse_token(char32_t start, Source_context& context)
