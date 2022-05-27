@@ -60,6 +60,8 @@ The following will be assumed about choices that are not explicitly established:
 * The `char` type is unsigned, with the same range as the `unsigned char` type.
 * A `void *` value has 16 bits (P16).
 * A `void (*)()` value has the same number of bits as a `void*` value, 16 bits if neither is specified (E16).
-* The format used for floating point types will be the common one that will be defined for CPUs without floating point capabilities.
+* A `float` is a single precision IEEE 754 number.
+* A `double` is a double precision IEEE 754 number.
+* A `long double` is the same as a `double`.
 * Right-shifting negative integers will propagate the sign bit.
 
