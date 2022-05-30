@@ -40,7 +40,7 @@ Milestones:
 * Virtual target specification. -- *Done: 9 February 2021* --
 * 64-bit reference target specification. -- *Done: 27 May 2022* --
 * 32-bit reference target specification. -- *Done: 30 May 2022* --
-* 16-bit reference target specification.
+* 16-bit reference target specification. -- *Done: 30 May 2022* --
 
 ### Phase 3: Language
 
