@@ -6,7 +6,7 @@
 
 ## 32-bit reference target
 
-Our 64-bit reference target will be [`i386_debian`](../targets/i386/i386_debian.md), i.e. Debian on i386 (IA-32).
+Our 32-bit reference target will be [`i386_debian`](../targets/i386/i386_debian.md), i.e. Debian on i386 (IA-32).
 
 ### Choice explained
 
