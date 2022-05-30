@@ -7,7 +7,7 @@
 
 ## Target `aarch64_mac`
 
-We will not go into much detail here. For more detailed information, we will rely on [documentation from Apple](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms) and [documentaion from ARM](https://github.com/ARM-software/abi-aa).
+We will not go into much detail here. For more detailed information, we will rely on [documentation from Apple](https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms) and [documentation from ARM](https://github.com/ARM-software/abi-aa).
 
 ### Supported hardware
 
