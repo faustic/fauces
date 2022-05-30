@@ -6,4 +6,4 @@
 
 ## AArch64-based targets
 
-* [aarch64_mac](aarch64_mac.md)
+* [`aarch64_mac`](aarch64_mac.md)

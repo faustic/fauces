@@ -6,4 +6,4 @@
 
 ## i386-based targets
 
-* [i386_debian](i386_debian.md)
+* [`i386_debian`](i386_debian.md)
