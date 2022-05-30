@@ -39,7 +39,7 @@ Milestones:
 * Virtual system runner. -- *Done: 11 January 2021* --
 * Virtual target specification. -- *Done: 9 February 2021* --
 * 64-bit reference target specification. -- *Done: 27 May 2022* --
-* 32-bit reference target specification.
+* 32-bit reference target specification. -- *Done: 30 May 2022* --
 * 16-bit reference target specification.
 
 ### Phase 3: Language
