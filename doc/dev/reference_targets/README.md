@@ -10,7 +10,7 @@ In the context of this project, a target is a set of choices for adapting our C+
 
 * [Virtual target](virtual_target.md)
 * [64-bit reference target](ref64bits_target.md)
-* 32-bit reference target
+* [32-bit reference target](ref32bits_target.md)
 * 16-bit reference target
 
 ### Virtual target
