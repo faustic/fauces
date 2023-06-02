@@ -50,6 +50,30 @@ C++ language.
 Milestones:
 
 * Virtual target essential operations.
+    * Specification of translator source structure.
+    * Specification of essential operations.
+    * Minimal implementation of language translation.
+        * Adapt `cpp_visyv1_i16` experiment to specified structure.
+        * Minimalistic compiler foundations.
+        * Minimalistic linker foundations.
+        * Minimalistic startup code.
+        * Minimalistic test environment based on `visy1010` experiment.
+    * Implementation of essential operations.
+        * Flow control.
+            * Call function.
+            * Return from function.
+            * Go to label if boolean is true.
+        * Pointer to unsigned char.
+            * Addition of size integer.
+        * Assignment from identical type.
+        * Unsigned basic integer.
+            * One's complement.
+            * Bitwise AND.
+            * Left shift.
+            * Right shift.
+            * Equality.
+            * Less than.
+        * Other operations depending on what has been initially specified and on later changes to specification.
 * Portable operations.
 * 64-bit reference target essential operations.
 * 32-bit reference target essential operations.
