@@ -9,7 +9,7 @@
 Project phases:
 
 1. Initial planning. -- *Done: 9 December 2020* --
-2. Experimenting.
+2. Initial experimenting. -- *Done: 30 May 2022* --
 3. Language.
 4. Library.
 5. Standard.
@@ -29,9 +29,9 @@ Milestones:
 * Documentation strategy. -- *Done: 9 December 2020* --
 * Documentation map. -- *Done: 9 December 2020* --
 
-### Phase 2: Experimenting
+### Phase 2: Initial experimenting
 
-Main goal: consolidate project strategy.
+Main goal: consolidate project strategy and do some early experiments.
 
 Milestones:
 
