@@ -33,3 +33,4 @@
 * Finish work on [issue #22](https://github.com/faustic/fauces/issues/22).
     * Expand next two milestones in the roadmap.
     * Highlight new policies
+* Specification of translator source structure.
