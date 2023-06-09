@@ -25,23 +25,22 @@ privileges to accept or reject external contributions and they may do so when
 they are not busy. Contributions from internal programmers are automatically
 accepted.
 
-#### 3. Programming strategy ####
+#### 3. Programming and documentation strategy ####
 
-A staff programmer that sporadically and unpredictably gets some time to work on
-the project should follow a procedure like this:
+Programming and documentation are not done regularly. A staff member that gets a small amount of time to write documentation or do programming for the project should follow a procedure like this:
 
 1. If time is up, stop.
 2. Look for issues assigned to you.
-3. If an issue exists assigned to you: try to address the issue until it is
-solved or rejected or time is up; go to 1.
+3. If an issue exists assigned to you: try to address the issue until it can be closed or unassigned or time is up; go to 1.
+    * You can close an issue if it is solved or if it need not be solved (e.g. if it is unrelated to this project or it goes beyond the scope of this project...). 
+    * You can unassign from you an open issue if you lack the time or knowledge to solve it. An appropriate label should be added to hint how to deal with the issue in the future (kind of task, kind of required knowledge, divide into smaller tasks...). 
 4. If no issue exists assigned to you, look for unassigned issues.
 5. If unassigned issues exist: assign an issue to yourself; go to 1.
-6. If no issues exist: try to create a new issue and assign it to yourself; go
-to 1.
+6. If no issues exist: try to create a new issue and assign it to yourself; go to 1.
+    * To create a new issue it is a good idea to check the project [roadmap](roadmap.md) and [status](status.md).
+    * If the roadmap and status are not up-to-date or not detailed enough, you may create an issue to update them and expand them.
 
-#### 4. Documentation strategy ####
-
-Documentation strategy is explained in a separate document.
+Concerning documentation, there are additional hints in a [separate document](doc_strategy.md). Concerning programming, we intend to write a style guide on the fly as needs arise.
 
 ### Dedication contexts
 
