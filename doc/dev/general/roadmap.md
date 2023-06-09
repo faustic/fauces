@@ -60,8 +60,10 @@ Milestones:
         * Minimalistic test environment based on `visy1010` experiment.
     * Implementation of essential operations.
         * Flow control.
-            * Call function.
-            * Return from function.
+            * Call function with no parameters.
+            * Call function with basic integer parameters.
+            * Return void or basic integer from function.
+            * Go to label.
             * Go to label if boolean is true.
         * Pointer to unsigned char.
             * Addition of size integer.
@@ -75,6 +77,38 @@ Milestones:
             * Less than.
         * Other operations depending on what has been initially specified and on later changes to specification.
 * Portable operations.
+    * Abstract support for operations on objects.
+        * Pass object to function.
+        * Return object from function.
+        * Type conversions.
+        * Assignment operations.
+        * Pointer operations.
+        * Logical operations.
+        * Bitwise operations 
+        * Additive and multiplicative operations.
+        * Conditional evaluation (`a ? b : c`).
+        * Comma expression. (`a, b`).
+        * Class operations.
+    * Types. Implement operations applicable to each type.
+        * Pointers.
+        * Arrays.
+        * Functions.
+        * Integers and booleans.
+        * Floating-point numbers.
+        * References.
+        * Classes and structures.
+        * Pointers to members.
+        * Unions.
+    * Flow control.
+        * If.
+        * If else.
+        * While.
+        * Do while.
+        * For.
+        * Switch.
+        * Break.
+        * Continue.
+    * Essential template support.
 * 64-bit reference target essential operations.
 * 32-bit reference target essential operations.
 * 16-bit reference target essential operations.
