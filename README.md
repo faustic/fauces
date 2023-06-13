@@ -56,11 +56,7 @@ parts of the project work.
 
 ## Functionality
 
-The prime objective is that the implementation works. Even if not every feature
-required by the standard is implemented yet, care should be taken to ensure that
-those features that are implemented comply with the standard. Which version of
-the standard is something that should be decided at an early stage of
-development.
+The prime objective is that the implementation works. Even if not every feature required by the standard is implemented yet, care should be taken to ensure that those features that are implemented comply with the standard. Currently, we are in no condition to keep pace with changes in the standard, so this must be understood as "compliance with some version of the standard and a will to try to comply with the current version".
 
 ## Portability
 

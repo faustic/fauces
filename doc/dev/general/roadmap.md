@@ -139,9 +139,7 @@ Milestones:
 
 Main goal: complete ISO C++ compliance.
 
-We set a milestone for each language and library clause in the C++20 standard.
-This may be revised at a later time if a new revision of the standard is
-published before phase 5 is near completion.
+We set a milestone for each language and library clause in the C++20 standard. These milestones will be revised based on the standard version that is current when we start work on this phase.
 
 Milestones:
 
