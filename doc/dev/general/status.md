@@ -23,7 +23,7 @@
     * An incipient C++ compiler that for now just does some token parsing.
     * Some minimal C++ programs, each one intended for the incipient C++ compiler to test a single C++ feature.
 
-### Latest work
+### Latest significant achievements
 
 * 22 April 2022: work on incipient compiler is deemed enough for initial experimenting.
 * 30 May 2022: documentation for reference targets is finished, at least to the extent we consider necessary to start development.
