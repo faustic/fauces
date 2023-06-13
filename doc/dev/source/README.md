@@ -14,7 +14,7 @@ Generally we try to follow the [C++ Core Guidelines](https://isocpp.github.io/Cp
 
 ### File naming
 
-Source files should be given concise names matching `[_a-z0-9]+`. An `.hpp` extension should be used for header files. A `.cpp` extension should be used for implementation files.
+Source files should be given concise names matching `[_a-z0-9]+`. A `.cpp` extension should be used for implementation files. An `.hpp` extension should be used for header files, except for those intended to be compatible with C programs, which should have an `.h` extension.
 
 ### Directory layout
 
