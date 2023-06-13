@@ -14,6 +14,10 @@
 * [Development strategy](dev/general/dev_strategy.md)
 * [Documentation strategy](dev/general/doc_strategy.md)
 
+#### Source code
+
+* [Source code conventions](dev/source/README.md)
+
 #### Phases of translation
 
 * [Phases of translation](dev/translation/README.md)
