@@ -50,7 +50,7 @@ C++ language.
 Milestones:
 
 * Virtual target essential operations.
-    * Specification of translator source structure.
+    * Specification of translator source structure. -- *Done: 22 June 2023* --
     * Specification of essential operations.
     * Minimal implementation of language translation.
         * Adapt `cpp_visyv1_i16` experiment to specified structure.

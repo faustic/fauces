@@ -30,7 +30,5 @@
  
 ### Short term goals
 
-* Finish work on [issue #22](https://github.com/faustic/fauces/issues/22).
-    * Expand next two milestones in the roadmap.
-    * Highlight new policies
-* Specification of translator source structure.
+* Specification of essential operations.
+* Adapt `cpp_visyv1_i16` experiment to specified directory layout.
