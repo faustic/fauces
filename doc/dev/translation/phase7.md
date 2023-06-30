@@ -55,5 +55,14 @@ Concrete code generators are architecture-dependent and generate the actual mach
 
 ##### Essential operations
 
-We label as essential those operations that the minimal code generator is required to implement. We can stipulate early which operations we consider essential and we may later revise this requirement if more convenient choices become apparent during development.
+We label as essential those operations that the minimal code generator is required to implement. We can stipulate early which operations we consider essential. Getting them wrong in the beginning is not too bad: if we forget about an essential operation, we can still add it when the need for it becomes apparent; if we inadvertently define as essential an operation that could have been implemented in terms of others, our minimal code generator will simply have a little more architecture-dependent code than was needed.
+
+We will choose essential operations based on the following ideas:
+
+* We can implement floating point arithmetic from unsigned integer arithmetic. This may be needed not only to save effort for the minimal code generator, but also for architectures lacking FPU.
+* We can implement signed integer arithmetic from unsigned integer arithmetic. This may be needed not only to save effort for the minimal code generator, but also for architectures that do not implement two's complement signed arithmetic, required by recent versions of the C++ standard.
+* We can implement unsigned integer multiplicative operations from unsigned integer additive operations and shift operations. This may be needed not only to save effort for the minimal code generator, but also for architectures lacking instructions for multiplication and division.
+* We can implement unsigned additive operations from bitwise operations and shift operations. This is somewhat extravagant, because the only architecture we are likely to find lacking addition and subtraction instructions is our own virtual architecture. But those are also two instructions that the minimal code generator will not have to implement.
+* We can implement all bitwise operations from one's complement and AND operations. Again, there are probably no real architectures that would benefit from this, but the minimal code generator will be done faster.
+* We can implement all operations for an unsigned integer of a certain size from the operations for an unsigned integer of bigger or smaller size.
 
