@@ -248,7 +248,7 @@ class Supply
 public:
     void add_unit(std::unique_ptr<Translated_unit> unit)
     {
-        units.push_back(move(unit));
+        units.push_back(std::move(unit));
     }
     
     void clear()
