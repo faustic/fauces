@@ -77,6 +77,8 @@ We divide code-generating operations into three groups:
 * `if (bool) goto label`. Any flow control statement could be written in terms of conditional jumps.
 * `f()`. A smart translator could probably inline absolutely every function even from a different translation unit, making it unnecessary to generate explicit code for function calls. However, that would be very inconvenient and would make the linking process too complicated. Therefore we include the function call as an essential operation. We deal separately with the case of a function that takes no arguments and returns no result.
 * `result = f(args)`. The general function call has to take into account the  calling conventions for the current architecture for every possible type of argument and every possible type of result. For our initial architecture, while most things still do not work, we may start accepting only integer types and progressively support more types as we begin working on them.
+* `return`. Returning from a function whose return type is void may be treated as a special case for its simplicity. In any case, it must be consistent with the calling conventions used for calling the function.
+* `return result`. Returning from a function whose return type is not void must consider in addition whatever the calling conventions say about returning  a value.
 * `goto label`. While this is equivalent to `if (true) goto label` and therefore not really essential, it is convenient enough to be required for the minimal code generator. 
 
 ###### Essential operations on data
