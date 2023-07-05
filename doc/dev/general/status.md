@@ -30,5 +30,5 @@
  
 ### Short term goals
 
-* Specification of essential operations.
 * Adapt `cpp_visyv1_i16` experiment to specified directory layout.
+* Minimalistic compiler foundations.
