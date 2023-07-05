@@ -66,3 +66,37 @@ We will choose essential operations based on the following ideas:
 * We can implement all bitwise operations from one's complement and AND operations. Again, there are probably no real architectures that would benefit from this, but the minimal code generator will be done faster.
 * We can implement all operations for an unsigned integer of a certain size from the operations for an unsigned integer of bigger or smaller size.
 
+We divide code-generating operations into three groups:
+
+* Flow control: loops, jumps, function calls...
+* Operations on data: arithmetic operations, assignments, type conversions...
+* Location operations: get address of object, dereference pointer...
+
+###### Essential flow control
+
+* `if (bool) goto label`. Any flow control statement could be written in terms of conditional jumps.
+* `f()`. A smart translator could probably inline absolutely every function even from a different translation unit, making it unnecessary to generate explicit code for function calls. However, that would be very inconvenient and would make the linking process too complicated. Therefore we include the function call as an essential operation. We deal separately with the case of a function that takes no arguments and returns no result.
+* `result = f(args)`. The general function call has to take into account the  calling conventions for the current architecture for every possible type of argument and every possible type of result. For our initial architecture, while most things still do not work, we may start accepting only integer types and progressively support more types as we begin working on them.
+* `goto label`. While this is equivalent to `if (true) goto label` and therefore not really essential, it is convenient enough to be required for the minimal code generator. 
+
+###### Essential operations on data
+
+* `~(unsigned int)`. One's complement of an unsigned integer.
+* `(unsigned int) & (unsigned int)`. Bitwise `AND` between two unsigned integers.
+* `(unsigned int) << (unsigned int)`. Left shit of an unsigned integer.
+* `(unsigned int) >> (unsigned int)`. Right shift of an unsigned integer.
+* `(unsigned int) == (unsigned int)`. Equality comparison between two unsigned integers.
+* `(unsigned int) < (unsigned int)`. `Less than` comparison between two unsigned integers.
+* `(sametype) = (const sametype)`. Default assignment from identical type, implemented as a byte-for-byte copy for any type. Types that have this operation deleted will deal with such circumstance elsewhere. Specialisations depending on type size and on particular type may be contemplated.
+* `(unsigned char*) + (size_t)`. Addition of pointer to unsigned char and size integer.
+* `(unsigned char*) == (unsigned char*)`. Equality comparison between two pointers to unsigned char.
+* `(void*) = (ptr)`. Pointer cast to pointer to void from any pointer to data. This will probably be a byte-for-byte copy on any architecture, but explicitly required just in case and for clarity.
+* `(ptr) = ptr(void*)`. Pointer cast to any pointer to data from pointer to void. This will probably be a byte-for-byte copy on any architecture, but explicitly required just in case and for clarity.
+* `(unsigned char) = (unsigned int)`. While this can be implemented in terms of pointer conversion, referencing, dereferencing and architecture parameters such as endianness, we make it explicit, as a starting point for other conversions.
+
+###### Essential location operations
+
+* `&(type)`. The address where the object of type `type` is located. 
+* `*(ptr)`. The object pointed to by ptr.
+
+Most information relative to where variables and intermediate results are actually stored is kept private by the code generator. Internally, the code generator copies data between memory and registers, between different registers or between different memory areas as needed or convenient. At certain points, however, it must be guaranteed that the most current value of a variable is at a location we deem "official", so its address can be correctly shared with code outside our current translation context. In our initial approach, the code generator will keep enough internal information to be able to automatically provide such guarantee whenever it is required.
