@@ -53,7 +53,7 @@ Milestones:
     * Specification of translator source structure. -- *Done: 22 June 2023* --
     * Specification of essential operations. -- *Done: 5 July 2023* --
     * Minimal implementation of language translation.
-        * Adapt `cpp_visyv1_i16` experiment to specified structure.
+        * Adapt `cpp_visyv1_i16` experiment to specified structure. -- *Done: 11 July 2023* --
         * Minimalistic compiler foundations.
         * Minimalistic linker foundations.
         * Minimalistic startup code.
