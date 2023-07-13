@@ -65,3 +65,4 @@ Most of the translation work happens inside the `Translator` class. When the tra
 
 * Architecture management
 * Platform management
+* Incremental development
