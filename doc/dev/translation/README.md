@@ -44,5 +44,24 @@ From the point of view of the translator program, the most important class provi
 * `Translated_unit`. This is a representation, private to the translation library, of a translated translation unit.
 * `Instantiantion_unit`. For now, it is just an alias for `Translated_unit`. Depending on how we implement template instantiation, we may need to differentiate both classes. Until then, we will use both terms interchangeably.
 * `Translated_unit_loader`. An abstract class, whose derived classes must implement the `load()` function, which returns an object of type `Translated_unit`. When an input file is added to the supply, it is determined at run time which derived class must be used to load the `Translated_unit`, depending on the type of the file.
-* `Fo16_unit_loader`: A class derived from `Translated_unit_loader` to load a Fo16 object file as a `Translated_unit`.
+* `Fo16_unit_loader`: A class derived from `Translated_unit_loader` to load a Fo16 object file as a `Translated_unit`. This was the first object format we supported. Every other object format we support must have its corresponding `Translated_unit_loader` derived class.
 * `Translator`: A class derived from `Translated_unit_loader` to load a C++ source file as a `Translated_unit` (by translating it).
+
+### The `Translator` class
+
+Most of the translation work happens inside the `Translator` class. When the translation library becomes aware that a C++ source file is being added to the supply, an object of class `Translator` is created and its `load()` member function is called. This call performs phases 1 to 8 of the translation process.
+
+#### Initial implementation
+
+* `preprocess`
+    * `pretokenize`
+    * `execute_directives`
+* `convert_literals`
+* `concatenate_literals`
+* `analyze`
+* `instantiate`
+
+#### Aims
+
+* Architecture management
+* Platform management
