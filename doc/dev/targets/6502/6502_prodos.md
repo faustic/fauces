@@ -28,7 +28,7 @@ The target `6502_prodos` is intended to support Apple ProDOS 8 1.0.1 or later.
 
 ### Calling conventions.
 
-* 16 bytes in page zero are used as expanded registers, named r0-r25. Expanded registers r24-r25 combine to form register esp, which points to an expanded stack.
+* 26 bytes in page zero are used as expanded registers, named r0-r25. Expanded registers r24-r25 combine to form register esp, which points to an expanded stack.
 * The caller passes parameters first in register A, then in expanded registers r1-r7 (except r0-r1 may be used instead as the address of the returned value; see below), then on the expanded stack. 
 * Types with size 1 will be returned in register A.
 * Types with size greater than 1 and less than 9 will be returned in register A combined with expanded registers r1-r7 (register A holding the least significant byte).
