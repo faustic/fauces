@@ -42,6 +42,7 @@ From the point of view of the translator program, the most important class provi
 ### Private classes and interfaces.
 
 * `Translated_unit`. This is a representation, private to the translation library, of a translated translation unit.
+* `Token`. It is a sequence of source code characters that cannot be further decomposed into smaller syntactically significant units.
 * `Instantiantion_unit`. For now, it is just an alias for `Translated_unit`. Depending on how we implement template instantiation, we may need to differentiate both classes. Until then, we will use both terms interchangeably.
 * `Translated_unit_loader`. An abstract class, whose derived classes must implement the `load()` function, which returns an object of type `Translated_unit`. When an input file is added to the supply, it is determined at run time which derived class must be used to load the `Translated_unit`, depending on the type of the file.
 * `Fo16_unit_loader`: A class derived from `Translated_unit_loader` to load a Fo16 object file as a `Translated_unit`. This was the first object format we supported. Every other object format we support must have its corresponding `Translated_unit_loader` derived class.
@@ -53,16 +54,44 @@ Most of the translation work happens inside the `Translator` class. When the tra
 
 #### Initial implementation
 
+When `Translator::load()` is called, it calls in turn a sequence of private functions to perform the translation:
+
 * `preprocess`
-    * `pretokenize`
-    * `execute_directives`
-* `convert_literals`
-* `concatenate_literals`
-* `analyze`
-* `instantiate`
+    * `pretokenize`: three first phases of translation.
+    * `execute_directives`: phase 4.
+* `convert_literals`: phase 5.
+* `concatenate_literals`: phase 6.
+* `analyze`: phase 7.
+* `instantiate`: phase 8.
+
+Most of these functions are still incomplete. However, with the exception of `analyze`, each one already produces the expected kind of output, even if most potential inputs are still not accepted. This means we can start trying to translate very simple programs and progressively try to support more syntactic elements as we encounter them.
+
+Currently, the `analyze` function always throws an error. Its prototype is:
+
+    analyze(std::list<Token>& tokens, Translated_unit& unit);
+
+The idea is to analyze the provided list of tokens and generate accordingly the appropriate machine code into the `Translated_unit` object. The initial implementation was interrupted without putting the idea into practice. To continue the work, we just need to better clarify our aims concerning the translation process.
 
 #### Aims
 
 * Architecture management
 * Platform management
 * Incremental development
+
+##### Architecture management
+
+We will manage architecture-dependent features by means of an architecture class defined for each architecture we support. Probably, the most convenient approach is to define the translator class as a template that takes the architecture class as a parameter. Whenever we want to add support for an architecture-dependent feature, we will add it to our architecture interface. We can describe the architecture interface as a concept (possibly implicit, possibly explicitly expressed as a C++ concept) implemented by each different architecture. The exact way to do it is still subject to multiple rethinks and iterations, due to the immature stage of development.
+
+##### Platform management
+
+We will deal with platform-dependent features in a similar way to how we deal with architecture-dependent features. However, we do not know yet whether the translation library will be directly platform-dependent in any way. Most often, platform-dependence will be indirect through the standard library (for example, when calling `operator new`). For this reason, the platform classes we will define by analogy with the architecture classes should better reside in our standard library tree, although also available to the translation library just in case.
+
+##### Incremental development
+
+Although the lack of project management prevents us from strictly adhering to any development model, we vaguely follow an incremental development strategy. This means we have a known goal that we intend to achieve by systematically taking all the necessary steps one by one. This is particularly the case for the `Translator` class.
+
+The goal we intend to achieve is determined by the C++ standard. Initially, however, we will not implement syntactic features in the order they are introduced in the C++ standard, but we will divide features into three groups, each one with a particular order:
+
+1. Common features: features we have explicitly planned in our roadmap. They will be implemented first, in the order they appear in the roadmap, unless this order is found inconvenient during development.
+2. Self-build features: features that our C++ implementation must support to be able to build itself. They will be implemented in the order suggested by our failed attempts to build the C++ implementation.
+3. Other standard features: additional features that need to be implemented to comply with the C++ standard. They will be implemented last, in the order they are presented in the C++ standard.
