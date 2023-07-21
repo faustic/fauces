@@ -33,13 +33,6 @@ SOFTWARE.
 
 #include "translator.hpp"
 
-
-#include "../../../experimenting/visy1010/visy1010/using_iostream.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_containers.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_string.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_memory.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_algorithm.hpp"
-
 namespace fauces
 {
 

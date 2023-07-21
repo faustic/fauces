@@ -38,6 +38,7 @@ SOFTWARE.
 #include <memory>
 #include <cstddef>
 #include <fstream>
+#include <algorithm>
 
 namespace fauces
 {
@@ -47,11 +48,13 @@ using Size =  std::uint_least16_t;
 using std::string;
 using std::size_t;
 using std::vector;
+using std::array;
+using std::swap;
+using std::unordered_map;
 using std::unique_ptr;
 using std::make_unique;
-using std::istream;
-using std::ifstream;
 using std::u32string;
+using std::out_of_range;
 
 enum class Ref_type
 {
@@ -100,7 +103,7 @@ struct Source_location
 
 struct Source_context
 {
-    ifstream is;
+    std::ifstream is;
     u32string line;
     Source_location src;
     size_t line_start = 0;

@@ -29,10 +29,6 @@ SOFTWARE.
 
 #include "files.hpp"
 
-#include "../../../../experimenting/visy1010/visy1010/using_iostream.hpp"
-#include "../../../../experimenting/visy1010/visy1010/using_string.hpp"
-#include "../../../../experimenting/visy1010/visy1010/using_containers.hpp"
-
 namespace fauces
 {
     struct Arg_handle
@@ -116,6 +112,7 @@ namespace fauces
 
 int main(int argc, char** argv)
 {
+    using std::cout;
     fauces::Program_arg arg = fauces::parse_args(argc, argv);
     fauces::Supply supply;
     for (auto i = arg.inputs.begin(); i != arg.inputs.end(); ++i)

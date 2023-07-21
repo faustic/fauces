@@ -33,12 +33,6 @@ SOFTWARE.
 #include "fo16.hpp"
 #include "translator.hpp"
 
-#include "../../../experimenting/visy1010/visy1010/using_iostream.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_containers.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_string.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_memory.hpp"
-
-
 namespace fauces
 {
 
@@ -51,7 +45,8 @@ static File_type identify_source_file(string filename)
 
 static File_type identify_file_type(string filename)
 {
-    ifstream ifs;
+    using std::ios;
+    std::ifstream ifs;
     ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
     try
     {

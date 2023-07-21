@@ -31,12 +31,6 @@ SOFTWARE.
 #include "fo16.hpp"
 #include "files.hpp"
 
-#include "../../../experimenting/visy1010/visy1010/using_iostream.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_containers.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_string.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_memory.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_algorithm.hpp"
-
 namespace fauces
 {
 
@@ -50,14 +44,14 @@ enum Sec_id
     sec_max_id = 65534
 };
 
-static unsigned short load_short(istream& is)
+static unsigned short load_short(std::istream& is)
 {
     unsigned char bytes[2];
     read(is, bytes, 2);
     return (bytes[0] << 8) | bytes[1];
 }
 
-static void save_short(ostream& os, unsigned short n)
+static void save_short(std::ostream& os, unsigned short n)
 {
     unsigned char bytes[2]
             {static_cast<unsigned char>(n >> 8), static_cast<unsigned char>(n)};
@@ -76,7 +70,7 @@ void Fo16_unit_loader::load_symbols
 }
 
 bool Fo16_unit_loader::load_section
-                        (istream& is, Translated_unit* unit, unsigned short id)
+                (std::istream& is, Translated_unit* unit, unsigned short id)
 {
     if (id > sec_max_id || id != load_short(is))
         throw Fo16_error_bad();
@@ -116,7 +110,9 @@ bool Fo16_unit_loader::load_section
 
 unique_ptr<Translated_unit> Fo16_unit_loader::load()
 {
-    ifstream ifs;
+    using std::cout;
+
+    std::ifstream ifs;
     init(ifs);
     
     cout << "load\n";
@@ -163,8 +159,9 @@ unique_ptr<Translated_unit> Fo16_unit_loader::load()
     return unit;
 }
 
-void Fo16_unit_loader::init(ifstream& ifs)
+void Fo16_unit_loader::init(std::ifstream& ifs)
 {
+    using std::ios;
     ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
     try
     {
@@ -197,6 +194,7 @@ void Fo16_unit_loader::init(ifstream& ifs)
 
 void fauces::Fo16_program_saver::init(std::ofstream &ofs)
 {
+    using std::ios;
     ofs.exceptions(ios::failbit | ios::badbit);
     try
     {
@@ -224,7 +222,7 @@ void fauces::Fo16_program_saver::init(std::ofstream &ofs)
 void fauces::Fo16_program_saver::save(Linked_program &prog)
 {
     prog.verify();
-    ofstream ofs;
+    std::ofstream ofs;
     init(ofs);
     static_assert(pref_code_id == 0);
     unsigned short section_id = pref_code_id;

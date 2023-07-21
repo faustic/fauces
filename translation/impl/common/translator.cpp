@@ -31,12 +31,6 @@ SOFTWARE.
 
 #include "phase4.hpp"
 
-#include "../../../experimenting/visy1010/visy1010/using_iostream.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_containers.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_string.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_memory.hpp"
-#include "../../../experimenting/visy1010/visy1010/using_algorithm.hpp"
-
 auto fauces::Translator::preprocess(const string& path, size_t level)
     -> list<Token>
 {
@@ -47,7 +41,7 @@ auto fauces::Translator::preprocess(const string& path, size_t level)
     return tokens;
 }
 
-unique_ptr<fauces::Translated_unit> fauces::Translator::load()
+auto fauces::Translator::load() -> unique_ptr<fauces::Translated_unit>
 {
     list<Token> tokens = preprocess(path);
     convert_literals(tokens);

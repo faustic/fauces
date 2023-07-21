@@ -40,6 +40,17 @@ SOFTWARE.
 namespace fauces
 {
 
+inline void read(std::istream& is, unsigned char* data, std::streamsize size)
+{
+    is.read(reinterpret_cast<char*>(data),size);
+}
+
+inline void write
+            (std::ostream& os, const unsigned char* data, std::streamsize size)
+{
+    os.write(reinterpret_cast<const char*>(data),size);
+}
+
 struct Program_input
 {
     std::unordered_map<std::string, std::string> options;
