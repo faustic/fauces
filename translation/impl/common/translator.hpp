@@ -41,22 +41,59 @@ using std::list;
 using std::string;
 using std::unique_ptr;
 
-class Translator: public Translated_unit_loader
+void remove_white_space(list<Token>& tokens);
+void bad_token(size_t index, const Token& token);
+
+class Preprocessor
 {
 public:
-    Translator(const string& path) : path {path} {}
     static constexpr size_t max_include = 256;
-private:
-    const string path;
-    unique_ptr<Translated_unit> load() override;
-    
     static list<Token> preprocess(const string& path, size_t level = 0);
+private:
     static std::list<Token> pretokenize(const string& path);
     static void execute_directives(list<Token>& tokens, size_t level = 0);
     static void convert_literals(list<Token>& tokens);
     static void concatenate_literals(list<Token>& tokens);
-    static void analyze(list<Token>& tokens, Translated_unit& unit);
-    static void instantiate(Translated_unit& unit);
+};
+
+template <typename Arch>
+class Translator: public Translated_unit_loader
+{
+public:
+    Translator(const string& path) : path {path} {}
+private:
+    const string path;
+    unique_ptr<Translated_unit> load() override
+    {
+        list<Token> tokens = preprocess(path);
+        auto unit = make_unique<Translated_unit>();
+        analyze(tokens, *unit);
+        instantiate(*unit);
+        return unit;
+    }
+    static list<Token> preprocess(const string& path, size_t level = 0)
+    {
+        return Preprocessor::preprocess(path, level);
+    }
+    
+    static void analyze(list<Token>& tokens, Translated_unit& unit)
+    {
+        size_t n = 0;
+        remove_white_space(tokens);
+        for (auto& t: tokens)
+        {
+            if (t.type == Token_type::unknown)
+                bad_token(n, t);
+            ++n;
+        }
+        throw Syntax_error {"No syntax defined yet: everything is an error"};
+    }
+
+    static void instantiate(Translated_unit& unit)
+    {
+        // Templates not supported yet.
+        // For the time being, this acts like a no-op.
+    }
 };
 }
 

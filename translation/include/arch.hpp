@@ -1,8 +1,6 @@
-// files.cpp
-// File transformation.
-// Intended compatibility: c++17
+// Supported architectures
 //
-// Created by Alejandro Castro García on 15 April 2021
+// Created by Alejandro Castro García on 21 July 2023
 /*
 Licensed under the MIT License.
  
@@ -28,51 +26,9 @@ SOFTWARE.
 */
 
 
-#include "files.hpp"
+#ifndef arch_hpp
+#define arch_hpp
 
+#include "arch/visy/visy.hpp"
 
-namespace fauces
-{
-
-
-static File_type identify_source_file(string filename)
-{
-    return File_type::cpp;
-}
-
-File_type identify_file_type(string filename)
-{
-    using std::ios;
-    std::ifstream ifs;
-    ifs.exceptions(ios::failbit | ios::badbit | ios::eofbit);
-    try
-    {
-        ifs.open(filename, ios::binary);
-    }
-    catch (...)
-    {
-        throw File_error_cantopen();
-    }
-    try
-    {
-        array<unsigned char, 16> signature;
-        read(ifs, signature.data(), signature.size());
-        if (Fo16_unit_loader::is_signature(signature))
-            return File_type::fo16;
-    }
-    catch (...)
-    {
-        if (!ifs.eof())
-            throw File_error_read();
-    }
-    return identify_source_file(filename);
-}
-
-void save_program(Linked_program& prog, const Program_output& output)
-{
-    Fo16_program_saver fo16_saver {output.value};
-    Linked_program_saver& saver = fo16_saver;
-    saver.save(prog);
-}
-
-} // namespace fauces
+#endif /* arch_hpp */

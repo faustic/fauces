@@ -31,6 +31,8 @@ SOFTWARE.
 #ifndef pieces_hpp
 #define pieces_hpp
 
+#include "arch.hpp"
+
 #include <vector>
 #include <unordered_map>
 #include <string>

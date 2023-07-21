@@ -32,8 +32,6 @@ SOFTWARE.
 
 #include "translator.hpp"
 
-void fauces::Translator::instantiate(Translated_unit& unit)
-{
-    // Templates not supported yet.
-    // For the time being, this acts like a no-op.
-}
+// Phase 8 requires full implementation of Translator::instantiate
+
+

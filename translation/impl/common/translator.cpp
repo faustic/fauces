@@ -31,23 +31,15 @@ SOFTWARE.
 
 #include "phase4.hpp"
 
-auto fauces::Translator::preprocess(const string& path, size_t level)
+auto fauces::Preprocessor::preprocess(const string& path, size_t level)
     -> list<Token>
 {
     if (level > max_include)
         throw Limit_error {"Included file is too nested"};
     list<Token> tokens = pretokenize(path);
     execute_directives(tokens, level);
+    convert_literals(tokens);
+    concatenate_literals(tokens);
     return tokens;
 }
 
-auto fauces::Translator::load() -> unique_ptr<fauces::Translated_unit>
-{
-    list<Token> tokens = preprocess(path);
-    convert_literals(tokens);
-    concatenate_literals(tokens);
-    auto unit = make_unique<Translated_unit>();
-    analyze(tokens, *unit);
-    instantiate(*unit);
-    return unit;
-}

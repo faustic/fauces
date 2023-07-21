@@ -36,6 +36,9 @@ SOFTWARE.
 #include <iostream>
 
 #include "pieces.hpp"
+#include "translator.hpp"
+#include "fo16.hpp"
+#include "arch.hpp"
 
 namespace fauces
 {
@@ -67,7 +70,29 @@ struct File_error_read {};
 struct File_error_write {};
 struct File_error_unknown {};
 
-void add_to_supply(Supply& supply, const Program_input& input);
+enum class File_type {fo16, cpp};
+
+File_type identify_file_type(string filename);
+
+template<typename Arch>
+void add_to_supply(Supply& supply, const Program_input& input)
+{
+    File_type type = identify_file_type(input.value);
+    unique_ptr<Translated_unit_loader> loader;
+    switch (type)
+    {
+        case File_type::fo16:
+            loader = make_unique<Fo16_unit_loader>(input.value);
+            break;
+        case File_type::cpp:
+            loader = make_unique<Translator<Arch>>(input.value);
+            break;
+        default:
+            throw File_error_unknown();
+    }
+    supply.add_unit(loader->load());
+}
+
 void save_program(Linked_program& prog, const Program_output& output);
 
 } // namespace fauces

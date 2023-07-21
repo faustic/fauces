@@ -34,10 +34,9 @@ SOFTWARE.
 
 #include <iostream>
 
-namespace fauces
-{
+// Phase 7 requires full implementation of Translator::analyze
 
-static void remove_white_space(list<Token>& tokens)
+void fauces::remove_white_space(list<Token>& tokens)
 {
     auto t = tokens.begin();
     while (t != tokens.end())
@@ -49,17 +48,8 @@ static void remove_white_space(list<Token>& tokens)
     }
 }
 
+void fauces::bad_token(size_t index, const Token& t)
+{
+    std::cerr << index << ". Unknown: " << t.text << "\n";
 }
 
-void fauces::Translator::analyze(list<Token>& tokens, Translated_unit& unit)
-{
-    size_t n = 0;
-    remove_white_space(tokens);
-    for (auto& t: tokens)
-    {
-        if (t.type == Token_type::unknown)
-            std::cerr << n << ". Unknown: " << t.text << "\n";
-        ++n;
-    }
-    throw Syntax_error {"No syntax defined yet: everything is an error"};
-}

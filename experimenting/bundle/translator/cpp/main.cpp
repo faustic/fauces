@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     for (auto i = arg.inputs.begin(); i != arg.inputs.end(); ++i)
     {
         cout << "Input: " << i->value << "\n";
-        fauces::add_to_supply(supply, *i);
+        fauces::add_to_supply<fauces::arch::Visy>(supply, *i);
     }
     fauces::Linked_program prog = supply.link();
     fauces::save_program(prog, arg.output);

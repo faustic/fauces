@@ -35,6 +35,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CE2D71B42A6A856F0032B8A2 /* arch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = arch.hpp; sourceTree = "<group>"; };
+		CE2D71B62A6A85E80032B8A2 /* visy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = visy.hpp; sourceTree = "<group>"; };
 		CEABE7872A5D4DC2004F7F0B /* cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEABE78A2A5D4DC2004F7F0B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CEBC1BF12A5D4E400031D162 /* pieces.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pieces.hpp; sourceTree = "<group>"; };
@@ -75,6 +77,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE2D71B32A6A85550032B8A2 /* arch */ = {
+			isa = PBXGroup;
+			children = (
+				CE2D71B52A6A85D40032B8A2 /* visy */,
+			);
+			path = arch;
+			sourceTree = "<group>";
+		};
+		CE2D71B52A6A85D40032B8A2 /* visy */ = {
+			isa = PBXGroup;
+			children = (
+				CE2D71B62A6A85E80032B8A2 /* visy.hpp */,
+			);
+			path = visy;
+			sourceTree = "<group>";
+		};
 		CEABE77E2A5D4DC2004F7F0B = {
 			isa = PBXGroup;
 			children = (
@@ -112,8 +130,10 @@
 		CEBC1BF02A5D4E400031D162 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				CEBC1BF12A5D4E400031D162 /* pieces.hpp */,
+				CE2D71B42A6A856F0032B8A2 /* arch.hpp */,
+				CE2D71B32A6A85550032B8A2 /* arch */,
 				CEBC1BF22A5D4E400031D162 /* files.hpp */,
+				CEBC1BF12A5D4E400031D162 /* pieces.hpp */,
 			);
 			name = include;
 			path = ../../../../translation/include;

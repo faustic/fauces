@@ -32,7 +32,7 @@ SOFTWARE.
 
 #include "translator.hpp"
 
-void fauces::Translator::concatenate_literals(list<Token>& tokens)
+void fauces::Preprocessor::concatenate_literals(list<Token>& tokens)
 {
     // Literal strings are not supported yet.
     // For the time being, this acts like a no-op.

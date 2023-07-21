@@ -32,7 +32,7 @@ SOFTWARE.
 
 #include "translator.hpp"
 
-void fauces::Translator::execute_directives(list<Token>& tokens, size_t level)
+void fauces::Preprocessor::execute_directives(list<Token>& tokens, size_t level)
 {
     // No directives are supported yet.
     // For the time being, this acts like a no-op.

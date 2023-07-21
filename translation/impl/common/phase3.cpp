@@ -401,7 +401,7 @@ static Token next_token(Source_context& context)
 
 } // namespace fauces
 
-auto fauces::Translator::pretokenize(const string& path) -> list<Token>
+auto fauces::Preprocessor::pretokenize(const string& path) -> list<Token>
 {
     list<Token> tokens;
     Source_context context {path};
