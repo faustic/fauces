@@ -54,9 +54,17 @@ Milestones:
     * Specification of essential operations. -- *Done: 5 July 2023* --
     * Minimal implementation of language translation.
         * Adapt `cpp_visyv1_i16` experiment to specified structure. -- *Done: 11 July 2023* --
-        * Minimalistic compiler foundations.
         * Minimalistic linker foundations.
+            * Conventions for support of multiple architectures.
+            * Conventions for support of multiple object and executable formats.
+            * `Symbol` with support for multiple architectures and object formats.
+            * `Translated_unit` with support for multiple architectures and object formats.
+            * `Supply` with support for multiple architectures and object formats.
+            * `Linked_program` with support for multiple architectures and object formats.
+        * Minimalistic compiler foundations.
+            * Compilation of empty main function.
         * Minimalistic startup code.
+            * Source code or pseudocode.
         * Minimalistic test environment based on `visy1010` experiment.
     * Implementation of essential operations.
         * Flow control.

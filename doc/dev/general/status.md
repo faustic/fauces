@@ -27,8 +27,9 @@
 
 * 22 April 2022: work on incipient compiler is deemed enough for initial experimenting.
 * 30 May 2022: documentation for reference targets is finished, at least to the extent we consider necessary to start development.
+* 11 July 2023: readjustment of incipient compiler as a translation library.
  
 ### Short term goals
 
-* Adapt `cpp_visyv1_i16` experiment to specified directory layout.
-* Minimalistic compiler foundations.
+* Linker conventions for support of multiple architectures.
+* Linker conventions for support of multiple object and executable formats.
