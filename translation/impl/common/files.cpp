@@ -68,11 +68,5 @@ File_type identify_file_type(string filename)
     return identify_source_file(filename);
 }
 
-void save_program(Linked_program& prog, const Program_output& output)
-{
-    Fo16_program_saver fo16_saver {output.value};
-    Linked_program_saver& saver = fo16_saver;
-    saver.save(prog);
-}
 
 } // namespace fauces

@@ -93,7 +93,13 @@ void add_to_supply(Supply& supply, const Program_input& input)
     supply.add_unit(loader->load());
 }
 
-void save_program(Linked_program& prog, const Program_output& output);
+template<typename Arch>
+void save_program(Linked_program& prog, const Program_output& output)
+{
+    Fo16_program_saver fo16_saver {output.value};
+    Linked_program_saver& saver = fo16_saver;
+    saver.save(prog);
+}
 
 } // namespace fauces
 #endif /* files_hpp */

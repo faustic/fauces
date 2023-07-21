@@ -120,8 +120,8 @@ int main(int argc, char** argv)
         cout << "Input: " << i->value << "\n";
         fauces::add_to_supply<fauces::arch::Visy>(supply, *i);
     }
-    fauces::Linked_program prog = supply.link();
-    fauces::save_program(prog, arg.output);
+    fauces::Linked_program prog = supply.link<fauces::arch::Visy>();
+    fauces::save_program<fauces::arch::Visy>(prog, arg.output);
     cout << "Output: " << arg.output.value << "\n";
     return 0;
 }

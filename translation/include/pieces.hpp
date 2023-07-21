@@ -261,7 +261,19 @@ public:
         units.clear();
     }
     
-    Linked_program link();
+    template<typename Arch>
+    Linked_program link()
+    {
+        Linked_program prog;
+        add_start(prog);
+        while (prog.pending_symbols().size())
+        {
+            auto& ext_sym = prog.pending_symbols();
+            add_symbol(prog, ext_sym.begin()->first);
+        }
+        clear();
+        return prog;
+    }
 
 private:
     std::vector<std::unique_ptr<Translated_unit>> units;

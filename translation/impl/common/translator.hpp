@@ -56,7 +56,7 @@ private:
     static void concatenate_literals(list<Token>& tokens);
 };
 
-template <typename Arch>
+template<typename Arch>
 class Translator: public Translated_unit_loader
 {
 public:

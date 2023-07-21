@@ -139,20 +139,6 @@ section_bytes(Sym_type type) -> vector<unsigned char>*
     }
 }
 
-auto fauces::Supply::link() -> Linked_program
-{
-    Linked_program prog;
-    add_start(prog);
-    while (prog.pending_symbols().size())
-    {
-        auto& ext_sym = prog.pending_symbols();
-        for (auto i = ext_sym.begin(); i != ext_sym.end(); ++i)
-            add_symbol(prog, i->first);
-    }
-    clear();
-    return prog;
-}
-
 void
 fauces::Supply::
 add_symbol(Linked_program& prog, const string &symbol_name)
@@ -171,3 +157,4 @@ add_symbol(Linked_program& prog, const string &symbol_name)
     }
     throw Ref_unresolved {symbol_name};
 }
+
