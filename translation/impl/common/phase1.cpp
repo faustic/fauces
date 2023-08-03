@@ -47,17 +47,17 @@ static inline bool is_continuation(int c)
 
 namespace fauces
 {
-static char32_t add_continuation(istream& is, char32_t& c, unsigned shift);
+static char32_t add_continuation(istream& is, char32_t& c);
 static char32_t from_utf8(istream& is);
 }
 
 static inline char32_t
-    fauces::add_continuation(istream& is, char32_t& c, unsigned shift)
+    fauces::add_continuation(istream& is, char32_t& c)
 {
     int u8 = is.get();
     if (!is_continuation(u8))
         throw Invalid_character();
-    c |= (static_cast<char32_t>(u8) & 0x3f) << shift;
+    c = (c << 6) | (static_cast<char32_t>(u8) & 0x3f);
     return c;
 }
 
@@ -74,21 +74,21 @@ static char32_t fauces::from_utf8(istream& is)
         {
             if ((u8 & 0xe0) == 0xc0 )
             {
-                char32_t c = (static_cast<char32_t>(u8) & 0x1f) << 8;
-                return add_continuation(is, c, 0);
+                char32_t c = static_cast<char32_t>(u8) & 0x1f;
+                return add_continuation(is, c);
             }
             else if ((u8 & 0xf0) == 0xe0)
             {
-                char32_t c = (static_cast<char32_t>(u8) & 0x0f) << 16;
-                add_continuation(is, c, 8);
-                return add_continuation(is, c, 0);
+                char32_t c = static_cast<char32_t>(u8) & 0x0f;
+                add_continuation(is, c);
+                return add_continuation(is, c);
             }
             else if ((u8 & 0xf8) == 0xf0)
             {
-                char32_t c = (static_cast<char32_t>(u8) & 0x07) << 24;
-                add_continuation(is, c, 16);
-                add_continuation(is, c, 8);
-                return add_continuation(is, c, 0);
+                char32_t c = static_cast<char32_t>(u8) & 0x07;
+                add_continuation(is, c);
+                add_continuation(is, c);
+                return add_continuation(is, c);
             }
         }
         catch (std::ios_base::failure)
