@@ -1,6 +1,5 @@
 // main.cpp
 // Test calling a function that does nothing.
-// Intended compatibility: c++20
 //
 // Created by Alejandro Castro García on 9 February 2021
 /*

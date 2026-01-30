@@ -1,6 +1,5 @@
 // environment.cpp
 // Virtual system environment
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 22 December 2020
 /*

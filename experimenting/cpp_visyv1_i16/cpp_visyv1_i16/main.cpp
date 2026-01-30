@@ -1,6 +1,5 @@
 // main.cpp
 // Experimenting with compiler concepts
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 9 February 2021
 /*

@@ -1,6 +1,5 @@
 // memory.hpp
 // Suitable containers for virtual system memory
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 11 December 2020
 /*

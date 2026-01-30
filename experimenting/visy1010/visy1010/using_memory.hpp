@@ -1,6 +1,5 @@
 // using_memory.hpp
 // Common using statements for memory. Normally not included from headers
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 14 April 2021
 /*

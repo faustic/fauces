@@ -1,6 +1,5 @@
 // main.cpp
 // Entry to virtual system launcher
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 10 December 2020
 /*

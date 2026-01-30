@@ -1,5 +1,4 @@
 // A class to manage the translation process
-// Intended compatibility: c++20
 //
 // Created by Alejandro Castro Garcia on 23 September 2021
 /*

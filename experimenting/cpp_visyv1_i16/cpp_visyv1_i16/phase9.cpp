@@ -1,6 +1,5 @@
 // phase9.cpp
 // Phase 9 of translation
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 9 February 2021
 /*

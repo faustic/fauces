@@ -1,6 +1,5 @@
 // using_cstdint.hpp
 // Common using statements for cstdint. Normally not included from headers
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 10 December 2020
 /*

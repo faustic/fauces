@@ -1,6 +1,5 @@
 // parser.cpp
 // Virtual system instruction parser
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 10 December 2020
 /*

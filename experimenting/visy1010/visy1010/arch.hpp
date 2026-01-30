@@ -1,6 +1,5 @@
 // arch.hpp
 // Types for virtual system CPU programmer's model
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 28 December 2020
 /*

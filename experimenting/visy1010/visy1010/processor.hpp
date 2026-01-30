@@ -1,6 +1,5 @@
 // processor.hpp
 // Base class for virtual system processors
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 10 December 2020
 /*

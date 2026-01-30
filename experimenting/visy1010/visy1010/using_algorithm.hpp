@@ -1,6 +1,5 @@
 // using_algorithm.hpp
 // Common using statements for algorithm. Normally not included from headers
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 1 March 2021
 /*

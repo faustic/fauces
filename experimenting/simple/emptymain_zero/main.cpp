@@ -1,6 +1,5 @@
 // main.cpp
 // Test empty main function explicitly returning 0.
-// Intended compatibility: c++20
 //
 // Created by Alejandro Castro García on 8 February 2021
 /*

@@ -1,6 +1,5 @@
 // assembler.hpp
 // Virtual system assembler
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 28 December 2020
 /*

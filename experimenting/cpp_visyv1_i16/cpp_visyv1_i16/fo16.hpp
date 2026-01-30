@@ -1,6 +1,5 @@
 // fo16.hpp
 // Fo16 format support
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 14 April 2021
 /*

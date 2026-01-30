@@ -1,6 +1,5 @@
 // using_containers.hpp
 // Common using statements for containers. Normally not included from headers
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 28 December 2020
 /*

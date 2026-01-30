@@ -1,6 +1,5 @@
 // using_iostream.hpp
 // Common using statements for iostream. Normally not included from headers
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 11 December 2020
 /*

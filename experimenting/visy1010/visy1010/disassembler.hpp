@@ -1,6 +1,5 @@
 // disassembler.hpp
 // Virtual system disassembler
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 11 December 2020
 /*

@@ -1,6 +1,5 @@
 // exec.cpp
 // Loading of executable file
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 22 February 2021
 /*

@@ -1,6 +1,5 @@
 // main.cpp
 // Entry point to adc test program (currently just a playground to experiment)
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro Garcia on 27 November 2020
 /*

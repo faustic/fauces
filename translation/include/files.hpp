@@ -1,6 +1,5 @@
 // files.hpp
 // File transformation.
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 15 April 2021
 /*

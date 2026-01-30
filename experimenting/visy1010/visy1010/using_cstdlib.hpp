@@ -1,6 +1,5 @@
 // using_cstdlib.hpp
 // Common using statements for cstdlib. Normally not included from headers
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 16 February 2021
 /*

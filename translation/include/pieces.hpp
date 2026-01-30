@@ -1,6 +1,5 @@
 // pieces.hpp
 // Classes representing the pieces used to build a program
-// Intended compatibility: c++17
 //
 // Created by Alejandro Castro García on 13 April 2021
 /*
