@@ -1,0 +1,13 @@
+.deps
+*.m4
+*.log
+*.status
+*.o
+*.in
+*.cache
+Makefile
+configure
+depcomp
+install-sh
+missing
+w65c02sxbrun
