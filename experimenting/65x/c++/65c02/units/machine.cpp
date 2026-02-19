@@ -29,6 +29,7 @@ SOFTWARE.
 #include "machine.hpp"
 #include "executable.hpp"
 #include "assembler.hpp"
+#include "disassembler.hpp"
 
 #include <faulib/io/rawfile.hpp>
 
@@ -119,6 +120,10 @@ void w65c02::Test_machine::turn_on()
     as.stz(Abs(Mem_test::report_nmi));
     as.bra("poweroff");
 
+    /*
+    Disassembler disas(mem, 0x2020, 600, true);
+    cout << disas;
+    */
     
     power(true);
     cpu().reset_low();

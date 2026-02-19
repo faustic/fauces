@@ -59,6 +59,7 @@ using std::chrono::steady_clock;
 namespace this_thread = std::this_thread;
 
 using Address = std::uint_least16_t;
+using Long_address = std::uint_least32_t;
 using Byte = std::uint8_t;
 using Sbyte = std::int8_t;
 using Word = std::uint16_t;

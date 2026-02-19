@@ -13,6 +13,7 @@
 		CEB626522A0A5689000D2530 /* assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626502A0A3CF3000D2530 /* assembler.cpp */; };
 		CEB626572A0AA4F4000D2530 /* cpu65c02.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626532A0A97CC000D2530 /* cpu65c02.cpp */; };
 		CEB626582A0AA4F9000D2530 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626552A0AA2DA000D2530 /* parser.cpp */; };
+		CEDEE3182F474369006DBDAD /* disassembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDEE3172F474369006DBDAD /* disassembler.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +44,8 @@
 		CEB626542A0A97CC000D2530 /* cpu65c02.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cpu65c02.hpp; sourceTree = "<group>"; };
 		CEB626552A0AA2DA000D2530 /* parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		CEB626562A0AA2DA000D2530 /* parser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = parser.hpp; sourceTree = "<group>"; };
+		CEDEE3162F474369006DBDAD /* disassembler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = disassembler.hpp; sourceTree = "<group>"; };
+		CEDEE3172F474369006DBDAD /* disassembler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = disassembler.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +82,8 @@
 				CE246BF92A09703500DAB8D9 /* 65c02.hpp */,
 				CEB626502A0A3CF3000D2530 /* assembler.cpp */,
 				CEB626512A0A3CF3000D2530 /* assembler.hpp */,
+				CEDEE3162F474369006DBDAD /* disassembler.hpp */,
+				CEDEE3172F474369006DBDAD /* disassembler.cpp */,
 				CEB626532A0A97CC000D2530 /* cpu65c02.cpp */,
 				CEB626542A0A97CC000D2530 /* cpu65c02.hpp */,
 				CE246BF72A096F2F00DAB8D9 /* executable.hpp */,
@@ -158,6 +163,7 @@
 				CEB626572A0AA4F4000D2530 /* cpu65c02.cpp in Sources */,
 				CE091FD429FC2C71009090AD /* main.cpp in Sources */,
 				CE302EFF2A02D79300F60075 /* machine.cpp in Sources */,
+				CEDEE3182F474369006DBDAD /* disassembler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
