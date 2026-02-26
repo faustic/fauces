@@ -48,7 +48,7 @@ class Disassembler : public Processor
 {
 public:
     Disassembler(Mem& mem, Address start, Word max_count, bool rockwell):
-    mem (mem), max_count(max_count), parser(*this, mem)
+    mem (mem), max_count(max_count), rockwell(rockwell), parser(*this, mem)
     {
         buffer << std::hex;
         go(start, max_count);
@@ -108,6 +108,12 @@ public:
         return *this;
     }
 
+    Disassembler& operator<<(Bitpos b)
+    {
+        buffer << b;
+        return *this;
+    }
+
 private:
     Mem& mem;
     std::stringstream buffer;
@@ -115,6 +121,20 @@ private:
     Word max_count;
     bool rockwell = false;
     
+    void bbr(Bitpos bit, Address pc)
+    {
+        Byte dp = mem.read8(pc + 1);
+        Byte offset = mem.read8(pc + 2);
+        Address addr = pc + 3 + as_signed(offset);
+        *this << "bbr" << bit << " " << dp << "," << addr;
+        parser.jmp(pc + 3);
+    }
+    void rmb(Bitpos bit, Address pc)
+    {
+        *this << "rmb" << bit << " " << mem.read8(pc + 1);
+        parser.jmp(pc + 2);
+    }
+
     void adc_abs() override;
     void adc_absl() override;
     void adc_abslx() override;

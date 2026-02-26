@@ -69,6 +69,20 @@ using Slong = std::int32_t;
 using Quad = std::uint64_t;
 using Squad = std::int64_t;
 
+class Bitpos
+{
+public:
+    Bitpos(int b): bit(b)
+    {
+    }
+    operator int()
+    {
+        return bit;
+    }
+private:
+    int bit;
+};
+
 inline Sbyte as_signed(Byte v)
 {
     return std::bit_cast<Sbyte>(v);

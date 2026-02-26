@@ -58,6 +58,10 @@ public:
     {
         return addr0;
     }
+    Byte dp0reg()
+    {
+        return dp0;
+    }
     Byte imm0reg()
     {
         return imm0;
@@ -83,6 +87,7 @@ private:
     Mem& mem;
     Address pc = 0;
     Address addr0 = 0;
+    Byte dp0 = 0;
     Byte imm0 = 0;
     Word wimm0 = 0;
     Byte bank[2] {};
@@ -95,7 +100,8 @@ private:
 
     void read_dpaddr()
     {
-        addr0 = Address(mem.read8(pc++));
+        dp0 = mem.read8(pc++);
+        addr0 = Address(dp0);
     }
     
     void read_imm()
