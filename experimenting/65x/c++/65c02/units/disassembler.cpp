@@ -316,7 +316,7 @@ void Disassembler::brl()
 
 void Disassembler::bvc()
 {
-    throw Disassembler_unimplemented();
+    *this << "bvc " << parser.addr0reg();
 }
 
 void Disassembler::bvs()
@@ -336,7 +336,7 @@ void Disassembler::cld()
 
 void Disassembler::cli()
 {
-    throw Disassembler_unimplemented();
+    *this << "cli";
 }
 
 void Disassembler::clv()
@@ -491,77 +491,99 @@ void Disassembler::dey()
 
 void Disassembler::eor_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << parser.addr0reg();
 }
 
 void Disassembler::eor_absl()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        bbr(4, parser.program_counter() - 4);
+    else
+    {
+        Long_address addr = parser.bank0reg();
+        addr <<=16;
+        addr |= parser.addr0reg();
+        *this << "eor " << addr;
+    }
 }
 
 void Disassembler::eor_abslx()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        bbr(5, parser.program_counter() - 4);
+    else
+    {
+        Long_address addr = parser.bank0reg();
+        addr <<=16;
+        addr |= parser.addr0reg();
+        *this << "eor " << addr << ",x";
+    }
 }
 
 void Disassembler::eor_absx()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << parser.addr0reg() << ",x";
 }
 
 void Disassembler::eor_absy()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << parser.addr0reg() << ",y";
 }
 
 void Disassembler::eor_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << parser.dp0reg();
 }
 
 void Disassembler::eor_dpi()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor (" << parser.dp0reg() << ")";
 }
 
 void Disassembler::eor_dpil()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        rmb(4, parser.program_counter() - 2);
+    else
+        *this << "eor [" << parser.dp0reg() << "]";
 }
 
 void Disassembler::eor_dpily()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        rmb(5, parser.program_counter() - 2);
+    else
+        *this << "eor [" << parser.dp0reg() << "],y";
 }
 
 void Disassembler::eor_dpiy()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor (" << parser.dp0reg() << "),y";
 }
 
 void Disassembler::eor_dpx()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << parser.dp0reg() << ",x";
 }
 
 void Disassembler::eor_dpxi()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << "(" << parser.dp0reg() << ",x)";
 }
 
 void Disassembler::eor_imm()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor #" << parser.imm0reg();
 }
 
 void Disassembler::eor_sr()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor " << parser.imm0reg() << ",s";
 }
 
 void Disassembler::eor_sriy()
 {
-    throw Disassembler_unimplemented();
+    *this << "eor (" << parser.imm0reg() << ",s),y";
 }
 
 void Disassembler::inc_acc()
@@ -601,7 +623,10 @@ void Disassembler::iny()
 
 void Disassembler::jml()
 {
-    throw Disassembler_unimplemented();
+    Long_address addr = parser.bank0reg();
+    addr <<=16;
+    addr |= parser.addr0reg();
+    *this << "jml " << addr;
 }
 
 void Disassembler::jmli()
@@ -611,7 +636,7 @@ void Disassembler::jmli()
 
 void Disassembler::jmp_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "jsr " << parser.addr0reg();
 }
 
 void Disassembler::jmp_absi()
@@ -769,37 +794,43 @@ void Disassembler::ldy_imm()
 
 void Disassembler::lsr_acc()
 {
-    throw Disassembler_unimplemented();
+    *this << "lsr a";
 }
 
 void Disassembler::lsr_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "lsr " << parser.addr0reg();
 }
 
 void Disassembler::lsr_absx()
 {
-    throw Disassembler_unimplemented();
+    *this << "lsr " << parser.addr0reg() << ",x";
 }
 
 void Disassembler::lsr_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "lsr " << parser.dp0reg();
 }
 
 void Disassembler::lsr_dpx()
 {
-    throw Disassembler_unimplemented();
+    *this << "lsr " << parser.dp0reg() << ",x";
 }
 
 void Disassembler::mvn()
 {
-    throw Disassembler_unimplemented();
+    Address pc = Long_address(parser.program_counter() - 2);
+    Long_address dst = Long_address(mem.read8(pc++)) << 16;
+    Long_address src = Long_address(mem.read8(pc)) << 16;
+    *this << "mvn " << src << "," << dst;
 }
 
 void Disassembler::mvp()
 {
-    throw Disassembler_unimplemented();
+    Address pc = Long_address(parser.program_counter() - 2);
+    Long_address dst = Long_address(mem.read8(pc++)) << 16;
+    Long_address src = Long_address(mem.read8(pc)) << 16;
+    *this << "mvp " << src << "," << dst;
 }
 
 void Disassembler::nop()
@@ -936,7 +967,7 @@ void Disassembler::phd()
 
 void Disassembler::phk()
 {
-    throw Disassembler_unimplemented();
+    *this << "phk";
 }
 
 void Disassembler::php()
@@ -951,7 +982,7 @@ void Disassembler::phx()
 
 void Disassembler::phy()
 {
-    throw Disassembler_unimplemented();
+    *this << "phy";
 }
 
 void Disassembler::pla()
@@ -1041,7 +1072,7 @@ void Disassembler::ror_dpx()
 
 void Disassembler::rti()
 {
-    throw Disassembler_unimplemented();
+    *this << "rti";
 }
 
 void Disassembler::rtl()
@@ -1261,7 +1292,7 @@ void Disassembler::stz_abs()
 
 void Disassembler::stz_absx()
 {
-    throw Disassembler_unimplemented();
+    *this << "stz " << parser.addr0reg() << ",x";
 }
 
 void Disassembler::stz_dp()
@@ -1286,7 +1317,7 @@ void Disassembler::tay()
 
 void Disassembler::tcd()
 {
-    throw Disassembler_unimplemented();
+    *this << "tcd";
 }
 
 void Disassembler::tcs()
@@ -1361,7 +1392,7 @@ void Disassembler::wai()
 
 void Disassembler::wdm()
 {
-    throw Disassembler_unimplemented();
+    *this << "wdm";
 }
 
 void Disassembler::xba()
