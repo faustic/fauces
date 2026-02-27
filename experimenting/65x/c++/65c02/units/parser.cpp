@@ -771,7 +771,7 @@ void w65c02::Parser::jmp_absxi(Parser & parser)
 
 void w65c02::Parser::jsl(Parser & parser)
 {
-    parser.read_addr();
+    parser.read_laddr();
     parser.processor.jsl();
 }
 
