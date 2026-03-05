@@ -74,7 +74,7 @@ void Disassembler::adc_absy()
 
 void Disassembler::adc_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "adc " << parser.dp0reg();
 }
 
 void Disassembler::adc_dpi()
@@ -252,7 +252,7 @@ void Disassembler::asl_dpx()
 
 void Disassembler::bcc()
 {
-    throw Disassembler_unimplemented();
+    *this << "bcc " << parser.addr0reg();
 }
 
 void Disassembler::bcs()
@@ -287,7 +287,7 @@ void Disassembler::bit_dpx()
 
 void Disassembler::bit_imm()
 {
-    throw Disassembler_unimplemented();
+    *this << "bit #" << parser.imm0reg();
 }
 
 void Disassembler::bmi()
@@ -317,7 +317,7 @@ void Disassembler::brk()
 
 void Disassembler::brl()
 {
-    throw Disassembler_unimplemented();
+    *this << "brl " << parser.addr0reg();
 }
 
 void Disassembler::bvc()
@@ -377,7 +377,7 @@ void Disassembler::cmp_absy()
 
 void Disassembler::cmp_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "cmp " << parser.dp0reg();
 }
 
 void Disassembler::cmp_dpi()
@@ -492,7 +492,7 @@ void Disassembler::dex()
 
 void Disassembler::dey()
 {
-    throw Disassembler_unimplemented();
+    *this << "dey";
 }
 
 void Disassembler::eor_abs()
@@ -963,7 +963,7 @@ void Disassembler::pha()
 
 void Disassembler::phb()
 {
-    throw Disassembler_unimplemented();
+    *this << "phb";
 }
 
 void Disassembler::phd()
@@ -1173,7 +1173,7 @@ void Disassembler::sec()
 
 void Disassembler::sed()
 {
-    throw Disassembler_unimplemented();
+    *this << "sed";
 }
 
 void Disassembler::sei()
@@ -1193,12 +1193,28 @@ void Disassembler::sta_abs()
 
 void Disassembler::sta_absl()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        bbs(0, parser.program_counter() - 4);
+    else
+    {
+        Long_address addr = parser.bank0reg();
+        addr <<=16;
+        addr |= parser.addr0reg();
+        *this << "sta " << addr;
+    }
 }
 
 void Disassembler::sta_abslx()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        bbs(1, parser.program_counter() - 4);
+    else
+    {
+        Long_address addr = parser.bank0reg();
+        addr <<=16;
+        addr |= parser.addr0reg();
+        *this << "sta" << addr << ",x";
+    }
 }
 
 void Disassembler::sta_absx()
@@ -1208,7 +1224,7 @@ void Disassembler::sta_absx()
 
 void Disassembler::sta_absy()
 {
-    throw Disassembler_unimplemented();
+    *this << "sta " << parser.addr0reg() << ",y";
 }
 
 void Disassembler::sta_dp()
@@ -1218,22 +1234,28 @@ void Disassembler::sta_dp()
 
 void Disassembler::sta_dpi()
 {
-    throw Disassembler_unimplemented();
+    *this << "sta (" << parser.dp0reg() << ")";
 }
 
 void Disassembler::sta_dpil()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        smb(0, parser.program_counter() - 2);
+    else
+        *this << "sta [" << parser.dp0reg() << "]";
 }
 
 void Disassembler::sta_dpily()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        smb(1, parser.program_counter() - 2);
+    else
+        *this << "sta [" << parser.dp0reg() << "],y";
 }
 
 void Disassembler::sta_dpiy()
 {
-    throw Disassembler_unimplemented();
+    *this << "sta (" << parser.dp0reg() << "),y";
 }
 
 void Disassembler::sta_dpx()
@@ -1243,17 +1265,17 @@ void Disassembler::sta_dpx()
 
 void Disassembler::sta_dpxi()
 {
-    throw Disassembler_unimplemented();
+    *this << "sta " << "(" << parser.dp0reg() << ",x)";
 }
 
 void Disassembler::sta_sr()
 {
-    throw Disassembler_unimplemented();
+    *this << "sta " << parser.imm0reg() << ",s";
 }
 
 void Disassembler::sta_sriy()
 {
-    throw Disassembler_unimplemented();
+    *this << "sta (" << parser.imm0reg() << ",s),y";
 }
 
 void Disassembler::stp()
@@ -1263,7 +1285,7 @@ void Disassembler::stp()
 
 void Disassembler::stx_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "stx " << parser.addr0reg();
 }
 
 void Disassembler::stx_dp()
@@ -1273,17 +1295,17 @@ void Disassembler::stx_dp()
 
 void Disassembler::stx_dpy()
 {
-    throw Disassembler_unimplemented();
+    *this << "stx " << parser.dp0reg() << ",y";
 }
 
 void Disassembler::sty_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "sty " << parser.addr0reg();
 }
 
 void Disassembler::sty_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "sty " << parser.dp0reg();
 }
 
 void Disassembler::sty_dpx()
@@ -1293,7 +1315,7 @@ void Disassembler::sty_dpx()
 
 void Disassembler::stz_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "stz " << parser.addr0reg();
 }
 
 void Disassembler::stz_absx()
@@ -1363,27 +1385,27 @@ void Disassembler::tsc()
 
 void Disassembler::tsx()
 {
-    throw Disassembler_unimplemented();
+    *this << "tsx";
 }
 
 void Disassembler::txa()
 {
-    throw Disassembler_unimplemented();
+    *this << "txa";
 }
 
 void Disassembler::txs()
 {
-    throw Disassembler_unimplemented();
+    *this << "txs";
 }
 
 void Disassembler::txy()
 {
-    throw Disassembler_unimplemented();
+    *this << "txy";
 }
 
 void Disassembler::tya()
 {
-    throw Disassembler_unimplemented();
+    *this << "tya";
 }
 
 void Disassembler::tyx()

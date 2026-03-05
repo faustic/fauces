@@ -129,9 +129,22 @@ private:
         *this << "bbr" << bit << " " << dp << "," << addr;
         parser.jmp(pc + 3);
     }
+    void bbs(Bitpos bit, Address pc)
+    {
+        Byte dp = mem.read8(pc + 1);
+        Byte offset = mem.read8(pc + 2);
+        Address addr = pc + 3 + as_signed(offset);
+        *this << "bbs" << bit << " " << dp << "," << addr;
+        parser.jmp(pc + 3);
+    }
     void rmb(Bitpos bit, Address pc)
     {
         *this << "rmb" << bit << " " << mem.read8(pc + 1);
+        parser.jmp(pc + 2);
+    }
+    void smb(Bitpos bit, Address pc)
+    {
+        *this << "smb" << bit << " " << mem.read8(pc + 1);
         parser.jmp(pc + 2);
     }
 
