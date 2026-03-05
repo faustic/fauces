@@ -257,7 +257,7 @@ void Disassembler::bcc()
 
 void Disassembler::bcs()
 {
-    throw Disassembler_unimplemented();
+    *this << "bcs " << parser.addr0reg();
 }
 
 void Disassembler::beq()
@@ -347,7 +347,7 @@ void Disassembler::cli()
 
 void Disassembler::clv()
 {
-    throw Disassembler_unimplemented();
+    *this << "clv";
 }
 
 void Disassembler::cmp_abs()
@@ -680,22 +680,38 @@ void Disassembler::lda_abs()
 
 void Disassembler::lda_absl()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        bbs(2, parser.program_counter() - 4);
+    else
+    {
+        Long_address addr = parser.bank0reg();
+        addr <<=16;
+        addr |= parser.addr0reg();
+        *this << "lda " << addr;
+    }
 }
 
 void Disassembler::lda_abslx()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        bbs(3, parser.program_counter() - 4);
+    else
+    {
+        Long_address addr = parser.bank0reg();
+        addr <<=16;
+        addr |= parser.addr0reg();
+        *this << "lda " << addr << ",x";
+    }
 }
 
 void Disassembler::lda_absx()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda " << parser.addr0reg() << ",x";
 }
 
 void Disassembler::lda_absy()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda " << parser.addr0reg() << ",y";
 }
 
 void Disassembler::lda_dp()
@@ -705,22 +721,28 @@ void Disassembler::lda_dp()
 
 void Disassembler::lda_dpi()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda (" << parser.dp0reg() << ")";
 }
 
 void Disassembler::lda_dpil()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        smb(2, parser.program_counter() - 2);
+    else
+        *this << "lda [" << parser.dp0reg() << "]";
 }
 
 void Disassembler::lda_dpily()
 {
-    throw Disassembler_unimplemented();
+    if (rockwell)
+        smb(3, parser.program_counter() - 2);
+    else
+        *this << "lda [" << parser.dp0reg() << "],y";
 }
 
 void Disassembler::lda_dpiy()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda (" << parser.dp0reg() << "),y";
 }
 
 void Disassembler::lda_dpx()
@@ -730,7 +752,7 @@ void Disassembler::lda_dpx()
 
 void Disassembler::lda_dpxi()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda " << "(" << parser.dp0reg() << ",x)";
 }
 
 void Disassembler::lda_imm()
@@ -740,32 +762,32 @@ void Disassembler::lda_imm()
 
 void Disassembler::lda_sr()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda " << parser.imm0reg() << ",s";
 }
 
 void Disassembler::lda_sriy()
 {
-    throw Disassembler_unimplemented();
+    *this << "lda (" << parser.imm0reg() << ",s),y";
 }
 
 void Disassembler::ldx_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldx " << parser.addr0reg();
 }
 
 void Disassembler::ldx_absy()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldx " << parser.addr0reg() << ",y";
 }
 
 void Disassembler::ldx_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldx " << parser.dp0reg();
 }
 
 void Disassembler::ldx_dpy()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldx " << parser.dp0reg() << ",y";
 }
 
 void Disassembler::ldx_imm()
@@ -775,22 +797,22 @@ void Disassembler::ldx_imm()
 
 void Disassembler::ldy_abs()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldy " << parser.addr0reg();
 }
 
 void Disassembler::ldy_absx()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldy " << parser.addr0reg() << ",x";
 }
 
 void Disassembler::ldy_dp()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldy " << parser.dp0reg();
 }
 
 void Disassembler::ldy_dpx()
 {
-    throw Disassembler_unimplemented();
+    *this << "ldy " << parser.dp0reg() << ",x";
 }
 
 void Disassembler::ldy_imm()
@@ -998,7 +1020,7 @@ void Disassembler::pla()
 
 void Disassembler::plb()
 {
-    throw Disassembler_unimplemented();
+    *this << "plb";
 }
 
 void Disassembler::pld()
@@ -1335,12 +1357,12 @@ void Disassembler::stz_dpx()
 
 void Disassembler::tax()
 {
-    throw Disassembler_unimplemented();
+    *this << "tax";
 }
 
 void Disassembler::tay()
 {
-    throw Disassembler_unimplemented();
+    *this << "tay";
 }
 
 void Disassembler::tcd()
@@ -1410,7 +1432,7 @@ void Disassembler::tya()
 
 void Disassembler::tyx()
 {
-    throw Disassembler_unimplemented();
+    *this << "tyx";
 }
 
 void Disassembler::wai()
