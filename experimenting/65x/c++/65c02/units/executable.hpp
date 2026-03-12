@@ -69,6 +69,10 @@ public:
             throw Exec_Error("Unable to load program into memory");
     }
     
+    void save(const string& path)
+    {
+    }
+    
     Word result_size()
     {
         return priv_result_size;

@@ -191,6 +191,11 @@ public:
         dc_b(0x40);
     }
     
+    void rts()
+    {
+        dc_b(0x60);
+    }
+    
     void sta(Abs addr)
     {
         dc_b(0x8d);

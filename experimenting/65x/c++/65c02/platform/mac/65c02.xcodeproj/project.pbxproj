@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		CE091FD429FC2C71009090AD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE091FD329FC2C71009090AD /* main.cpp */; };
 		CE302EFF2A02D79300F60075 /* machine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE302EFD2A02D79300F60075 /* machine.cpp */; };
+		CE79C7772F631A5400303499 /* testgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE79C75F2F63196100303499 /* testgen.cpp */; };
+		CE79C77A2F63599300303499 /* assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626502A0A3CF3000D2530 /* assembler.cpp */; };
 		CE9581BD2A20A4B3007B87F7 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9581BB2A20A0C6007B87F7 /* ui.cpp */; };
 		CEB626522A0A5689000D2530 /* assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626502A0A3CF3000D2530 /* assembler.cpp */; };
 		CEB626572A0AA4F4000D2530 /* cpu65c02.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626532A0A97CC000D2530 /* cpu65c02.cpp */; };
@@ -18,6 +20,15 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		CE3990B529FC27DE004DCCE5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		CE79C76E2F631A3000303499 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -36,6 +47,9 @@
 		CE302EFE2A02D79300F60075 /* machine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = machine.hpp; sourceTree = "<group>"; };
 		CE3990B729FC27DE004DCCE5 /* 65c02 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 65c02; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5EC9562A0D4FE200D3213A /* processor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = processor.hpp; sourceTree = "<group>"; };
+		CE79C75F2F63196100303499 /* testgen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testgen.cpp; sourceTree = "<group>"; };
+		CE79C7702F631A3000303499 /* testgen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testgen; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE79C7782F633CA900303499 /* testgen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testgen.hpp; sourceTree = "<group>"; };
 		CE9581BB2A20A0C6007B87F7 /* ui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ui.cpp; sourceTree = "<group>"; };
 		CE9581BC2A20A0C6007B87F7 /* ui.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ui.hpp; sourceTree = "<group>"; };
 		CEB626502A0A3CF3000D2530 /* assembler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = assembler.cpp; sourceTree = "<group>"; };
@@ -50,6 +64,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		CE3990B429FC27DE004DCCE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE79C76D2F631A3000303499 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -71,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				CE3990B729FC27DE004DCCE5 /* 65c02 */,
+				CE79C7702F631A3000303499 /* testgen */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,7 +100,10 @@
 		CE3990B929FC27DE004DCCE5 /* units */ = {
 			isa = PBXGroup;
 			children = (
+				CE79C7792F633D7300303499 /* testgen */,
 				CE091FD329FC2C71009090AD /* main.cpp */,
+				CE79C75F2F63196100303499 /* testgen.cpp */,
+				CE79C7782F633CA900303499 /* testgen.hpp */,
 				CE246BF92A09703500DAB8D9 /* 65c02.hpp */,
 				CEB626502A0A3CF3000D2530 /* assembler.cpp */,
 				CEB626512A0A3CF3000D2530 /* assembler.hpp */,
@@ -97,6 +122,13 @@
 			);
 			name = units;
 			path = ../../units;
+			sourceTree = "<group>";
+		};
+		CE79C7792F633D7300303499 /* testgen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = testgen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +151,25 @@
 			productReference = CE3990B729FC27DE004DCCE5 /* 65c02 */;
 			productType = "com.apple.product-type.tool";
 		};
+		CE79C76F2F631A3000303499 /* testgen */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE79C7742F631A3000303499 /* Build configuration list for PBXNativeTarget "testgen" */;
+			buildPhases = (
+				CE79C76C2F631A3000303499 /* Sources */,
+				CE79C76D2F631A3000303499 /* Frameworks */,
+				CE79C76E2F631A3000303499 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = testgen;
+			packageProductDependencies = (
+			);
+			productName = testgen;
+			productReference = CE79C7702F631A3000303499 /* testgen */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -126,11 +177,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 2620;
+				LastUpgradeCheck = 2630;
 				ORGANIZATIONNAME = "Faustic Inferno SL";
 				TargetAttributes = {
 					CE3990B629FC27DE004DCCE5 = {
 						CreatedOnToolsVersion = 14.3;
+					};
+					CE79C76F2F631A3000303499 = {
+						CreatedOnToolsVersion = 26.3;
 					};
 				};
 			};
@@ -148,6 +202,7 @@
 			projectRoot = "";
 			targets = (
 				CE3990B629FC27DE004DCCE5 /* 65c02 */,
+				CE79C76F2F631A3000303499 /* testgen */,
 			);
 		};
 /* End PBXProject section */
@@ -167,6 +222,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE79C76C2F631A3000303499 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE79C77A2F63599300303499 /* assembler.cpp in Sources */,
+				CE79C7772F631A5400303499 /* testgen.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -174,6 +238,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
@@ -235,6 +300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
@@ -305,6 +371,34 @@
 			};
 			name = Release;
 		};
+		CE79C7752F631A3000303499 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++23";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = c23;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = $SRCROOT/../../../common/include;
+			};
+			name = Debug;
+		};
+		CE79C7762F631A3000303499 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++23";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = c23;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = $SRCROOT/../../../common/include;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -322,6 +416,15 @@
 			buildConfigurations = (
 				CE3990BF29FC27DE004DCCE5 /* Debug */,
 				CE3990C029FC27DE004DCCE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE79C7742F631A3000303499 /* Build configuration list for PBXNativeTarget "testgen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE79C7752F631A3000303499 /* Debug */,
+				CE79C7762F631A3000303499 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

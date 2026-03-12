@@ -105,6 +105,31 @@ inline Squad as_signed(Quad v)
 
 using Mem = faulib::format::Memory_base<Address, Byte, Word, Long, Quad>;
 
+using Mem_le = faulib::format::Memory_le<Address, Byte, Word, Long, Quad>;
+
+
+class Mem_le_plain: public Mem_le
+{
+public:
+    Byte read8(Address addr) override
+    {
+        return bytes[addr];
+    }
+    void write8(Address addr, Byte v) override
+    {
+        bytes[addr] = v;
+    }
+    
+    void copybytes(unsigned char* dst, size_t size) override
+    {
+        size = (size <= 65536 ? size : 65536);
+        memcpy(dst, bytes.data(), size);
+    }
+
+private:
+    vector<Byte> bytes = vector<Byte>(65536);
+};
+
 }
 
 #endif /* w65c02_hpp */
