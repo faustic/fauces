@@ -38,12 +38,6 @@ SOFTWARE.
 namespace w65c02
 {
 
-class Disassembler_unimplemented
-{
-    // Provisional class to detect unimplemented opcodes
-    // In the end, all opcodes will be implemented.
-};
-
 class Disassembler : public Processor
 {
 public:
@@ -65,15 +59,7 @@ public:
         {
             addr = parser.program_counter();
             *this << addr << ": ";
-            try
-            {
-                parser.next_instruction();
-            }
-            catch(Disassembler_unimplemented)
-            {
-                *this << mem.read8(addr) << " **************\n";
-                break;
-            }
+            parser.next_instruction();
             buffer << "\n";
         }
     }
