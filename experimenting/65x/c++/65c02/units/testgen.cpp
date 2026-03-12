@@ -71,16 +71,18 @@ using std::runtime_error;
 using std::filesystem::create_directory;
 using namespace w65c02;
 
-class TestError : public runtime_error
+class Test_error : public runtime_error
 {
 public:
-    TestError(const std::string& what_arg) : runtime_error(what_arg)
+    Test_error(const std::string& what_arg) : runtime_error(what_arg)
     {
     }
 };
 
 unique_ptr<w65c02::Test> named_test(std::string testname, Mem& mem)
 {
+    if (testname != "Hola_1")
+        throw Test_error("Unknown test name");
     return make_unique<w65c02::Hola_1>(mem);
 }
 
@@ -99,7 +101,7 @@ int main(int argc, char** argv)
         cout << "Result size: " << test->result_size() << "\n";
         cout << "\n";
         if (test->code_size() > 4076)
-            throw TestError("Code too big");
+            throw Test_error("Code too big");
         Executable exec(mem, test->code_start(), test->code_start(),
                         test->result_start(), test->result_size());
         string dir_name = argv[1];

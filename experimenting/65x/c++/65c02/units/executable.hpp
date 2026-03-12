@@ -37,10 +37,10 @@ SOFTWARE.
 namespace w65c02
 {
 
-class Exec_Error: public runtime_error
+class Exec_error: public runtime_error
 {
 public:
-    Exec_Error(const string& what_arg): runtime_error(what_arg)
+    Exec_error(const string& what_arg): runtime_error(what_arg)
     {}
 };
 
@@ -62,15 +62,16 @@ public:
         using faulib::io::readraw;
         auto bytes = readraw<Byte>(path.c_str());
         if (!check_signature(bytes))
-            throw Exec_Error("Bad signature");
+            throw Exec_error("Bad signature");
         if (!position(bytes))
-            throw Exec_Error("Unable to position program in memory");
+            throw Exec_error("Unable to position program in memory");
         if (!load(span<Byte>(bytes.begin() + 32, bytes.end())))
-            throw Exec_Error("Unable to load program into memory");
+            throw Exec_error("Unable to load program into memory");
     }
     
     void save(const string& path)
     {
+        throw Exec_error("Unimplemented");
     }
     
     Word result_size()
