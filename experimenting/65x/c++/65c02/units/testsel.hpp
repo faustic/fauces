@@ -30,8 +30,6 @@ SOFTWARE.
 
 #include "testgen.hpp"
 
-#include "testgen/Hola_1.hpp"
-
 #include <memory>
 #include <string>
 

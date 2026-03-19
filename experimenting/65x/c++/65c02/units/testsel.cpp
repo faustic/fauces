@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include "testsel.hpp"
 
+#include "testgen/Hola_1.hpp"
+
 #include <unordered_map>
 #include <string>
 #include <functional>
