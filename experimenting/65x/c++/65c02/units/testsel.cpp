@@ -1,4 +1,4 @@
-// Generate test programs for the 65c02 emulator
+// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -24,45 +24,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "testgen.hpp"
-#include "testsel.hpp"
-#include "executable.hpp"
 
-#include <filesystem>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
+#include "testsel.hpp"
+
+#include <unordered_map>
+#include <string>
+#include <functional>
 
 using std::string;
-using std::cout;
+using std::unordered_map;
+using std::function;
 using std::unique_ptr;
 using std::make_unique;
-using std::runtime_error;
-using std::filesystem::create_directory;
-using namespace w65c02;
 
-int main(int argc, char** argv)
+namespace w65c02
 {
-    cout << "TEST GENERATION\n";
-    cout << (argc - 1) << "\n";
-    Mem_le_plain mem;
-    for (int i = 1; i < argc; ++i)
-    {
-        cout << argv[i] << "\n";
-        auto test = named_test(argv[i], mem);
-        cout << "Code start: " << test->code_start() << "\n";
-        cout << "Code size: " << test->code_size() << "\n";
-        cout << "Result start: " << test->result_start() << "\n";
-        cout << "Result size: " << test->result_size() << "\n";
-        cout << "\n";
-        if (test->code_size() > 4076)
-            throw Test_error("Code too big");
-        Executable exec(mem, test->code_start(), test->code_size(),
-                        test->result_start(), test->result_size());
-        string dir_name = argv[1];
-        create_directory(dir_name);
-        exec.save(dir_name + "/TEST");
-    }
-    return 0;
+
+static unordered_map<string, function<unique_ptr<Test>(Mem&)>> fmap
+{
+    {"Hola_1", [](Mem& mem) {return make_unique<Hola_1>(mem);}}
+};
+
+unique_ptr<Test> named_test(const string& testname, Mem& mem)
+{
+    return fmap.at(testname)(mem);
 }
 
+} // namespace w65c02

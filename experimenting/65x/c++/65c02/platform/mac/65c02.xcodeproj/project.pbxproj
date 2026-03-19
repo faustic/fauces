@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CE091FD429FC2C71009090AD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE091FD329FC2C71009090AD /* main.cpp */; };
 		CE302EFF2A02D79300F60075 /* machine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE302EFD2A02D79300F60075 /* machine.cpp */; };
+		CE66AE582F6C84E60086AB5A /* testsel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE66AE562F6C84E60086AB5A /* testsel.cpp */; };
 		CE79C7772F631A5400303499 /* testgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE79C75F2F63196100303499 /* testgen.cpp */; };
 		CE79C77A2F63599300303499 /* assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB626502A0A3CF3000D2530 /* assembler.cpp */; };
 		CE9581BD2A20A4B3007B87F7 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9581BB2A20A0C6007B87F7 /* ui.cpp */; };
@@ -47,6 +48,9 @@
 		CE302EFE2A02D79300F60075 /* machine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = machine.hpp; sourceTree = "<group>"; };
 		CE3990B729FC27DE004DCCE5 /* 65c02 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 65c02; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5EC9562A0D4FE200D3213A /* processor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = processor.hpp; sourceTree = "<group>"; };
+		CE66AE552F6C84E60086AB5A /* testsel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testsel.hpp; sourceTree = "<group>"; };
+		CE66AE562F6C84E60086AB5A /* testsel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testsel.cpp; sourceTree = "<group>"; };
+		CE66AE592F6C853A0086AB5A /* Hola_1.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Hola_1.hpp; sourceTree = "<group>"; };
 		CE79C75F2F63196100303499 /* testgen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testgen.cpp; sourceTree = "<group>"; };
 		CE79C7702F631A3000303499 /* testgen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testgen; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE79C7782F633CA900303499 /* testgen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testgen.hpp; sourceTree = "<group>"; };
@@ -104,6 +108,8 @@
 				CE091FD329FC2C71009090AD /* main.cpp */,
 				CE79C75F2F63196100303499 /* testgen.cpp */,
 				CE79C7782F633CA900303499 /* testgen.hpp */,
+				CE66AE562F6C84E60086AB5A /* testsel.cpp */,
+				CE66AE552F6C84E60086AB5A /* testsel.hpp */,
 				CE246BF92A09703500DAB8D9 /* 65c02.hpp */,
 				CEB626502A0A3CF3000D2530 /* assembler.cpp */,
 				CEB626512A0A3CF3000D2530 /* assembler.hpp */,
@@ -127,6 +133,7 @@
 		CE79C7792F633D7300303499 /* testgen */ = {
 			isa = PBXGroup;
 			children = (
+				CE66AE592F6C853A0086AB5A /* Hola_1.hpp */,
 			);
 			path = testgen;
 			sourceTree = "<group>";
@@ -226,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE66AE582F6C84E60086AB5A /* testsel.cpp in Sources */,
 				CE79C77A2F63599300303499 /* assembler.cpp in Sources */,
 				CE79C7772F631A5400303499 /* testgen.cpp in Sources */,
 			);

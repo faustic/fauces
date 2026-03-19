@@ -1,4 +1,3 @@
-// Generate test programs for the 65c02 emulator
 //
 /*
 Licensed under the MIT License.
@@ -25,61 +24,40 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testgen_hpp
-#define w65c02_testgen_hpp
-
-#include "assembler.hpp"
+#ifndef w65c02_Hola_1_h
+#define w65c02_Hola_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
-
-class Test_error : public runtime_error
+class Hola_1: public Test
 {
 public:
-    Test_error(const std::string& what_arg) : runtime_error(what_arg)
+    Hola_1(Mem& mem): Test(mem)
     {
+        as.lda(Imm(0x48));
+        as.sta(Abs(0x3000));
+        as.lda(Imm(0x6f));
+        as.sta(Abs(0x3001));
+        as.lda(Imm(0x6c));
+        as.sta(Abs(0x3002));
+        as.lda(Imm(0x61));
+        as.sta(Abs(0x3003));
+        as.rts();
+        end();
     }
-};
-
-class Test
-{
-public:
-    Test(Mem& mem):
-    mem(mem), as(mem, start)
-    {
-    }
-    
-    virtual ~Test() = default;
-    
-    virtual void end()
-    {
-        size = as.program_counter() - start;
-        as.close();
-    }
-    
-    virtual size_t code_size()
-    {
-        return size;
-    }
-    
-    virtual Address code_start()
-    {
-        return start;
-    }
-    
-    virtual Address result_start() = 0;
-    virtual size_t result_size() = 0;
-    
-protected:
-    Assembler as;
-
 private:
-    static constexpr Address start = 0x2020;
-    Mem& mem;
-    size_t size = 0;
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 4;
+    }
 };
-
 }
 
 
-#endif /* w65c02_testgen_hpp */
+#endif /* w65c02_Hola_1_h */

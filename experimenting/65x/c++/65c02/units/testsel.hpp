@@ -1,4 +1,4 @@
-// Generate test programs for the 65c02 emulator
+// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,61 +25,23 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testgen_hpp
-#define w65c02_testgen_hpp
+#ifndef w65c02_testsel_hpp
+#define w65c02_testsel_hpp
 
-#include "assembler.hpp"
+#include "testgen.hpp"
+
+#include "testgen/Hola_1.hpp"
+
+#include <memory>
+#include <string>
 
 namespace w65c02
 {
 
-class Test_error : public runtime_error
-{
-public:
-    Test_error(const std::string& what_arg) : runtime_error(what_arg)
-    {
-    }
-};
-
-class Test
-{
-public:
-    Test(Mem& mem):
-    mem(mem), as(mem, start)
-    {
-    }
-    
-    virtual ~Test() = default;
-    
-    virtual void end()
-    {
-        size = as.program_counter() - start;
-        as.close();
-    }
-    
-    virtual size_t code_size()
-    {
-        return size;
-    }
-    
-    virtual Address code_start()
-    {
-        return start;
-    }
-    
-    virtual Address result_start() = 0;
-    virtual size_t result_size() = 0;
-    
-protected:
-    Assembler as;
-
-private:
-    static constexpr Address start = 0x2020;
-    Mem& mem;
-    size_t size = 0;
-};
+std::unique_ptr<w65c02::Test>
+named_test(const std::string &testname, Mem& mem);
 
 }
 
 
-#endif /* w65c02_testgen_hpp */
+#endif /* w65c02_testsel_hpp */
