@@ -102,7 +102,7 @@ int main(int argc, char** argv)
         cout << "\n";
         if (test->code_size() > 4076)
             throw Test_error("Code too big");
-        Executable exec(mem, test->code_start(), test->code_start(),
+        Executable exec(mem, test->code_start(), test->code_size(),
                         test->result_start(), test->result_size());
         string dir_name = argv[1];
         create_directory(dir_name);

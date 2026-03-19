@@ -71,7 +71,22 @@ public:
     
     void save(const string& path)
     {
-        throw Exec_error("Unimplemented");
+        using faulib::io::writeraw;
+        auto os = faulib::io::oopenraw<Byte>(path.c_str());
+        writeraw<const Byte>(os, signature);
+        writeraw<Byte>(os, start());
+        writeraw<Byte>(os, start() >> 8);
+        writeraw<Byte>(os, size);
+        writeraw<Byte>(os, size >> 8);
+        writeraw<Byte>(os, result_start());
+        writeraw<Byte>(os, result_start() >> 8);
+        writeraw<Byte>(os, result_size());
+        writeraw<Byte>(os, result_size() >> 8);
+        for (int i = 0; i < 8; ++i)
+            writeraw<Byte>(os, 0);
+        for (size_t i = 0; i < size; ++i)
+            writeraw(os, mem.read8(start() + i));
+        os.close();
     }
     
     Word result_size()

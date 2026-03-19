@@ -1,7 +1,5 @@
-// rawfile.hpp
 // Frequently performed tasks with files and streams
 //
-// Created by Alejandro Castro García on 8 September 2021
 /*
 Licensed under the MIT License.
  
@@ -59,9 +57,27 @@ using std::streampos;
 using std::numeric_limits;
 
 template<typename T>
+ofstream oopenraw(const char* path)
+{
+    ofstream ofs;
+    ofs.exceptions(ofs.failbit | ofs.badbit);
+    ofs.open(path, ofs.binary | ofs.trunc);
+    return ofs;
+}
+
+template<typename T>
+ifstream iopenraw(const char* path)
+{
+    ifstream ifs;
+    ifs.exceptions(ifs.failbit | ifs.badbit | ifs.eofbit);
+    ifs.open(path, ifs.binary);
+    return ifs;
+}
+
+template<typename T>
 ostream& writeraw(ostream& os, span<T> rawdata)
 {
-    char* ptr = reinterpret_cast<char*>(rawdata.data());
+    const char* ptr = reinterpret_cast<const char*>(rawdata.data());
     size_t size = rawdata.size() * sizeof(T);
     static constexpr streamsize max = numeric_limits<streamsize>::max();
     while (size > max)
@@ -78,11 +94,18 @@ ostream& writeraw(ostream& os, span<T> rawdata)
 }
 
 template<typename T>
+ostream& writeraw(ostream& os, T rawdata)
+{
+    T t[] = {rawdata};
+    return writeraw<T>(os, t);
+}
+
+
+
+template<typename T>
 void writeraw(const char* path, span<T> rawdata)
 {
-    ofstream ofs;
-    ofs.exceptions(ofs.failbit | ofs.badbit);
-    ofs.open(path, ofs.binary | ofs.trunc);
+    ofstream ofs = oopenraw<T>(path);
     writeraw(ofs, rawdata);
     ofs.close();
 }
@@ -127,9 +150,7 @@ inline streampos get_stream_size(istream &is)
 template<typename T>
 vector<T> readraw(const char* path)
 {
-    ifstream ifs;
-    ifs.exceptions(ifs.failbit | ifs.badbit | ifs.eofbit);
-    ifs.open(path, ifs.binary);
+    ifstream ifs = iopenraw<T>(path);
     streampos n = get_stream_size(ifs) / sizeof(T);
     using Size = typename vector<T>::size_type;
     if (n > numeric_limits<Size>::max())
