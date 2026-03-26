@@ -55,6 +55,20 @@ private:
     Address priv_value;
 };
 
+class Abs_x
+{
+public:
+    Abs_x(Address value):
+    priv_value(value)
+    {}
+    Address value() const
+    {
+        return priv_value;
+    }
+private:
+    Address priv_value;
+};
+
 class Imm
 {
 public:
@@ -92,6 +106,12 @@ public:
             throw Assembler_error("Undefined labels");
     }
     
+    void adc(Abs addr)
+    {
+        dc_b(0x6d);
+        dc_w(addr.value());
+    }
+
     void dc_b(int value)
     {
         mem.write8(pc++, value);
@@ -163,9 +183,21 @@ public:
         dc_b(0x80);
         dc_b(offset_to(label));
     }
+    void clc()
+    {
+        dc_b(0x18);
+    }
+    void cld()
+    {
+        dc_b(0xd8);
+    }
     void cli()
     {
         dc_b(0x58);
+    }
+    void inx()
+    {
+        dc_b(0xe8);
     }
     void jsr(Abs addr)
     {
@@ -177,9 +209,22 @@ public:
         dc_b(0xa9);
         dc_b(imm.value());
     }
+    void ldx(Imm imm)
+    {
+        dc_b(0xa2);
+        dc_b(imm.value());
+    }
     void pha()
     {
         dc_b(0x48);
+    }
+    void php()
+    {
+        dc_b(0x08);
+    }
+    void phx()
+    {
+        dc_b(0xda);
     }
     void pla()
     {
@@ -201,6 +246,13 @@ public:
         dc_b(0x8d);
         dc_w(addr.value());
     }
+
+    void sta(Abs_x addr)
+    {
+        dc_b(0x9d);
+        dc_w(addr.value());
+    }
+
     void stz(const Abs& addr)
     {
         dc_b(0x9c);
