@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,62 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Sty_dp_1_h
+#define w65c02_Sty_dp_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Sty_dp_1: public Test
+{
+public:
+    Sty_dp_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        
+        int check[] =
+        {
+            0xD0, 0x30, 0x0A, 0x65, 0x1E, 0x33, 0x45, 0x4C,
+            0x98, 0xCC, 0x8A, 0xE0, 0x3B, 0x45, 0x00, 0x01
+        };
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.lda(Dp(i));
+            as.sta(Abs(0x7000 + i));
+        }
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.ldy(Imm(check[i]));
+            as.sty(Dp(i));
+            as.lda(Dp(i));
+            as.sta(Abs(0x3000 + i));
+        }
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.lda(Abs(0x7000 + i));
+            as.sta(Dp(i));
+        }
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
 
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 16;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Sty_dp_1_h */

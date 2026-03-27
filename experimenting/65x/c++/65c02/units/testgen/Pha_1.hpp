@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,69 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Pha_1_h
+#define w65c02_Pha_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Pha_1: public Test
+{
+public:
+    Pha_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        
+        as.ldx(Imm(0));
+        as.label("zeroloop");
+        as.stz(Absx(0x3000));
+        as.inx();
+        as.bne("zeroloop");
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+        as.label("phaloop");
+        as.phx();
+        as.pla();
+        as.pha();
+        as.php();
+        as.inx();
+        as.inx();
+        as.inx();
+        as.inx();
+        as.bne("phaloop");
+        
+        as.label("plaloop");
+        as.pla();
+        as.sta(Absx(0x3000));
+        as.inx();
+        as.pla();
+        as.php();
+        as.sta(Absx(0x3000));
+        as.pla();
+        as.inx();
+        as.sta(Absx(0x3000));
+        as.inx();
+        as.inx();
+        as.bne("plaloop");        
+        
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 256;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Pha_1_h */

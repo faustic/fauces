@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,47 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Ror_abs_1_h
+#define w65c02_Ror_abs_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
-
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+class Ror_abs_1: public Test
+{
+public:
+    Ror_abs_1(Mem& mem): Test(mem)
+    {
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        for (int i = 0; i < 256; ++i)
+        {
+            as.lda(Imm(i));
+            as.sta(Abs(0x3000 + i));
+        }
+        for (int i = 0; i < 256; ++i)
+        {
+            as.ror(Abs(0x3000 + i));
+            as.php();
+            as.pla();
+            as.sta(Abs(0x3100 + i));
+        }
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 512;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Ror_abs_1_h */

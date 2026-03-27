@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,56 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Trb_abs_1_h
+#define w65c02_Trb_abs_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Trb_abs_1: public Test
+{
+public:
+    Trb_abs_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        
+        int check[] =
+        {
+            0xBF, 0x90, 0xAF, 0xE2, 0x44, 0x80, 0x47, 0xC0,
+            0xA4, 0xC0, 0x32, 0x8F, 0xE4, 0xD1, 0x57, 0x8D
+        };
+        
+        for (int i = 0; i < 256; ++i)
+        {
+            as.lda(Imm(i));
+            as.sta(Abs(0x3000 + i));
+            as.lda(Imm(check[i % 16]));
+            as.trb(Abs(0x3000 + i));
+            as.php();
+            as.pla();
+            as.sta(Abs(0x3100 + i));
+        }
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 512;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Trb_abs_1_h */

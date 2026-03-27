@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,48 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Sta_absy_1_h
+#define w65c02_Sta_absy_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
-
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+class Sta_absy_1: public Test
+{
+public:
+    Sta_absy_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        
+        int check[] =
+        {
+            0x15, 0x0C, 0x62, 0x55, 0x0F, 0xA0, 0x42, 0xB2,
+            0xA3, 0x94, 0x20, 0xD7, 0x72, 0x6D, 0xB2, 0x3E
+        };
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.ldy(Imm(i));
+            as.lda(Imm(check[i]));
+            as.sta(Absy(0x3000));
+        }
+        
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 16;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Sta_absy_1_h */

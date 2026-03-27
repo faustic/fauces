@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,62 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Rti_1_h
+#define w65c02_Rti_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
-
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+class Rti_1: public Test
+{
+public:
+    Rti_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        
+        as.ldx(Imm(0));
+        as.bra("repeat");
+        Abs handler(as.program_counter());
+        as.rti();
+        
+        as.label("repeat");
+        
+        int ret_addr = as.program_counter() + 10;
+        as.lda(Imm(ret_addr >> 8));
+        as.pha();
+        as.lda(Imm(ret_addr)); 
+        as.pha();
+        as.phx(); // rti should restore the status register with this value
+        as.jmp(handler);
+        if (ret_addr != as.program_counter())
+            throw Assembler_error("Unexpected program size");
+        
+        as.php();
+        as.pla();
+        as.sta(Absx(0x3000));
+        
+        as.inx();
+        as.bne("repeat");
+        
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 256;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Rti_1_h */

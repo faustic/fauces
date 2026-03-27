@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,48 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Stx_abs_1_h
+#define w65c02_Stx_abs_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Stx_abs_1: public Test
+{
+public:
+    Stx_abs_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        
+        int check[] =
+        {
+            0xC3, 0x16, 0x8E, 0x9F, 0x63, 0x48, 0x40, 0x2F,
+            0xA8, 0x2D, 0xAF, 0x4B, 0x33, 0xFD, 0x9D, 0x4C
+        };
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.ldx(Imm(check[i]));
+            as.stx(Abs(0x3000 + i));
+        }
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
 
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 16;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Stx_abs_1_h */

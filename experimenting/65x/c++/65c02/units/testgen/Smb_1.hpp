@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,59 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Smb_1_h
+#define w65c02_Smb_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Smb_1: public Test
+{
+public:
+    Smb_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        
+        as.lda(Dp(0xea));
+        as.sta(Abs(0x7000));
+        
+        for (int i= 0; i < 8; ++i)
+        {
+            string loop = "begin_" + std::to_string(i);
+            as.ldx(Imm(0));
+            as.label(loop);
+            as.stx(Dp(0xea));
+            as.smb(i, Dp(0xea));
+            as.nop();
+            as.nop();
+            as.lda(Dp(0xea));
+            as.sta(Absx(0x3000 + i * 256));
+            as.inx();
+            as.bne(loop);
+        }        
+        
+        as.lda(Abs(0x7000));
+        as.sta(Dp(0xea));
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 2048;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Smb_1_h */

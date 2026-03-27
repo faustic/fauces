@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,55 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Txa_1_h
+#define w65c02_Txa_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Txa_1: public Test
+{
+public:
+    Txa_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        
+        int check[] =
+        {
+            0x2E, 0xE0, 0x2A, 0x82, 0xE0, 0x19, 0x45, 0x50,
+            0xAC, 0x35, 0x76, 0xB6, 0xB5, 0xE2, 0x4D, 0x73
+        };
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.ldx(Imm(check[i]));
+            as.lda(Imm(0));
+            as.txa();
+            as.php();
+            as.plx();
+            as.sta(Abs(0x3000 + i));
+            as.stx(Abs(0x3000 + 16 + i));
+        }
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 32;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Txa_1_h */

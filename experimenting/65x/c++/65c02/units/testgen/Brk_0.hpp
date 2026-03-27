@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,33 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Brk_0_h
+#define w65c02_Brk_0_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
-
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+class Brk_0: public Test
+{
+public:
+    Brk_0(Mem& mem): Test(mem)
+    {
+        as.brk();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0;
+    }
+    
+    size_t result_size()
+    {
+        return 0;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Brk_0_h */

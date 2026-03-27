@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,55 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Tay_1_h
+#define w65c02_Tay_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Tay_1: public Test
+{
+public:
+    Tay_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        as.lda(Imm(0));
+        as.pha();
+        as.plp();
+        
+        int check[] =
+        {
+            0x36, 0x6F, 0x9D, 0x74, 0x40, 0x4C, 0x47, 0x37,
+            0xB3, 0x2B, 0xEA, 0x8D, 0x28, 0x7E, 0x87, 0x88
+        };
+        
+        for (int i = 0; i < 16; ++i)
+        {
+            as.lda(Imm(check[i]));
+            as.ldy(Imm(0));
+            as.tay();
+            as.php();
+            as.pla();
+            as.sty(Abs(0x3000 + i));
+            as.sta(Abs(0x3000 + 16 + i));
+        }
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 32;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Tay_1_h */

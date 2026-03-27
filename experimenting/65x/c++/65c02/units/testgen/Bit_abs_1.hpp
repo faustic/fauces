@@ -1,4 +1,3 @@
-// Selection of test generator
 //
 /*
 Licensed under the MIT License.
@@ -25,24 +24,58 @@ SOFTWARE.
 */
 
 
-#ifndef w65c02_testsel_hpp
-#define w65c02_testsel_hpp
-
-#include "testgen.hpp"
-
-#include <memory>
-#include <string>
+#ifndef w65c02_Bit_abs_1_h
+#define w65c02_Bit_abs_1_h
+#include "../testgen.hpp"
 
 namespace w65c02
 {
+class Bit_abs_1: public Test
+{
+public:
+    Bit_abs_1(Mem& mem): Test(mem)
+    {
+        as.php();
+        as.lda(Imm(0x00));
+        as.pha();
+        as.plp();
+        
+        for (int i = 64; i < 128; ++i)
+        {
+            as.lda(Imm(i));
+            as.sta(Abs(0x7000 - 64 + i));
+        }
+        as.ldx(Imm(0));
+        for (int i = 0; i < 64; ++i)
+        {
+            string part = "part_";
+            as.label(part + std::to_string(i));
+            as.phx();
+            as.pla();
+            as.bit(Abs(0x7000 + i));
+            as.php();
+            as.pla();
+            as.sta(Absx(0x3000 + i * 256));
+            as.inx();
+            as.bne(part + std::to_string(i));
+        }
 
-std::unique_ptr<Test>
-named_test(const std::string &testname, Mem& mem);
-
-void start_tests();
-std::string next_test();
-
+        as.plp();
+        as.rts();
+        end();
+    }
+private:
+    Address result_start()
+    {
+        return 0x3000;
+    }
+    
+    size_t result_size()
+    {
+        return 16384;
+    }
+};
 }
 
 
-#endif /* w65c02_testsel_hpp */
+#endif /* w65c02_Bit_abs_1_h */
