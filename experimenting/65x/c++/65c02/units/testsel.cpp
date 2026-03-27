@@ -67,7 +67,6 @@ SOFTWARE.
  #include "testgen/Brk_0.hpp"
  #include "testgen/Bvc_1.hpp"
  #include "testgen/Bvs_1.hpp"
- #include "testgen/Clc_0.hpp"
  #include "testgen/Clc_1.hpp"
  #include "testgen/Cld_1.hpp"
  #include "testgen/Cli_1.hpp"
@@ -165,7 +164,6 @@ SOFTWARE.
  #include "testgen/Ror_dp_1.hpp"
  #include "testgen/Ror_dpx_1.hpp"
  #include "testgen/Rti_1.hpp"
- #include "testgen/Rts_0.hpp"
  #include "testgen/Rts_1.hpp"
  #include "testgen/Sbc_abs_1.hpp"
  #include "testgen/Sbc_absx_1.hpp"
@@ -268,7 +266,6 @@ static unordered_map<string, function<unique_ptr<Test>(Mem&)>> fmap
     {"Brk_0", [](Mem& mem) {return make_unique<Brk_0>(mem);}},
     {"Bvc_1", [](Mem& mem) {return make_unique<Bvc_1>(mem);}},
     {"Bvs_1", [](Mem& mem) {return make_unique<Bvs_1>(mem);}},
-    {"Clc_0", [](Mem& mem) {return make_unique<Clc_0>(mem);}},
     {"Clc_1", [](Mem& mem) {return make_unique<Clc_1>(mem);}},
     {"Cld_1", [](Mem& mem) {return make_unique<Cld_1>(mem);}},
     {"Cli_1", [](Mem& mem) {return make_unique<Cli_1>(mem);}},
@@ -366,7 +363,6 @@ static unordered_map<string, function<unique_ptr<Test>(Mem&)>> fmap
     {"Ror_dp_1", [](Mem& mem) {return make_unique<Ror_dp_1>(mem);}},
     {"Ror_dpx_1", [](Mem& mem) {return make_unique<Ror_dpx_1>(mem);}},
     {"Rti_1", [](Mem& mem) {return make_unique<Rti_1>(mem);}},
-    {"Rts_0", [](Mem& mem) {return make_unique<Rts_0>(mem);}},
     {"Rts_1", [](Mem& mem) {return make_unique<Rts_1>(mem);}},
     {"Sbc_abs_1", [](Mem& mem) {return make_unique<Sbc_abs_1>(mem);}},
     {"Sbc_absx_1", [](Mem& mem) {return make_unique<Sbc_absx_1>(mem);}},
