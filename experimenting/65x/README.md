@@ -8,7 +8,9 @@ This emulator, from one of our unpublished projects, has been brought here becau
 
 The emulator has been written in C++ based on a previous implementation for Java.
 
-The implementation for Java, also brought here, is more complete. In addition to the emulator, it includes:
+The implementation for Java, also brought here for a while, has been removed, because it is no longer necessary. It used to be more complete than the implementation for C++, but everything of importance is now translated into C++, which fits better into this project.
+
+In addition to the emulator, this experiment includes:
 
 * A 65C02 disassembler.
 * A 65C02 assembler (or more precisely a 65C02 code generator, as it doesn't actually do assembly source code parsing).
